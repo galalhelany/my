@@ -64,7 +64,7 @@ h1 {
 }
 @media screen and (max-width: 768px) {
   h1 {
-    font-size: 60px;
+    font-size: 50px;
   }
 }
 h2,
@@ -77,7 +77,12 @@ h6 {
     Cantarell, "Open Sans", "Helvetica Neue", sans-serif, Georgia, serif;
   margin: 0 0 30px 0;
 }
-
+.img-responsivep {
+  display: block;
+  border-radius: 15px;
+  max-width: 100%;
+  height: 450;
+}
 ::-webkit-selection {
   color: #fcfcfc;
   background: #b7c2c2;
@@ -351,7 +356,7 @@ header .nav-bar-down .logo1:focus {
 }
 @media screen and (max-width: 768px) {
   .boldm {
-    font-size: 100px;
+    font-size: 60px;
     top: 100px;
   }
 }
