@@ -507,12 +507,6 @@ footer .nav-bar-down .logo2 {
   text-align: center;
   background: #000;
 }
-#work-blog .owl-carousel {
-  background-image: url("../images/sgin\ galal.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
 
 #work-blog .owl-carousel {
   z-index: 0;
