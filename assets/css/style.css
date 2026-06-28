@@ -298,9 +298,11 @@ body.mobile-nav--is--visible .app-header .navigation .line:nth-child(2) .content
   cursor: pointer;
 }
 .app-nav .item {
+  display: block;
   font-size: var(--font--size-regular);
   padding: 1px 0;
   color: var(--color--foreground--33);
+  text-decoration: none;
 }
 .app-nav .item:hover {
   color: var(--color--foreground--100);
@@ -547,7 +549,10 @@ body.theme-slider--is--visible .app-aside .option.theme .dot:nth-child(1)  { tra
 .section > .content {
   grid-column: 3 / -1;
 }
-.section h1 {
+.section h1,
+.section.intro .text,
+.section.values .title h2,
+.section.background .item .role {
   margin-left: var(--font--margin-left);
   font-size: var(--font--size-huge);
   line-height: 0.975;
@@ -969,4 +974,3 @@ body.page-not-found .section.intro .text {
 body.page-not-found .section.intro h1 {
   padding-bottom: 0.5em;
 }
-

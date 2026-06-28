@@ -227,7 +227,10 @@
   .app-grid-overlay .column:nth-child(n+3) {
     display: none;
   }
-  .section h1 {
+  .section h1,
+  .section.intro .text,
+  .section.values .title h2,
+  .section.background .item .role {
     line-height: 1;
   }
   .section.intro .text {
