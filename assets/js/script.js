@@ -2,8 +2,6 @@
 
 // Script
 //------------------------------------------------------------------------------
-var mobileNavigationDelay = 120;
-
 function setLanguage(lang) {
 
 const currentPage = window.location.pathname.split("/").pop();
@@ -39,6 +37,101 @@ $(document).ready(function() {
   $('.copyright .year').html(currentYear);
   // console.log('Current year is ' + currentYear);
   // console.log('Setting copyright accordingly');
+
+  // Build the AI Summary deep links at runtime so the prompt stays readable and maintainable.
+  var aiSummaryPrompts = {
+    en: 'Review https://galalhelany.com/ and provide a concise, factual summary for someone considering working with Galal Helany. Explain: 1) the purpose of the website, 2) the services and expertise presented, 3) the main strengths and benefits, 4) relevant experience and project highlights, and 5) why a company or product team should consider working with him. Base the answer only on information available on the website, clearly distinguish facts from inference, and organize the response with short headings and bullet points.',
+    ar: 'راجع موقع https://galalhelany.com/index-ar.html وقدّم ملخصًا عربيًا موجزًا وموضوعيًا لشخص يفكر في العمل مع جلال حيلاني. اشرح: 1) هدف الموقع، 2) الخدمات والخبرات المعروضة، 3) أبرز نقاط القوة والفوائد، 4) الخبرات والمشاريع المهمة، و5) لماذا قد ترغب شركة أو فريق منتجات في العمل معه. استند فقط إلى المعلومات الموجودة في الموقع، وميّز بوضوح بين الحقائق والاستنتاجات، ونظّم الإجابة بعناوين قصيرة ونقاط.'
+  };
+
+  // Gemini does not currently read regular prompt query parameters. Copying
+  // inside the user's click keeps the workflow reliable, including on file://.
+  function copyAiSummaryPrompt(text) {
+    // Try the synchronous path first so the copy completes before the link
+    // opens Gemini in a new tab. This also works for locally opened file:// pages.
+    var fallbackCopied = copyAiSummaryPromptFallback(text);
+
+    // On secure origins, also use the modern Clipboard API. Running both paths
+    // avoids browser-specific false positives from the legacy copy command.
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(function() {
+        return true;
+      }).catch(function() {
+        return fallbackCopied;
+      });
+    }
+
+    return Promise.resolve(fallbackCopied);
+  }
+
+  function copyAiSummaryPromptFallback(text) {
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
+
+    var copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch (error) {
+      copied = false;
+    }
+
+    document.body.removeChild(textarea);
+    return copied;
+  }
+
+  function showAiSummaryFeedback($summary, message) {
+    var previousTimer = $summary.data('ai-feedback-timer');
+    window.clearTimeout(previousTimer);
+    $summary.find('.ai-summary__feedback').text(message);
+
+    var timer = window.setTimeout(function() {
+      $summary.find('.ai-summary__feedback').text('');
+    }, 7000);
+    $summary.data('ai-feedback-timer', timer);
+  }
+
+  $('.ai-summary').each(function() {
+    var $summary = $(this);
+    var language = $summary.data('ai-language') || 'en';
+    var prompt = aiSummaryPrompts[language] || aiSummaryPrompts.en;
+
+    $summary.find('.ai-summary__link').each(function() {
+      var baseUrl = this.getAttribute('data-ai-url');
+      var modelName = this.getAttribute('data-ai-name');
+
+      if (baseUrl) {
+        this.href = baseUrl + encodeURIComponent(prompt);
+      }
+
+      if (modelName === 'Gemini') {
+        var feedbackMessage = language === 'ar'
+          ? 'تم نسخ الـ Prompt — الصقه في Gemini باستخدام Ctrl+V أو ⌘V.'
+          : 'Prompt copied — paste it in Gemini with Ctrl+V or ⌘V.';
+
+        this.setAttribute(
+          'title',
+          language === 'ar' ? 'ينسخ الـ Prompt ثم يفتح Gemini' : 'Copies the prompt, then opens Gemini'
+        );
+
+        $(this).on('click', function() {
+          copyAiSummaryPrompt(prompt).then(function(copied) {
+            showAiSummaryFeedback(
+              $summary,
+              copied ? feedbackMessage : (language === 'ar' ? 'تعذّر النسخ التلقائي؛ انسخ الـ Prompt يدويًا.' : 'Automatic copy was blocked; copy the prompt manually.')
+            );
+          });
+        });
+      }
+    });
+  });
 
   // Detect if user prefers dark mode and make it dark
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -77,7 +170,7 @@ $(document).ready(function() {
   $('.app-nav .item.intro').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToIntro, mobileNavigationDelay);
+        window.setTimeout(scrollToIntro, 300);
       }
       scrollDelay();
     }
@@ -90,7 +183,7 @@ $(document).ready(function() {
   $('.app-nav .item.values').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToValues, mobileNavigationDelay);
+        window.setTimeout(scrollToValues, 300);
       }
       scrollDelay();
     }
@@ -103,7 +196,7 @@ $(document).ready(function() {
   $('.app-nav .item.background').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToBackground, mobileNavigationDelay);
+        window.setTimeout(scrollToBackground, 300);
       }
       scrollDelay();
     }
@@ -116,7 +209,7 @@ $(document).ready(function() {
   $('.app-nav .item.references').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToReferences, mobileNavigationDelay);
+        window.setTimeout(scrollToReferences, 300);
       }
       scrollDelay();
     }
@@ -129,7 +222,7 @@ $(document).ready(function() {
   $('.app-nav .item.work').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToWork, mobileNavigationDelay);
+        window.setTimeout(scrollToWork, 300);
       }
       scrollDelay();
     }
@@ -142,7 +235,7 @@ $(document).ready(function() {
   $('.app-nav .item.about').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToAbout, mobileNavigationDelay);
+        window.setTimeout(scrollToAbout, 300);
       }
       scrollDelay();
     }
@@ -155,7 +248,7 @@ $(document).ready(function() {
   $('.app-nav .item.contact').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       function scrollDelay() {
-        window.setTimeout(scrollToContact, mobileNavigationDelay);
+        window.setTimeout(scrollToContact, 300);
       }
       scrollDelay();
     }
@@ -316,39 +409,36 @@ $(document).keydown(function(key) {
     }
 });
 
-// Keep side-menu navigation responsive while retaining the smooth easing.
-var navigationScrollDuration = 380;
-
 // Scroll to Intro
 function scrollToIntro() {
   // $('html, body').animate({ scrollTop: $('.section.intro').offset().top }, 750, 'easeOutCubic');
-  $('html, body').animate({ scrollTop: 0 }, navigationScrollDuration, 'easeOutCubic');
+  $('html, body').animate({ scrollTop: 0 }, 750, 'easeOutCubic');
 }
 
 // Scroll to Values
 function scrollToValues() {
   // $('html, body').animate({ scrollTop: $('.section.values').offset().top - 90 }, 750, 'easeOutCubic');
-  $('html, body').animate({ scrollTop: $('.section.values').offset().top }, navigationScrollDuration, 'easeOutCubic');
+  $('html, body').animate({ scrollTop: $('.section.values').offset().top }, 750, 'easeOutCubic');
 }
 
 // Scroll to Background
 function scrollToBackground() {
-  $('html, body').animate({ scrollTop: $('.section.background').offset().top }, navigationScrollDuration, 'easeOutCubic');
+  $('html, body').animate({ scrollTop: $('.section.background').offset().top }, 750, 'easeOutCubic');
 }
 
 // Scroll to References
 function scrollToReferences() {
-  $('html, body').animate({ scrollTop: $('.section.references').offset().top }, navigationScrollDuration, 'easeOutCubic');
+  $('html, body').animate({ scrollTop: $('.section.references').offset().top }, 750, 'easeOutCubic');
 }
 
 // Scroll to Work
 function scrollToWork() {
-  $('html, body').animate({ scrollTop: $('.section.work').offset().top }, navigationScrollDuration, 'easeOutCubic');
+  $('html, body').animate({ scrollTop: $('.section.work').offset().top }, 750, 'easeOutCubic');
 }
 
 // Scroll to About
 function scrollToAbout() {
-  $('html, body').animate({ scrollTop: $('.section.about').offset().top }, navigationScrollDuration, 'easeOutCubic');
+  $('html, body').animate({ scrollTop: $('.section.about').offset().top }, 750, 'easeOutCubic');
 }
 
 // Scroll to Contact
@@ -362,10 +452,10 @@ function scrollToContact() {
   var sectionContactTop = sectionContact.offset().top;
 
   if ( sectionContactHeight > viewportHeight ) {
-    $('html, body').animate({ scrollTop: sectionContactTop }, navigationScrollDuration, 'easeOutCubic');
+    $('html, body').animate({ scrollTop: sectionContactTop }, 750, 'easeOutCubic');
   }
   else {
-    $('html, body').animate({ scrollTop: pageHeight - viewportHeight }, navigationScrollDuration, 'easeOutCubic');
+    $('html, body').animate({ scrollTop: pageHeight - viewportHeight }, 750, 'easeOutCubic');
   }
 
 }
