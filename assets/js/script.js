@@ -38,6 +38,26 @@ $(document).ready(function() {
   // console.log('Current year is ' + currentYear);
   // console.log('Setting copyright accordingly');
 
+  // Build the AI Summary deep links at runtime so the prompt stays readable and maintainable.
+  var aiSummaryPrompts = {
+    en: 'Review https://galalhelany.com/ and provide a concise, factual summary for someone considering working with Galal Helany. Explain: 1) the purpose of the website, 2) the services and expertise presented, 3) the main strengths and benefits, 4) relevant experience and project highlights, and 5) why a company or product team should consider working with him. Base the answer only on information available on the website, clearly distinguish facts from inference, and organize the response with short headings and bullet points.',
+    ar: 'راجع موقع https://galalhelany.com/index-ar.html وقدّم ملخصًا عربيًا موجزًا وموضوعيًا لشخص يفكر في العمل مع جلال حيلاني. اشرح: 1) هدف الموقع، 2) الخدمات والخبرات المعروضة، 3) أبرز نقاط القوة والفوائد، 4) الخبرات والمشاريع المهمة، و5) لماذا قد ترغب شركة أو فريق منتجات في العمل معه. استند فقط إلى المعلومات الموجودة في الموقع، وميّز بوضوح بين الحقائق والاستنتاجات، ونظّم الإجابة بعناوين قصيرة ونقاط.'
+  };
+
+  $('.ai-summary').each(function() {
+    var $summary = $(this);
+    var language = $summary.data('ai-language') || 'en';
+    var prompt = aiSummaryPrompts[language] || aiSummaryPrompts.en;
+
+    $summary.find('.ai-summary__link').each(function() {
+      var baseUrl = this.getAttribute('data-ai-url');
+
+      if (baseUrl) {
+        this.href = baseUrl + encodeURIComponent(prompt);
+      }
+    });
+  });
+
   // Detect if user prefers dark mode and make it dark
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     if ( $('body').hasClass('theme--16') ){
