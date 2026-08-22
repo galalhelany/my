@@ -1,0 +1,241 @@
+/* Premium motion system
+----------------------------------------------------------------------------- */
+
+:root {
+  --motion-duration: 800ms;
+  --motion-stagger: 100ms;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* Section and child reveals are enabled by JavaScript so content stays visible
+   when scripting or Intersection Observer is unavailable. */
+.motion-enabled .motion-reveal {
+  opacity: 0;
+  transform: translate3d(0, 36px, 0);
+  transition:
+    opacity var(--motion-duration) var(--motion-ease),
+    transform var(--motion-duration) var(--motion-ease);
+  transition-delay: var(--motion-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.motion-enabled .motion-reveal[data-motion-direction="inline"] {
+  transform: translate3d(-28px, 0, 0);
+}
+
+[dir="rtl"].motion-enabled .motion-reveal[data-motion-direction="inline"] {
+  transform: translate3d(28px, 0, 0);
+}
+
+.motion-enabled .motion-reveal.is-in-view {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+/* Page-wide ambient circles live in the document and track the actual cursor
+   position while remaining behind every content section. */
+.motion-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app-main {
+  position: relative;
+  z-index: 1;
+}
+
+.app-main > .section:not(.cover) {
+  position: relative;
+  z-index: 1;
+}
+
+.motion-ambient__circle {
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0.32;
+  filter: blur(1px);
+  transition: transform 260ms var(--motion-ease);
+  will-change: transform;
+}
+
+.motion-ambient__circle--primary {
+  width: clamp(120px, 16vw, 260px);
+  aspect-ratio: 1;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at 30% 30%, var(--color--foreground--15), transparent 70%);
+  transform: translate3d(
+    calc(var(--ambient-primary-x, 75vw) - 50%),
+    calc(var(--ambient-primary-y, 25vh) - 50%),
+    0
+  );
+  animation: ambient-float-primary 8s ease-in-out infinite alternate;
+}
+
+.motion-ambient__circle--secondary {
+  width: clamp(80px, 10vw, 160px);
+  aspect-ratio: 1;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle, var(--color--foreground--10), transparent 72%);
+  transform: translate3d(
+    calc(var(--ambient-secondary-x, 25vw) - 50%),
+    calc(var(--ambient-secondary-y, 65vh) - 50%),
+    0
+  );
+  transition-duration: 480ms;
+  animation: ambient-float-secondary 10s ease-in-out infinite alternate;
+}
+
+@keyframes ambient-float-primary {
+  from { margin-top: -6px; }
+  to { margin-top: 10px; }
+}
+
+@keyframes ambient-float-secondary {
+  from { margin: 6px 0 0 0; }
+  to { margin: -8px 0 0 8px; }
+}
+
+/* Images reveal through opacity and scale; the custom property lets JS add
+   optional transform-only parallax without fighting the entrance transition. */
+.motion-enabled .motion-image {
+  --image-scale: 0.95;
+  --image-parallax: 0px;
+  opacity: 0;
+  transform: translate3d(0, var(--image-parallax), 0) scale(var(--image-scale));
+  transform-origin: center;
+  transition:
+    opacity 900ms var(--motion-ease),
+    transform 900ms var(--motion-ease);
+  will-change: opacity, transform;
+}
+
+.motion-enabled .motion-image.is-in-view {
+  --image-scale: 1;
+  opacity: 1;
+}
+
+/* Testimonial/project metadata leads, followed by the quote. */
+.motion-enabled .section.references .item .quote,
+.motion-enabled .section.references .item p {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition: opacity 650ms var(--motion-ease), transform 650ms var(--motion-ease);
+}
+
+.motion-enabled .section.references .item.is-in-view p {
+  opacity: 1;
+  transform: none;
+  transition-delay: 80ms;
+}
+
+.motion-enabled .section.references .item.is-in-view .quote {
+  opacity: 1;
+  transform: none;
+  transition-delay: 180ms;
+}
+
+/* CTA: the primary contact link receives a single, gentle pulse after reveal. */
+.motion-enabled .section.contact.is-in-view .actions .item:first-child a {
+  animation: cta-pulse 1.8s var(--motion-ease) 900ms 2;
+}
+
+/* Footer links remain visible by default. When the contact section activates,
+   they receive a one-time stagger without depending on more scroll space. */
+.motion-enabled .section.contact.is-in-view .actions > * {
+  animation: footer-reveal 700ms var(--motion-ease) var(--motion-delay, 0ms) both;
+}
+
+.section.contact > .content::before {
+  content: "";
+  position: absolute;
+  inset: 15% 5% 5%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color--foreground--10), transparent 68%);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 1.2s var(--motion-ease), transform 1.2s var(--motion-ease);
+  pointer-events: none;
+}
+
+.section.contact > .content {
+  isolation: isolate;
+  position: relative;
+}
+
+.section.contact.is-in-view > .content::before {
+  opacity: 0.55;
+  transform: scale(1);
+  animation: cta-glow 6s ease-in-out 1.2s infinite alternate;
+}
+
+@keyframes cta-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
+
+@keyframes footer-reveal {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cta-glow {
+  from { opacity: 0.35; transform: scale(0.98); }
+  to { opacity: 0.6; transform: scale(1.04); }
+}
+
+/* Glass surfaces transition cleanly when their state changes. */
+.app-aside .option,
+.app-header,
+.app-nav {
+  transition: background-color 350ms var(--motion-ease), backdrop-filter 350ms var(--motion-ease);
+}
+
+@media all and (max-width: 1020px) {
+  .motion-ambient__circle {
+    opacity: 0.2;
+  }
+}
+
+/* Accessibility: motion is removed, smooth scrolling is disabled, and all
+   content is immediately visible for people who request reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .motion-enabled .motion-reveal,
+  .motion-enabled .motion-image,
+  .motion-enabled .section.references .item .quote,
+  .motion-enabled .section.references .item p {
+    opacity: 1;
+    transform: none;
+  }
+}
