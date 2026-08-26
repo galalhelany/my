@@ -655,6 +655,153 @@ body.theme-slider--is--visible .app-aside .option.theme .dot:nth-child(1)  { tra
 .section.intro .text span {
   white-space: nowrap;
 }
+
+/* Client logos: a seamless GPU-accelerated marquee with a monochrome treatment. */
+.client-logo-marquee {
+  --client-logo-gap: 24px;
+  position: relative;
+  width: 100%;
+  margin-top: clamp(36px, 5vw, 72px);
+  overflow: hidden;
+  direction: ltr;
+  contain: layout paint;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+.client-logo-marquee__track {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  transform: translate3d(0, 0, 0);
+}
+.client-logo-marquee.is-ready .client-logo-marquee__track {
+  animation: clientLogoMarquee 42s linear infinite;
+  will-change: transform;
+}
+.client-logo-marquee__group {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: var(--client-logo-gap);
+  margin-inline-end: var(--client-logo-gap);
+}
+.client-logo-marquee__item {
+  width: auto;
+  height: clamp(56px, 5.8vw, 76px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.55;
+  animation: clientLogoLuminosity 5.8s ease-in-out infinite;
+}
+/* Logo links stay visually clean while retaining their accessible focus ring. */
+.app-main .client-logo-marquee__item,
+.app-main .client-logo-marquee__item:hover {
+  border-bottom: 0;
+  text-decoration: none;
+}
+.client-logo-marquee__item:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.client-logo-marquee__item:nth-child(5n + 2) { animation-delay: -1.15s; }
+.client-logo-marquee__item:nth-child(5n + 3) { animation-delay: -2.3s; }
+.client-logo-marquee__item:nth-child(5n + 4) { animation-delay: -3.45s; }
+.client-logo-marquee__item:nth-child(5n + 5) { animation-delay: -4.6s; }
+.client-logo-marquee__item img {
+  width: auto;
+  height: 100%;
+  max-width: 210px;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) saturate(0) contrast(1.15);
+  mix-blend-mode: multiply;
+  transform: translateZ(0);
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 240ms ease-out;
+}
+body.theme--08 .client-logo-marquee__item img,
+body.theme--07 .client-logo-marquee__item img,
+body.theme--06 .client-logo-marquee__item img,
+body.theme--05 .client-logo-marquee__item img,
+body.theme--04 .client-logo-marquee__item img,
+body.theme--03 .client-logo-marquee__item img,
+body.theme--02 .client-logo-marquee__item img,
+body.theme--01 .client-logo-marquee__item img,
+body.theme--00 .client-logo-marquee__item img {
+  filter: grayscale(1) saturate(0) invert(1) contrast(1.15);
+  mix-blend-mode: screen;
+}
+@media (hover: hover) {
+  /* Reveal each brand's original colors while preserving the subtle scale. */
+  .app-main .client-logo-marquee__item:hover {
+    opacity: 1 !important;
+    animation-play-state: paused;
+  }
+  .app-main .client-logo-marquee__item:hover img {
+    filter: none;
+    mix-blend-mode: normal;
+    transform: translateZ(0) scale(1.045);
+  }
+}
+@keyframes clientLogoMarquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes clientLogoLuminosity {
+  0%, 100% {
+    opacity: 0.38;
+  }
+  50% {
+    opacity: 0.78;
+  }
+}
+@media (max-width: 500px) {
+  .client-logo-marquee {
+    margin-top: 32px;
+  }
+  .client-logo-marquee__item {
+    height: 56px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .client-logo-marquee {
+    overflow: visible;
+    contain: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .client-logo-marquee.is-ready .client-logo-marquee__track {
+    width: 100%;
+    transform: none;
+    animation: none;
+    will-change: auto;
+  }
+  .client-logo-marquee__group {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-inline-end: 0;
+  }
+  .client-logo-marquee__group--clone {
+    display: none;
+  }
+  .client-logo-marquee__item {
+    opacity: 0.65;
+    animation: none;
+  }
+  .client-logo-marquee__item img {
+    transition: none;
+  }
+  .client-logo-marquee__item:hover img {
+    transform: translateZ(0);
+  }
+}
 .section h1 a {
   border-bottom: 2px solid var(--color--foreground--25);
   display: inline-block;

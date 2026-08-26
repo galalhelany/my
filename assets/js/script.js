@@ -38,6 +38,28 @@ $(document).ready(function() {
   // console.log('Current year is ' + currentYear);
   // console.log('Setting copyright accordingly');
 
+  // Duplicate each client-logo group once so the CSS translation loops without
+  // a visible jump. The clone is hidden from assistive technology.
+  $('.client-logo-marquee').each(function() {
+    var $marquee = $(this);
+    var $track = $marquee.find('.client-logo-marquee__track');
+    var $group = $track.find('.client-logo-marquee__group').first();
+
+    if ($group.length && $track.find('.client-logo-marquee__group').length === 1) {
+      var $clone = $group.clone();
+      $clone
+        .addClass('client-logo-marquee__group--clone')
+        .attr('aria-hidden', 'true')
+        .removeAttr('role');
+      $clone.find('[role="listitem"]').removeAttr('role');
+      // Keep the decorative duplicate out of keyboard navigation.
+      $clone.find('a').attr('tabindex', '-1');
+      $clone.find('img').attr('alt', '');
+      $track.append($clone);
+      $marquee.addClass('is-ready');
+    }
+  });
+
   // Build the AI Summary deep links at runtime so the prompt stays readable and maintainable.
   var aiSummaryPrompts = {
     en: 'Review https://galalhelany.com/ and provide a concise, factual summary for someone considering working with Galal Helany. Explain: 1) the purpose of the website, 2) the services and expertise presented, 3) the main strengths and benefits, 4) relevant experience and project highlights, and 5) why a company or product team should consider working with him. Base the answer only on information available on the website, clearly distinguish facts from inference, and organize the response with short headings and bullet points.',
