@@ -32,6 +32,10 @@
     --font--size-large: clamp(22px, 2.74vw, 2.74vw);
     --font--size-medium: 22px;
   }
+  /* Keep the compact navigation readable while inheriting the active theme. */
+  .app-header {
+    background-color: var(--color--background--100);
+  }
   .app-grid-overlay .column:nth-child(n+7) {
     display: none;
   }
