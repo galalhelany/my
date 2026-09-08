@@ -165,6 +165,7 @@
   <script src="assets/js/jquery-3.7.1.min.js"></script>
   <script src="assets/js/jquery-easing-1.4.1.js"></script>
   <script src="assets/js/script.js"></script>
+  <script src="assets/js/cursor.js" defer></script>
 
 
 </head>
@@ -208,7 +209,8 @@
       <a class="item work" href="#projects">المشاريع</a>
       <a class="item values" href="#principles">المبادئ</a>
       <a class="item background" href="#experience">الخبرة</a>
-      <a class="item references" href="#latest-projects">آخر المشاريع</a>
+      <a class="item references" href="#what-i-bring">ما أضيفه للمنتج</a>
+      <a class="item faq" href="#before-we-work-together">أسئلة شائعة</a>
       <a class="item about" href="#about">من أنا</a>
       <a class="item contact" href="#contact">تواصل</a>
     </div>
@@ -321,19 +323,39 @@
 
         <ul class="project-grid">
           <li class="project-card-item">
-            <article class="project-card">
+            <article class="project-card project-card--dual" data-project-dual-card>
               <figure>
-                <img src="assets/img/projects/hamdan-awards-mockup.png" alt="نموذج واجهات منصة جوائز حمدان"
-                  width="3164" height="1802" loading="lazy" decoding="async">
+                <a class="project-card__media-link" href="https://www.ha.ae/ar" target="_blank"
+                  rel="noopener noreferrer" data-project-cursor-zone="live"
+                  aria-label="عرض منصة جوائز حمدان المباشرة">
+                  <img src="assets/img/projects/hamdan-awards-mockup.png" alt="نموذج واجهات منصة جوائز حمدان"
+                    width="3164" height="1802" loading="lazy" decoding="async">
+                </a>
                 <figcaption>
-                  <span class="project-card__date"><span aria-hidden="true"></span>2024</span>
-                  <h3 class="project-card__name">جوائز حمدان</h3>
-                  <h4 class="project-card__title">تبسيط منصة معقدة متعددة الأدوار لإدارة الجوائز</h4>
-                  <div class="project-card__tags" aria-label="مجالات المشروع">
-                    <span>منتج مؤسسي</span><span>مسارات متعددة الأدوار</span><span>نظام تصميم</span>
+                  <a class="project-card__case-content" href="case-study-ar.html?project=enterprise-platform"
+                    data-project-cursor-zone="case" aria-label="فتح دراسة حالة جوائز حمدان">
+                    <span class="project-card__date"><span aria-hidden="true"></span>2024</span>
+                    <h3 class="project-card__name">جوائز حمدان</h3>
+                    <h4 class="project-card__title">تبسيط منصة معقدة متعددة الأدوار لإدارة الجوائز</h4>
+                    <p class="project-card__description">منصة متكاملة للجوائز توحّد التقديم والتقييم والإدارة ومسارات العمل متعددة الأدوار ضمن تجربة واحدة قابلة للتوسع.</p>
+                    <div class="project-card__tags" aria-label="مجالات المشروع">
+                      <span>منتج مؤسسي</span><span>مسارات متعددة الأدوار</span><span>نظام تصميم</span>
+                    </div>
+                  </a>
+                  <div class="project-card__actions">
+                    <a class="project-card__action project-card__action--case"
+                      href="case-study-ar.html?project=enterprise-platform" data-project-cursor-zone="case">
+                      <span>عرض دراسة الحالة الكاملة</span>
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m10 3-5 5 5 5" /></svg>
+                    </a>
+                    <a class="project-card__action project-card__action--live" href="https://www.ha.ae/ar"
+                      target="_blank" rel="noopener noreferrer" data-project-cursor-zone="live">
+                      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" /><path d="M2.8 10h14.4M10 2.5c2.2 2.2 3.3 4.7 3.3 7.5S12.2 15.3 10 17.5C7.8 15.3 6.7 12.8 6.7 10S7.8 4.7 10 2.5Z" /></svg>
+                      <span>عرض مباشر</span>
+                    </a>
                   </div>
-                  <span class="project-card__action">دراسة الحالة الكاملة قريبًا</span>
                 </figcaption>
+                <span class="project-card__cursor" aria-hidden="true"><span data-project-cursor-label>عرض الحالة</span></span>
               </figure>
             </article>
           </li>
@@ -347,6 +369,7 @@
                   <span class="project-card__date"><span aria-hidden="true"></span>2025-2026</span>
                   <h3 class="project-card__name">Mosaic / ARC ERP</h3>
                   <h4 class="project-card__title">تصميم نظام ERP متخصص لعمليات تجهيزات المباني المعمارية</h4>
+                  <p class="project-card__description">نظام مؤسسي متخصص يجمع عمليات تجهيزات المباني المعمارية المعقدة والفرق والتقارير ضمن مسار عمل واحد متماسك.</p>
                   <div class="project-card__tags" aria-label="مجالات المشروع">
                     <span>B2B SaaS</span><span>ERP</span><span>مسارات عمل معقدة</span>
                   </div>
@@ -365,6 +388,7 @@
                   <span class="project-card__date"><span aria-hidden="true"></span>2024</span>
                   <h3 class="project-card__name">لفاح</h3>
                   <h4 class="project-card__title">إعادة تصور تجربة الطلب الرقمي لعلامة مطاعم متنامية</h4>
+                  <p class="project-card__description">تجربة طلب متجاوبة تجعل اكتشاف القائمة والتخصيص وإتمام الطلب أسرع عبر الجوال وسطح المكتب.</p>
                   <div class="project-card__tags" aria-label="مجالات المشروع">
                     <span>منتج استهلاكي</span><span>تجارة إلكترونية</span><span>ويب متجاوب</span>
                   </div>
@@ -383,6 +407,7 @@
                   <span class="project-card__date"><span aria-hidden="true"></span>2025</span>
                   <h3 class="project-card__name">ABH Manufacturing</h3>
                   <h4 class="project-card__title">تحويل منظومة منتجات معقدة إلى تجربة رقمية قابلة للتوسع</h4>
+                  <p class="project-card__description">منصة B2B قابلة للتوسع تبسّط اكتشاف المنتجات والمعلومات التقنية وإدارة العمليات عبر مختلف الأجهزة.</p>
                   <div class="project-card__tags" aria-label="مجالات المشروع">
                     <span>منتج B2B</span><span>اكتشاف المنتجات</span><span>ويب متجاوب</span>
                   </div>
@@ -401,6 +426,7 @@
                   <span class="project-card__date"><span aria-hidden="true"></span>2025</span>
                   <h3 class="project-card__name">المنظمة العربية للسياحة</h3>
                   <h4 class="project-card__title">إعادة هيكلة تجربة رقمية غنية بالمحتوى لتسهيل الاكتشاف</h4>
+                  <p class="project-card__description">بنية محتوى أوضح تساعد الزوار على اكتشاف الوجهات والتقارير ومعلومات الأعضاء والموارد التنظيمية بسهولة.</p>
                   <div class="project-card__tags" aria-label="مجالات المشروع">
                     <span>هندسة معلومات</span><span>UX/UI</span><span>ويب متجاوب</span>
                   </div>
@@ -431,6 +457,31 @@
             أنا ملتزم بـ التطور المستمر وتقديم أعمال ترتقي إلى أعلى مستويات الجودة، مع ربط كل مشروع برسالة أعمق تهدف إلى
             إحداث أثر إيجابي وترك بصمة خيّرة. كما ألتزم أن يكون عملي دومًا منسجمًا مع القيم والمبادئ الإسلامية، دون أي
             تعارض مع ديني، مع الحفاظ على الاحترافية العالية.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section markets" aria-labelledby="markets-title">
+      <div class="content">
+        <header class="markets__header">
+          <h2 id="markets-title">أسواق مختلفة.<br><span>تحديات مشتركة.</span></h2>
+        </header>
+
+        <!-- ينسخ سكربت الشريط الحالي هذه المجموعة مرة واحدة لإنشاء حركة متصلة. -->
+        <div class="client-logo-marquee markets-marquee" aria-label="الدول التي عملت عبرها">
+          <div class="client-logo-marquee__track">
+            <div class="client-logo-marquee__group markets-marquee__group" role="list">
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/sy.png" srcset="https://flagcdn.com/w160/sy.png 2x" width="80" height="53" alt="" loading="lazy" decoding="async"><span>سوريا</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/sa.png" srcset="https://flagcdn.com/w160/sa.png 2x" width="80" height="53" alt="" loading="lazy" decoding="async"><span>المملكة العربية السعودية</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/ae.png" srcset="https://flagcdn.com/w160/ae.png 2x" width="80" height="40" alt="" loading="lazy" decoding="async"><span>الإمارات</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/tr.png" srcset="https://flagcdn.com/w160/tr.png 2x" width="80" height="53" alt="" loading="lazy" decoding="async"><span>تركيا</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/se.png" srcset="https://flagcdn.com/w160/se.png 2x" width="80" height="50" alt="" loading="lazy" decoding="async"><span>السويد</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/cz.png" srcset="https://flagcdn.com/w160/cz.png 2x" width="80" height="53" alt="" loading="lazy" decoding="async"><span>التشيك</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/us.png" srcset="https://flagcdn.com/w160/us.png 2x" width="80" height="42" alt="" loading="lazy" decoding="async"><span>الولايات المتحدة</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/ca.png" srcset="https://flagcdn.com/w160/ca.png 2x" width="80" height="40" alt="" loading="lazy" decoding="async"><span>كندا</span></div>
+              <div class="markets-marquee__item" role="listitem"><img src="https://flagcdn.com/w80/de.png" srcset="https://flagcdn.com/w160/de.png 2x" width="80" height="48" alt="" loading="lazy" decoding="async"><span>ألمانيا</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -670,29 +721,196 @@
       </div>
     </section>
 
-    <section class="section references " id="latest-projects">
+    <section class="section references product-strengths" id="what-i-bring">
       <div class="content">
+        <header class="product-strengths__header">
+          <h2>ما الذي أضيفه إلى المنتج</h2>
+        </header>
 
-        <div class="item">
-          <h2 class="quote">مِقياس — لوحة معلومات البيع بالتجزئة</h2>
-          <p>
-            <span class="person"><a href="https://www.behance.net/gallery/232673857/Miqyas-Retail-Dashboard-UXUI"
-                target="_blank" rel="noopener noreferrer">عرض على Behance</a></span>
-            <span class="role">تطبيق saas</span>
-          </p>
+        <div class="product-strengths__list">
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">01</span>
+            <h3>تصميم المنتج من البداية إلى النهاية</h3>
+            <ul>
+              <li>من الاكتشاف إلى الإطلاق</li>
+              <li>البحث وتحديد المتطلبات والاستراتيجية</li>
+              <li>تصميم التفاعل والواجهات عالية الدقة</li>
+              <li>النماذج الأولية والاختبار والتسليم للمطورين</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--three" aria-hidden="true">
+              <img src="assets/img/product-strengths/45085.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45084.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45083.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
+
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">02</span>
+            <h3>التفكير في المنتج والأنظمة</h3>
+            <ul>
+              <li>احتياجات المستخدم × أهداف العمل</li>
+              <li>مسارات العمل المعقدة ومنطق المنتج</li>
+              <li>قرارات تصميم قابلة للتوسع</li>
+              <li>التفكير أبعد من الشاشات المنفردة</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--three" aria-hidden="true">
+              <img src="assets/img/product-strengths/45078.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45082.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45073.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
+
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">03</span>
+            <h3>تجارب مستخدم معقدة، بوضوح</h3>
+            <ul>
+              <li>منتجات غنية بالمحتوى والبيانات</li>
+              <li>مسارات متعددة الأدوار والصلاحيات</li>
+              <li>منصات B2B وB2C معقدة</li>
+              <li>وضوح دون تقليل قدرات المنتج</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--three" aria-hidden="true">
+              <img src="assets/img/product-strengths/45069.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/01.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45081.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
+
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">04</span>
+            <h3>أنظمة التصميم وقابلية التوسع</h3>
+            <ul>
+              <li>مكونات وأنماط قابلة لإعادة الاستخدام</li>
+              <li>رموز التصميم والمتغيرات</li>
+              <li>اتساق التجربة عبر المنصات</li>
+              <li>مواءمة التصميم مع التطوير</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--two" aria-hidden="true">
+              <img src="assets/img/product-strengths/45077.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45074.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
+
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">05</span>
+            <h3>خبرة التصميم البصري</h3>
+            <ul>
+              <li>أكثر من 10 سنوات في التصميم البصري</li>
+              <li>الخطوط والتسلسل البصري والتكوين</li>
+              <li>الهوية البصرية والأنظمة المرئية</li>
+              <li>واجهات واضحة ومتقنة</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--three" aria-hidden="true">
+              <img src="assets/img/product-strengths/45080.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45075.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45071.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
+
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">06</span>
+            <h3>التصميم × الواجهة الأمامية</h3>
+            <ul>
+              <li>تصميم متجاوب مع مختلف الشاشات</li>
+              <li>HTML وCSS (<strong>Tailwind</strong>) وJavaScript (<strong>React - Next.js - TypeScript</strong>)</li>
+              <li>تفكير قائم على المكونات</li>
+              <li>التصميم مع مراعاة الجدوى التقنية</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--two" aria-hidden="true">
+              <img src="assets/img/product-strengths/45072.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45070.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
+
+          <article class="product-strengths__item">
+            <span class="product-strengths__number" aria-hidden="true">07</span>
+            <h3>التعاون والتسليم</h3>
+            <ul>
+              <li>المنتج × التصميم × الهندسة</li>
+              <li>مواءمة أصحاب المصلحة</li>
+              <li>تسليم جاهز للتطوير</li>
+              <li>من القرارات إلى منتج تم إطلاقه</li>
+            </ul>
+            <div class="product-strengths__preview product-strengths__preview--two" aria-hidden="true">
+              <img src="assets/img/product-strengths/45079.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+              <img src="assets/img/product-strengths/45076.png" alt="" width="390" height="180" loading="lazy" decoding="async">
+            </div>
+          </article>
         </div>
+      </div>
+    </section>
 
-        <div class="item">
-          <h2 class="quote">نرد – تطبيق التعلم الذكي</h2>
-          <p>
-            <span class="person"><a href="https://www.behance.net/gallery/231011813/Nerd-Smart-Learning-App-UIUX"
-                target="_blank" rel="noopener noreferrer">عرض على Behance</a></span>
-            <span class="role">تطبيق</span>
-          </p>
+    <section class="section faq" id="before-we-work-together">
+      <div class="content">
+        <header class="faq__header">
+          <h2>قبل أن نعمل معًا</h2>
+        </header>
+
+        <div class="faq__list">
+          <details class="faq__item">
+            <summary>
+              <h3>ما نوع الفرص التي تبحث عنها؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>أهتم بشكل أساسي بأدوار مصمم منتجات أول ومصمم UX/UI أول، خصوصًا ضمن فرق تبني منتجات SaaS ومنتجات مؤسسية ومنصات B2B وB2C ومنتجات رقمية معقدة. أنجذب بصورة خاصة إلى المنتجات التي يستطيع فيها التصميم تبسيط التعقيد والتأثير في تطور المنتج، وليس في مظهره فقط.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>متى يمكنك البدء؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>أنا منفتح حاليًا على فرص جديدة، ويمكنني البدء فورًا في الدور أو المشروع المناسب.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>ما أنواع المنتجات التي تستمتع بالعمل عليها أكثر؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>أستمتع بالمنتجات التي تنطوي على تعقيد حقيقي، مثل المنصات متعددة الأدوار، ومنتجات SaaS، ولوحات المعلومات، والأنظمة المؤسسية، والأدوات التشغيلية، والتجارب ذات مسارات العمل أو المعلومات الكثيفة. كلما زادت الحاجة إلى الفهم والتنظيم والتبسيط، أصبحت مشكلة التصميم أكثر إثارة للاهتمام.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>كيف يبدو العمل معك فعليًا؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>أحب أن يمتد دوري إلى ما هو أبعد من ملف Figma. أعمل عن قرب مع مديري المنتجات والمهندسين وأصحاب المصلحة والمستخدمين، بدءًا من فهم المشكلة وصياغة المسارات، وصولًا إلى التحقق من القرارات ومعالجة الحالات الطرفية ودعم التنفيذ.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>هل تصمم واجهات المستخدم فقط، أم تعمل أيضًا على استراتيجية المنتج وتجربة المستخدم؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>أعمل عبر دورة حياة المنتج كاملة. وبحسب المشروع، قد يشمل ذلك الاكتشاف والبحث واستراتيجية تجربة المستخدم وهندسة المعلومات ومسارات المستخدم وتصميم التفاعل والواجهات والنماذج الأولية والاختبار وأنظمة التصميم والتسليم للمطورين.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>كيف تعمل مع المطورين؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>عن قرب ومنذ وقت مبكر. تساعدني خلفيتي في تطوير الواجهات الأمامية على فهم السلوك المتجاوب وقيود التنفيذ والواجهات القائمة على المكونات وواقع واجهات الإنتاج. أفضل مناقشة الجدوى والحالات الطرفية أثناء التصميم بدلًا من اكتشاف المشكلات بعد التسليم.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>هل تعمل أيضًا في تطوير الواجهات الأمامية؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>نعم. لدي خبرة عملية في HTML وCSS وJavaScript، إلى جانب فهم مسارات وتقنيات تطوير الواجهات الحديثة مثل React وTypeScript وNext.js وTailwind CSS. يبقى تركيزي الأساسي على تصميم المنتجات، لكن الخلفية التقنية تساعدني على التصميم بواقعية أكبر والتواصل بصورة أفضل مع فرق الهندسة.</p></div>
+          </details>
+
+          <details class="faq__item">
+            <summary>
+              <h3>كيف تستخدم الذكاء الاصطناعي في عملية التصميم؟</h3>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer"><p>أستخدم الذكاء الاصطناعي كجزء من سير العمل، لا كبديل عن التفكير التصميمي. يمكنه تسريع تلخيص الأبحاث والاستكشاف والمحتوى والتوثيق والنماذج الأولية والتطوير، لكن قرارات المنتج يجب أن تظل مبنية على المستخدمين والسياق والقيود والحكم المهني.</p></div>
+          </details>
         </div>
-
-
-
       </div>
     </section>
 
@@ -710,6 +928,21 @@
             يمتد شغفي أيضًا إلى العلامة التجارية، الهوية البصرية، والتسويق الرقمي، مما يمكنني من ابتكار تجارب متكاملة
             تتناغم مع الجمهور وتحقق نتائج ملموسة.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="section pre-contact-cta" aria-labelledby="pre-contact-title">
+      <div class="content">
+        <h2 id="pre-contact-title">
+          <span>دورك الآن.</span>
+          <span>أخبرني عمّا تبنيه.</span>
+        </h2>
+        <a class="pre-contact-cta__link" href="https://cal.com/galalhelany" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M7 3v3M17 3v3M4.5 9h15M6.5 5h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+          </svg>
+          <span>لنتحدث</span>
+        </a>
       </div>
     </section>
 

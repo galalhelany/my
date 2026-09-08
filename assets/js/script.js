@@ -60,6 +60,64 @@ $(document).ready(function() {
     }
   });
 
+  // The Hamdan card has two intentional destinations. A lightweight,
+  // transform-only cursor follows the active text or image region while the
+  // native links preserve keyboard access and expected browser behavior.
+  document.querySelectorAll('[data-project-dual-card]').forEach(function(card) {
+    var figure = card.querySelector('figure');
+    var cursor = card.querySelector('.project-card__cursor');
+    var cursorLabel = card.querySelector('[data-project-cursor-label]');
+    var isArabic = document.documentElement.lang === 'ar';
+    var cursorSize = 160;
+    var pendingX = -cursorSize;
+    var pendingY = -cursorSize;
+    var cursorFrame = null;
+
+    if (!figure || !cursor || !cursorLabel) {
+      return;
+    }
+
+    function renderProjectCursor() {
+      cursor.style.setProperty('--project-cursor-x', pendingX + 'px');
+      cursor.style.setProperty('--project-cursor-y', pendingY + 'px');
+      cursorFrame = null;
+    }
+
+    function hideProjectCursor() {
+      card.classList.remove('is-project-cursor-visible', 'is-project-cursor-live');
+    }
+
+    figure.addEventListener('pointermove', function(event) {
+      if (event.pointerType && event.pointerType !== 'mouse') {
+        hideProjectCursor();
+        return;
+      }
+
+      var zone = event.target.closest('[data-project-cursor-zone]');
+      if (!zone || !card.contains(zone)) {
+        hideProjectCursor();
+        return;
+      }
+
+      var mode = zone.getAttribute('data-project-cursor-zone');
+      var bounds = figure.getBoundingClientRect();
+      pendingX = Math.max(8, Math.min(bounds.width - cursorSize - 8, event.clientX - bounds.left - cursorSize / 2));
+      pendingY = Math.max(8, Math.min(bounds.height - cursorSize - 8, event.clientY - bounds.top - cursorSize / 2));
+
+      cursorLabel.textContent = mode === 'live'
+        ? (isArabic ? 'عرض مباشر' : 'View live')
+        : (isArabic ? 'عرض الحالة' : 'View case');
+      card.classList.toggle('is-project-cursor-live', mode === 'live');
+      card.classList.add('is-project-cursor-visible');
+
+      if (!cursorFrame) {
+        cursorFrame = window.requestAnimationFrame(renderProjectCursor);
+      }
+    }, { passive: true });
+
+    figure.addEventListener('pointerleave', hideProjectCursor, { passive: true });
+  });
+
   // Build the AI Summary deep links at runtime so the prompt stays readable and maintainable.
   var aiSummaryPrompts = {
     en: 'Review https://galalhelany.com/ and provide a concise, factual summary for someone considering working with Galal Helany. Explain: 1) the purpose of the website, 2) the services and expertise presented, 3) the main strengths and benefits, 4) relevant experience and project highlights, and 5) why a company or product team should consider working with him. Base the answer only on information available on the website, clearly distinguish facts from inference, and organize the response with short headings and bullet points.',
@@ -237,6 +295,19 @@ $(document).ready(function() {
     }
     else {
       scrollToReferences();
+    }
+  });
+
+  // Scroll to Before We Work Together from app nav
+  $('.app-nav .item.faq').click(function() {
+    if ( $('body').hasClass('mobile-nav--is--visible') ){
+      function scrollDelay() {
+        window.setTimeout(scrollToFaq, 300);
+      }
+      scrollDelay();
+    }
+    else {
+      scrollToFaq();
     }
   });
 
@@ -453,6 +524,11 @@ function scrollToReferences() {
   $('html, body').animate({ scrollTop: $('.section.references').offset().top }, 750, 'easeOutCubic');
 }
 
+// Scroll to Before We Work Together
+function scrollToFaq() {
+  $('html, body').animate({ scrollTop: $('.section.faq').offset().top }, 750, 'easeOutCubic');
+}
+
 // Scroll to Work
 function scrollToWork() {
   $('html, body').animate({ scrollTop: $('.section.work').offset().top }, 750, 'easeOutCubic');
@@ -635,6 +711,7 @@ $(window).on('load resize scroll', function() {
   var appNavItemValues = $('.app-nav .item.values');
   var appNavItemBackground = $('.app-nav .item.background');
   var appNavItemReferences = $('.app-nav .item.references');
+  var appNavItemFaq = $('.app-nav .item.faq');
   var appNavItemAbout = $('.app-nav .item.about');
   var appNavItemContact = $('.app-nav .item.contact');
 
@@ -673,6 +750,11 @@ $(window).on('load resize scroll', function() {
   var sectionReferencesHeight = sectionReferences.height();
   var sectionReferencesTop = sectionReferences.offset().top;
   var sectionReferencesBottom = sectionReferencesTop + sectionReferencesHeight;
+
+  var sectionFaq = $('.app-main .section.faq')
+  var sectionFaqHeight = sectionFaq.height();
+  var sectionFaqTop = sectionFaq.offset().top;
+  var sectionFaqBottom = sectionFaqTop + sectionFaqHeight;
 
   var sectionAbout = $('.app-main .section.about')
   var sectionAboutHeight = sectionAbout.height();
@@ -720,6 +802,9 @@ $(window).on('load resize scroll', function() {
   if ( sectionReferencesTop <= appMainScrollMiddle && sectionReferencesBottom >= appMainScrollMiddle ){
     appNavItemReferences.addClass('is--active');
     // sectionReferences.addClass('is--in-view');
+  }
+  if ( sectionFaqTop <= appMainScrollMiddle && sectionFaqBottom >= appMainScrollMiddle ){
+    appNavItemFaq.addClass('is--active');
   }
   if ( sectionAboutTop <= appMainScrollMiddle && sectionContactMiddle >= appMainScrollBottom ){
     appNavItemAbout.addClass('is--active');
