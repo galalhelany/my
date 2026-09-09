@@ -230,6 +230,10 @@
   var slug = projects[requestedSlug] ? requestedSlug : slugs[0];
   var readingView = requestedView === 'tldr' ? 'tldr' : 'details';
   var language = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+  var caseStudyPaths = {
+    en: 'hamdan-awards-case-study.html',
+    ar: 'hamdan-awards-case-study-ar.html'
+  };
   var project = projects[slug];
   var content = project[language];
   var copy = sharedCopy[language];
@@ -303,27 +307,18 @@
     }
   });
 
-  var nextLink = document.querySelector('[data-project-next]');
-  if (nextLink) {
-    nextLink.href = (language === 'ar' ? 'case-study-ar.html' : 'case-study.html') + '?project=' + nextSlug + '&view=' + readingView;
-  }
-
   // Keep both language controls on the same case study, matching the homepage
   // language switcher rather than sending visitors back to the landing page.
   document.querySelectorAll('[data-project-language]').forEach(function (languageLink) {
     var targetLanguage = languageLink.getAttribute('data-project-language');
-    languageLink.href = (targetLanguage === 'ar' ? 'case-study-ar.html' : 'case-study.html') + '?project=' + slug + '&view=' + readingView;
+    languageLink.href = caseStudyPaths[targetLanguage] + (readingView === 'tldr' ? '?view=tldr' : '');
   });
-
-  document.title = content.title + (language === 'ar' ? ' | جلال حيلاني' : ' | Galal Helany');
 
   // Footer AI links use the current project rather than the homepage prompt.
   // Gemini also receives the prompt through the clipboard because it does not
   // consistently preserve query-string prompts when opening a new chat.
   function getCaseStudySummaryPrompt() {
-    var caseStudyUrl = 'https://galalhelany.com/' +
-      (language === 'ar' ? 'case-study-ar.html' : 'case-study.html') +
-      '?project=' + encodeURIComponent(slug);
+    var caseStudyUrl = 'https://galalhelany.com/' + caseStudyPaths[language];
 
     if (language === 'ar') {
       return 'راجع دراسة حالة ' + content.title + ' على ' + caseStudyUrl +
@@ -806,13 +801,9 @@
   }
 
   function updateReadingLinks(view) {
-    if (nextLink) {
-      nextLink.href = (language === 'ar' ? 'case-study-ar.html' : 'case-study.html') + '?project=' + nextSlug + '&view=' + view;
-    }
-
     document.querySelectorAll('[data-project-language]').forEach(function (languageLink) {
       var targetLanguage = languageLink.getAttribute('data-project-language');
-      languageLink.href = (targetLanguage === 'ar' ? 'case-study-ar.html' : 'case-study.html') + '?project=' + slug + '&view=' + view;
+      languageLink.href = caseStudyPaths[targetLanguage] + (view === 'tldr' ? '?view=tldr' : '');
     });
   }
 
@@ -843,8 +834,12 @@
 
     if (shouldUpdateUrl && window.history && window.history.replaceState) {
       var updatedUrl = new URL(window.location.href);
-      updatedUrl.searchParams.set('project', slug);
-      updatedUrl.searchParams.set('view', readingView);
+      updatedUrl.searchParams.delete('project');
+      if (readingView === 'tldr') {
+        updatedUrl.searchParams.set('view', 'tldr');
+      } else {
+        updatedUrl.searchParams.delete('view');
+      }
       window.history.replaceState({ readingView: readingView }, '', updatedUrl);
     }
   }
