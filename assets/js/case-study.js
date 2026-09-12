@@ -417,7 +417,113 @@
   var textSizeSlider = textSizeControl ? textSizeControl.querySelector('.slider') : null;
   var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Both product galleries share one data-driven carousel on the English and
+  function initializeMetricCounters() {
+    var counterElements = Array.from(document.querySelectorAll('.case-study-metrics strong'));
+    if (!counterElements.length || prefersReducedMotion) {
+      return;
+    }
+
+    var counters = counterElements.map(function (element) {
+      var originalText = element.textContent.trim();
+      var numberMatch = originalText.match(/[\d,]+(?:\.\d+)?/);
+      if (!numberMatch) {
+        return null;
+      }
+
+      var numericText = numberMatch[0].replace(/,/g, '');
+      var decimalPoint = numericText.indexOf('.');
+      var decimalPlaces = decimalPoint === -1 ? 0 : numericText.length - decimalPoint - 1;
+      var target = Number(numericText);
+
+      element.setAttribute('aria-label', originalText);
+
+      return {
+        element: element,
+        originalText: originalText,
+        prefix: originalText.slice(0, numberMatch.index),
+        suffix: originalText.slice(numberMatch.index + numberMatch[0].length),
+        target: target,
+        decimalPlaces: decimalPlaces,
+        usesGrouping: numberMatch[0].indexOf(',') !== -1
+      };
+    }).filter(Boolean);
+
+    if (!counters.length) {
+      return;
+    }
+
+    function formatCounterValue(counter, value) {
+      var fixedValue = value.toFixed(counter.decimalPlaces);
+      var parts = fixedValue.split('.');
+      if (counter.usesGrouping) {
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+      return counter.prefix + parts.join('.') + counter.suffix;
+    }
+
+    counters.forEach(function (counter) {
+      counter.element.textContent = formatCounterValue(counter, 0);
+      counter.element.classList.add('is-counter-pending');
+    });
+
+    var hasAnimated = false;
+
+    function animateCounters() {
+      if (hasAnimated) {
+        return;
+      }
+      hasAnimated = true;
+
+      counters.forEach(function (counter, index) {
+        window.setTimeout(function () {
+          var startTime = null;
+          var duration = 1600;
+
+          counter.element.classList.add('is-counter-active');
+
+          function updateCounter(timestamp) {
+            if (startTime === null) {
+              startTime = timestamp;
+            }
+
+            var progress = Math.min((timestamp - startTime) / duration, 1);
+            var easedProgress = 1 - Math.pow(1 - progress, 3);
+            var currentValue = counter.target * easedProgress;
+            counter.element.textContent = formatCounterValue(counter, currentValue);
+
+            if (progress < 1) {
+              window.requestAnimationFrame(updateCounter);
+            } else {
+              counter.element.textContent = counter.originalText;
+              counter.element.classList.remove('is-counter-pending', 'is-counter-active');
+            }
+          }
+
+          window.requestAnimationFrame(updateCounter);
+        }, index * 110);
+      });
+    }
+
+    var metrics = document.querySelector('.case-study-metrics');
+    if ('IntersectionObserver' in window && metrics) {
+      var metricsObserver = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (entry) { return entry.isIntersecting; })) {
+          return;
+        }
+
+        metricsObserver.disconnect();
+        animateCounters();
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+
+      metricsObserver.observe(metrics);
+    } else {
+      animateCounters();
+    }
+  }
+
+  initializeMetricCounters();
+
+  // All three product galleries share one data-driven carousel on the English and
   // Arabic pages. Generated slides keep image references out of the HTML.
   function padGalleryNumber(value) {
     return value < 10 ? '0' + value : String(value);
@@ -519,6 +625,161 @@
     return slides;
   }
 
+  function openCaseStudyLightbox(galleryItems, startIndex, galleryLanguage, galleryLabel, syncCarousel) {
+    var existingLightbox = document.querySelector('[data-case-lightbox]');
+    if (existingLightbox) {
+      existingLightbox.remove();
+    }
+
+    var returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    var activeLightboxIndex = startIndex;
+    var isClosing = false;
+    var lightbox = document.createElement('div');
+    var figure = document.createElement('figure');
+    var mediaButton = document.createElement('button');
+    var image = document.createElement('img');
+    var caption = document.createElement('figcaption');
+    var previousLightboxButton = document.createElement('button');
+    var nextLightboxButton = document.createElement('button');
+    var closeDelay = prefersReducedMotion ? 0 : 240;
+
+    lightbox.className = 'case-study-lightbox';
+    lightbox.setAttribute('data-case-lightbox', '');
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.setAttribute('aria-label', galleryLanguage === 'ar'
+      ? 'عارض صور بالحجم الكامل: ' + galleryLabel
+      : 'Full-size image viewer: ' + galleryLabel);
+    lightbox.tabIndex = -1;
+
+    figure.className = 'case-study-lightbox__figure';
+    mediaButton.className = 'case-study-lightbox__media-button';
+    mediaButton.type = 'button';
+    mediaButton.setAttribute('data-case-lightbox-media', '');
+    image.className = 'case-study-lightbox__image';
+    image.decoding = 'async';
+    image.draggable = false;
+    caption.className = 'case-study-lightbox__caption';
+    caption.setAttribute('aria-live', 'polite');
+    caption.setAttribute('aria-atomic', 'true');
+
+    previousLightboxButton.className = 'case-study-lightbox__arrow case-study-lightbox__arrow--previous';
+    previousLightboxButton.type = 'button';
+    previousLightboxButton.setAttribute('aria-label', galleryLanguage === 'ar' ? 'الصورة السابقة' : 'Previous image');
+    previousLightboxButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+
+    nextLightboxButton.className = 'case-study-lightbox__arrow case-study-lightbox__arrow--next';
+    nextLightboxButton.type = 'button';
+    nextLightboxButton.setAttribute('aria-label', galleryLanguage === 'ar' ? 'الصورة التالية' : 'Next image');
+    nextLightboxButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
+    mediaButton.appendChild(image);
+    figure.appendChild(mediaButton);
+    figure.appendChild(caption);
+    lightbox.appendChild(previousLightboxButton);
+    lightbox.appendChild(figure);
+    lightbox.appendChild(nextLightboxButton);
+
+    function updateLightbox(requestedIndex, shouldAnimate) {
+      activeLightboxIndex = (requestedIndex + galleryItems.length) % galleryItems.length;
+      var item = galleryItems[activeLightboxIndex];
+      var currentNumber = localizeGalleryNumber(activeLightboxIndex + 1, galleryLanguage);
+      var totalNumber = localizeGalleryNumber(galleryItems.length, galleryLanguage);
+
+      if (shouldAnimate) {
+        figure.classList.add('is-changing');
+      }
+
+      image.onload = function () {
+        figure.classList.remove('is-changing');
+        figure.classList.add('is-ready');
+      };
+      image.src = item.src;
+      image.alt = item.alt;
+      image.width = item.width;
+      image.height = item.height;
+      mediaButton.setAttribute('aria-label', galleryLanguage === 'ar'
+        ? 'إغلاق عارض الصورة: ' + item.alt
+        : 'Close image viewer: ' + item.alt);
+      caption.textContent = item.alt + ' · ' + currentNumber + ' / ' + totalNumber +
+        (galleryLanguage === 'ar' ? ' · ← → · اضغط Esc للإغلاق' : ' · ← → · Esc to close');
+
+      if (typeof syncCarousel === 'function') {
+        syncCarousel(activeLightboxIndex);
+      }
+    }
+
+    function closeLightbox() {
+      if (isClosing) {
+        return;
+      }
+
+      isClosing = true;
+      lightbox.classList.add('is-closing');
+      document.documentElement.classList.remove('case-study-lightbox-open');
+      body.classList.remove('case-study-lightbox-open');
+
+      window.setTimeout(function () {
+        lightbox.remove();
+        var customCursor = document.querySelector('.site-cursor');
+        if (customCursor) {
+          customCursor.classList.remove('is-visible', 'is-gallery-zoom-in', 'is-gallery-zoom-out');
+        }
+        if (returnFocus && document.contains(returnFocus)) {
+          returnFocus.focus({ preventScroll: true });
+        }
+      }, closeDelay);
+    }
+
+    mediaButton.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function (event) {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    previousLightboxButton.addEventListener('click', function () {
+      updateLightbox(activeLightboxIndex - 1, true);
+    });
+    nextLightboxButton.addEventListener('click', function () {
+      updateLightbox(activeLightboxIndex + 1, true);
+    });
+
+    lightbox.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeLightbox();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        updateLightbox(activeLightboxIndex - 1, true);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        updateLightbox(activeLightboxIndex + 1, true);
+      } else if (event.key === 'Tab') {
+        var focusableControls = [previousLightboxButton, mediaButton, nextLightboxButton];
+        var focusedIndex = focusableControls.indexOf(document.activeElement);
+        var nextFocusIndex;
+
+        if (event.shiftKey) {
+          nextFocusIndex = focusedIndex <= 0 ? focusableControls.length - 1 : focusedIndex - 1;
+        } else {
+          nextFocusIndex = focusedIndex >= focusableControls.length - 1 ? 0 : focusedIndex + 1;
+        }
+
+        event.preventDefault();
+        focusableControls[nextFocusIndex].focus();
+      }
+    });
+
+    document.body.appendChild(lightbox);
+    document.documentElement.classList.add('case-study-lightbox-open');
+    body.classList.add('case-study-lightbox-open');
+    updateLightbox(activeLightboxIndex, false);
+    window.requestAnimationFrame(function () {
+      lightbox.classList.add('is-open');
+      lightbox.focus({ preventScroll: true });
+    });
+  }
+
   function initializeCaseStudyCarousels() {
     document.querySelectorAll('[data-case-carousel]').forEach(function (carousel) {
       var galleryLanguage = carousel.getAttribute('data-carousel-language') === 'ar' ? 'ar' : 'en';
@@ -547,6 +808,7 @@
       var fragment = document.createDocumentFragment();
       galleryItems.forEach(function (item, index) {
         var slide = document.createElement('figure');
+        var zoomButton = document.createElement('button');
         var image = document.createElement('img');
 
         slide.className = 'case-study-carousel__slide';
@@ -563,8 +825,27 @@
         image.height = item.height;
         image.decoding = 'async';
         image.loading = 'lazy';
+        image.draggable = false;
 
-        slide.appendChild(image);
+        zoomButton.className = 'case-study-carousel__zoom';
+        zoomButton.type = 'button';
+        zoomButton.setAttribute('data-case-carousel-zoom', '');
+        zoomButton.setAttribute('aria-label', (galleryLanguage === 'ar' ? 'فتح الصورة بالحجم الكامل: ' :
+          'Open full-size image: ') + item.alt);
+        zoomButton.addEventListener('click', function () {
+          openCaseStudyLightbox(
+            galleryItems,
+            index,
+            galleryLanguage,
+            carousel.getAttribute('aria-label') || '',
+            function (lightboxIndex) {
+              showSlide(Math.min(lightboxIndex, pairCount - 1));
+            }
+          );
+        });
+
+        zoomButton.appendChild(image);
+        slide.appendChild(zoomButton);
         fragment.appendChild(slide);
       });
       stage.appendChild(fragment);
@@ -593,7 +874,11 @@
 
         renderedSlides.forEach(function (slide, index) {
           var isVisible = index === activeIndex || index === activeIndex + 1;
+          var slideZoomButton = slide.querySelector('[data-case-carousel-zoom]');
           slide.setAttribute('aria-hidden', String(!isVisible));
+          if (slideZoomButton) {
+            slideZoomButton.tabIndex = isVisible ? 0 : -1;
+          }
         });
 
         // Movement is handled only with a GPU-accelerated track transform;
@@ -864,8 +1149,17 @@
     }
   }
 
+  function scrollToCaseStudyTop() {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto'
+    });
+  }
+
   readingButtons.forEach(function (button) {
     button.addEventListener('click', function () {
+      scrollToCaseStudyTop();
       setReadingView(button.getAttribute('data-reading-view'), { updateUrl: true, animate: true });
     });
   });
@@ -873,6 +1167,7 @@
   // TL;DR ends with an explicit path back to the full narrative.
   document.querySelectorAll('[data-reading-switch]').forEach(function (button) {
     button.addEventListener('click', function () {
+      scrollToCaseStudyTop();
       setReadingView(button.getAttribute('data-reading-switch'), { updateUrl: true, animate: true });
     });
   });

@@ -38,6 +38,93 @@ $(document).ready(function() {
   // console.log('Current year is ' + currentYear);
   // console.log('Setting copyright accordingly');
 
+  // Keep the native details semantics while allowing the FAQ answers to finish
+  // their closing motion before the browser removes them from the layout.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.faq__item').forEach(function(item) {
+      var summary = item.querySelector('summary');
+      var answer = item.querySelector('.faq__answer');
+      var isAnimating = false;
+
+      if (!summary || !answer) {
+        return;
+      }
+
+      function clearAnswerStyles() {
+        answer.style.removeProperty('max-height');
+        answer.style.removeProperty('opacity');
+        answer.style.removeProperty('transform');
+        item.classList.remove('is-opening', 'is-closing');
+        isAnimating = false;
+      }
+
+      function finishOnHeightTransition(callback) {
+        function handleTransitionEnd(event) {
+          if (event.target !== answer || event.propertyName !== 'max-height') {
+            return;
+          }
+
+          answer.removeEventListener('transitionend', handleTransitionEnd);
+          callback();
+        }
+
+        answer.addEventListener('transitionend', handleTransitionEnd);
+      }
+
+      function openAnswer() {
+        isAnimating = true;
+        item.open = true;
+        item.classList.add('is-opening');
+        answer.style.maxHeight = '0px';
+        answer.style.opacity = '0';
+        answer.style.transform = 'translate3d(0, -8px, 0)';
+
+        window.requestAnimationFrame(function() {
+          window.requestAnimationFrame(function() {
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            answer.style.opacity = '1';
+            answer.style.transform = 'translate3d(0, 0, 0)';
+          });
+        });
+
+        finishOnHeightTransition(clearAnswerStyles);
+      }
+
+      function closeAnswer() {
+        isAnimating = true;
+        item.classList.add('is-closing');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        answer.style.opacity = '1';
+        answer.style.transform = 'translate3d(0, 0, 0)';
+        answer.getBoundingClientRect();
+
+        window.requestAnimationFrame(function() {
+          answer.style.maxHeight = '0px';
+          answer.style.opacity = '0';
+          answer.style.transform = 'translate3d(0, -8px, 0)';
+        });
+
+        finishOnHeightTransition(function() {
+          item.open = false;
+          clearAnswerStyles();
+        });
+      }
+
+      summary.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (isAnimating) {
+          return;
+        }
+
+        if (item.open) {
+          closeAnswer();
+        } else {
+          openAnswer();
+        }
+      });
+    });
+  }
+
   // Duplicate each client-logo group once so the CSS translation loops without
   // a visible jump. The clone is hidden from assistive technology.
   $('.client-logo-marquee').each(function() {

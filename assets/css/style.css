@@ -50,6 +50,57 @@ body {
     background-color 180ms ease-out,
     border-color 180ms ease-out;
 }
+.site-cursor__caret {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: var(--site-cursor-caret-height, 22px);
+  border-radius: 999px;
+  background: #616161;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color--background--100) 75%, transparent);
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) scaleY(0.78);
+  transition:
+    opacity 140ms ease-out,
+    height 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-cursor__zoom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color--foreground--100);
+  border-radius: 50%;
+  color: var(--color--foreground--100);
+  background: color-mix(in srgb, var(--color--background--100) 76%, transparent);
+  -webkit-backdrop-filter: blur(3px) saturate(125%);
+  backdrop-filter: blur(3px) saturate(125%);
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.12);
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) scale(0.72);
+  transition:
+    opacity 140ms ease-out,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease-out;
+}
+.site-cursor__zoom-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 1;
+  transform: translate3d(-50%, -50%, 0);
+  transition: opacity 140ms ease-out, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-cursor__zoom-bar--vertical {
+  transform: translate3d(-50%, -50%, 0) rotate(90deg);
+}
 .site-cursor__halo {
   width: 58px;
   height: 58px;
@@ -119,6 +170,42 @@ body {
 }
 .site-cursor.is-interactive .site-cursor__dot {
   transform: translate3d(-50%, -50%, 0) scale(0.82);
+}
+.site-cursor.is-text .site-cursor__halo,
+.site-cursor.is-text .site-cursor__dot,
+.site-cursor.is-text .site-cursor__magnifier {
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) scale(0.72);
+}
+.site-cursor.is-text .site-cursor__caret {
+  opacity: 0.92;
+  transform: translate3d(-50%, -50%, 0) scaleY(1);
+}
+.site-cursor.is-text.is-pressed .site-cursor__caret {
+  transform: translate3d(-50%, -50%, 0) scaleY(0.86);
+}
+.site-cursor.is-gallery-zoom-in .site-cursor__halo,
+.site-cursor.is-gallery-zoom-in .site-cursor__dot,
+.site-cursor.is-gallery-zoom-in .site-cursor__caret,
+.site-cursor.is-gallery-zoom-in .site-cursor__magnifier,
+.site-cursor.is-gallery-zoom-out .site-cursor__halo,
+.site-cursor.is-gallery-zoom-out .site-cursor__dot,
+.site-cursor.is-gallery-zoom-out .site-cursor__caret,
+.site-cursor.is-gallery-zoom-out .site-cursor__magnifier {
+  opacity: 0;
+}
+.site-cursor.is-gallery-zoom-in .site-cursor__zoom,
+.site-cursor.is-gallery-zoom-out .site-cursor__zoom {
+  opacity: 1;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+}
+.site-cursor.is-gallery-zoom-out .site-cursor__zoom-bar--vertical {
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) rotate(90deg) scaleX(0.3);
+}
+.site-cursor.is-gallery-zoom-in.is-pressed .site-cursor__zoom,
+.site-cursor.is-gallery-zoom-out.is-pressed .site-cursor__zoom {
+  transform: translate3d(-50%, -50%, 0) scale(0.86);
 }
 .site-cursor.is-pressed .site-cursor__halo {
   transform: translate3d(-50%, -50%, 0) scale(0.88);
@@ -1927,6 +2014,12 @@ body.theme--00 .client-logo-marquee__item img {
 .faq__item[open] .faq__icon::after {
   transform: translate3d(-50%, -50%, 0) rotate(90deg) scaleX(0);
 }
+.faq__item.is-closing .faq__icon {
+  transform: rotate(0deg);
+}
+.faq__item.is-closing .faq__icon::after {
+  transform: translate3d(-50%, -50%, 0) rotate(90deg) scaleX(1);
+}
 .faq__answer {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) 36px;
@@ -2328,7 +2421,14 @@ body.theme--00 .client-logo-marquee__item img {
 ----------------------------------------------------------------------------- */
 
 ::selection {
-  background-color: var(--color--foreground--10);
+  color: var(--color--background--100);
+  background-color: var(--color--foreground--100);
+  text-shadow: none;
+}
+::-moz-selection {
+  color: var(--color--background--100);
+  background-color: var(--color--foreground--100);
+  text-shadow: none;
 }
 
 

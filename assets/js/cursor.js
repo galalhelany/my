@@ -12,6 +12,9 @@
   cursor.className = 'site-cursor';
   cursor.setAttribute('aria-hidden', 'true');
   cursor.innerHTML = '<span class="site-cursor__halo"></span><span class="site-cursor__dot"></span>' +
+    '<span class="site-cursor__caret"></span>' +
+    '<span class="site-cursor__zoom"><span class="site-cursor__zoom-bar"></span>' +
+    '<span class="site-cursor__zoom-bar site-cursor__zoom-bar--vertical"></span></span>' +
     '<span class="site-cursor__magnifier"><span class="site-cursor__magnifier-text"></span>' +
     '<span class="site-cursor__magnifier-logo"></span></span>';
   document.body.appendChild(cursor);
@@ -53,6 +56,55 @@
     cursor.classList.remove('is-magnifier', 'is-logo-magnifier');
   }
 
+  function mirrorHeadingContent(heading) {
+    var styleProperties = [
+      'color',
+      'display',
+      'font-family',
+      'font-size',
+      'font-style',
+      'font-weight',
+      'letter-spacing',
+      'line-height',
+      'margin-top',
+      'margin-right',
+      'margin-bottom',
+      'margin-left',
+      'padding-top',
+      'padding-right',
+      'padding-bottom',
+      'padding-left',
+      'text-align',
+      'text-decoration',
+      'text-transform',
+      'white-space',
+      'word-break',
+      'overflow-wrap',
+      'direction'
+    ];
+
+    magnifierText.textContent = '';
+    Array.from(heading.childNodes).forEach(function (node) {
+      magnifierText.appendChild(node.cloneNode(true));
+    });
+
+    var sourceElements = Array.from(heading.querySelectorAll('*'));
+    var mirroredElements = Array.from(magnifierText.querySelectorAll('*'));
+
+    mirroredElements.forEach(function (mirroredElement, index) {
+      var sourceElement = sourceElements[index];
+      if (!sourceElement) {
+        return;
+      }
+
+      mirroredElement.removeAttribute('id');
+      var sourceStyles = window.getComputedStyle(sourceElement);
+      styleProperties.forEach(function (property) {
+        mirroredElement.style.setProperty(property, sourceStyles.getPropertyValue(property));
+      });
+    });
+  }
+
   // Recreate only the active heading inside the circular lens. Positioning the
   // enlarged copy opposite the pointer makes the lens behave like a magnifier
   // without duplicating the page or reading unrelated content.
@@ -68,7 +120,7 @@
     var localY = pointerY - bounds.top;
 
     if (activeHeading !== heading) {
-      magnifierText.textContent = heading.textContent;
+      mirrorHeadingContent(heading);
       activeHeading = heading;
       activeLogo = null;
       magnifierLogo.textContent = '';
@@ -162,7 +214,14 @@
     pendingHeading = null;
     pendingLogo = null;
     clearMagnifier();
-    cursor.classList.remove('is-visible', 'is-interactive', 'is-pressed');
+    cursor.classList.remove(
+      'is-visible',
+      'is-interactive',
+      'is-text',
+      'is-gallery-zoom-in',
+      'is-gallery-zoom-out',
+      'is-pressed'
+    );
   }
 
   function isNativeCursorTarget(target) {
@@ -192,13 +251,33 @@
 
     pointerX = event.clientX;
     pointerY = event.clientY;
+    var galleryZoomOut = target.closest('[data-case-lightbox-media]');
+    var galleryZoomIn = galleryZoomOut ? null : target.closest('[data-case-carousel-zoom]');
     // Experience-logo lenses are homepage-only. Their SVG clone is recolored
     // with the original palette while the visible logo remains theme-aware.
-    pendingLogo = isCaseStudyPage ? null : target.closest('.section.background .logo');
+    pendingLogo = isCaseStudyPage || galleryZoomIn || galleryZoomOut
+      ? null
+      : target.closest('.section.background .logo');
     // Use the same magnifying-lens treatment for H2 headings across the
     // homepage and case-study pages in both languages.
-    pendingHeading = pendingLogo ? null : target.closest('h2');
-    cursor.classList.toggle('is-interactive', !pendingLogo && !pendingHeading && isInteractiveTarget(target));
+    pendingHeading = pendingLogo || galleryZoomIn || galleryZoomOut ? null : target.closest('h2');
+    var isInteractive = !pendingLogo && !pendingHeading && !galleryZoomIn && !galleryZoomOut &&
+      isInteractiveTarget(target);
+    var paragraph = !pendingLogo && !pendingHeading && !isInteractive ? target.closest('p') : null;
+
+    cursor.classList.toggle('is-interactive', isInteractive);
+    cursor.classList.toggle('is-text', Boolean(paragraph));
+    cursor.classList.toggle('is-gallery-zoom-in', Boolean(galleryZoomIn));
+    cursor.classList.toggle('is-gallery-zoom-out', Boolean(galleryZoomOut));
+
+    if (paragraph) {
+      var paragraphStyles = window.getComputedStyle(paragraph);
+      var paragraphLineHeight = parseFloat(paragraphStyles.lineHeight);
+      var paragraphFontSize = parseFloat(paragraphStyles.fontSize) || 16;
+      var caretHeight = Number.isFinite(paragraphLineHeight) ? paragraphLineHeight : paragraphFontSize * 1.25;
+      cursor.style.setProperty('--site-cursor-caret-height', Math.max(16, Math.min(caretHeight, 42)) + 'px');
+    }
+
     cursor.classList.add('is-visible');
 
     if (!cursorFrame) {
