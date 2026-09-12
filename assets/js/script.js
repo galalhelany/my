@@ -181,7 +181,7 @@ $(document).ready(function() {
       }
 
       var zone = event.target.closest('[data-project-cursor-zone]');
-      if (!zone || !card.contains(zone)) {
+      if (!zone || !card.contains(zone) || zone.closest('.project-card__actions')) {
         hideProjectCursor();
         return;
       }

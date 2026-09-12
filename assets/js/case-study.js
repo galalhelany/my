@@ -666,12 +666,14 @@
     previousLightboxButton.className = 'case-study-lightbox__arrow case-study-lightbox__arrow--previous';
     previousLightboxButton.type = 'button';
     previousLightboxButton.setAttribute('aria-label', galleryLanguage === 'ar' ? 'الصورة السابقة' : 'Previous image');
-    previousLightboxButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+    previousLightboxButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>' +
+      '<span>' + (galleryLanguage === 'ar' ? 'الصورة السابقة' : 'Previous photo') + '</span>';
 
     nextLightboxButton.className = 'case-study-lightbox__arrow case-study-lightbox__arrow--next';
     nextLightboxButton.type = 'button';
     nextLightboxButton.setAttribute('aria-label', galleryLanguage === 'ar' ? 'الصورة التالية' : 'Next image');
-    nextLightboxButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+    nextLightboxButton.innerHTML = '<span>' + (galleryLanguage === 'ar' ? 'الصورة التالية' : 'Next photo') + '</span>' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
 
     mediaButton.appendChild(image);
     figure.appendChild(mediaButton);
@@ -701,8 +703,11 @@
       mediaButton.setAttribute('aria-label', galleryLanguage === 'ar'
         ? 'إغلاق عارض الصورة: ' + item.alt
         : 'Close image viewer: ' + item.alt);
-      caption.textContent = item.alt + ' · ' + currentNumber + ' / ' + totalNumber +
-        (galleryLanguage === 'ar' ? ' · ← → · اضغط Esc للإغلاق' : ' · ← → · Esc to close');
+      caption.textContent = galleryLanguage === 'ar'
+        ? galleryLabel + ' · الصورة ' + currentNumber + ' من ' + totalNumber +
+          ' · اضغط Esc للإغلاق'
+        : galleryLabel + ' · Photo ' + currentNumber + ' of ' + totalNumber +
+          ' · Esc to close';
 
       if (typeof syncCarousel === 'function') {
         syncCarousel(activeLightboxIndex);
@@ -1194,7 +1199,7 @@
 
   function applyTextSize(value, shouldPersist) {
     var numericValue = Number(value);
-    var safeValue = Number.isInteger(numericValue) ? Math.min(4, Math.max(0, numericValue)) : 2;
+    var safeValue = Number.isInteger(numericValue) ? Math.min(4, Math.max(0, numericValue)) : 1;
     var size = textSizeStates[safeValue];
     removeTextSizeClasses();
     body.classList.add('text-size--' + String(safeValue).padStart(2, '0'));
@@ -1217,12 +1222,12 @@
     try {
       var storedValue = window.localStorage.getItem(textSizeStorageKey);
       if (storedValue === null) {
-        return 2;
+        return 1;
       }
       var savedValue = Number(storedValue);
-      return Number.isInteger(savedValue) && savedValue >= 0 && savedValue <= 4 ? savedValue : 2;
+      return Number.isInteger(savedValue) && savedValue >= 0 && savedValue <= 4 ? savedValue : 1;
     } catch (error) {
-      return 2;
+      return 1;
     }
   }
 
