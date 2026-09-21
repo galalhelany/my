@@ -252,7 +252,7 @@
     pointerX = event.clientX;
     pointerY = event.clientY;
     var galleryZoomOut = target.closest('[data-case-lightbox-media]');
-    var galleryZoomIn = galleryZoomOut ? null : target.closest('[data-case-carousel-zoom]');
+    var galleryZoomIn = galleryZoomOut ? null : target.closest('[data-case-carousel-zoom], [data-mosaic-audit-zoom]');
     // Experience-logo lenses are homepage-only. Their SVG clone is recolored
     // with the original palette while the visible logo remains theme-aware.
     pendingLogo = isCaseStudyPage || galleryZoomIn || galleryZoomOut

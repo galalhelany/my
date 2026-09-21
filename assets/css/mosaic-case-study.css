@@ -1,0 +1,1004 @@
+/* Mosaic-specific content patterns. Every selector is scoped so the Hamdan
+   case study keeps the exact shared visual system without regressions. */
+body[data-case-study-project="mosaic-erp"] .mosaic-wide-content {
+  max-width: none;
+}
+
+body[data-case-study-project="mosaic-erp"] [data-project-language="ar"][hidden] {
+  display: none !important;
+}
+
+body[data-case-study-project="mosaic-erp"][data-reading-view="details"] [data-reading-mode="tldr-only"],
+body[data-case-study-project="mosaic-erp"][data-reading-view="tldr"] [data-reading-mode="details-only"] {
+  display: none !important;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-hero-media img,
+body[data-case-study-project="mosaic-erp"] .mosaic-secondary-media img {
+  background: #f4f5f7;
+  object-fit: contain;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-secondary-media {
+  margin-top: clamp(18px, 3vw, 40px);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel {
+  width: 100%;
+  max-width: 100%;
+  margin: 28px 0 0;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__viewport {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1440 / 1024;
+  border: 1px solid var(--color--foreground--10);
+  background: var(--color--foreground--5);
+  outline: none;
+  touch-action: pan-y;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__viewport:focus-visible {
+  outline: 2px solid var(--color--foreground--100);
+  outline-offset: 3px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  direction: ltr;
+  transform: translate3d(0, 0, 0);
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  margin: 0;
+  background: #f7f7f7;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__slide img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__zoom {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border: 0;
+  color: var(--color--foreground--100);
+  background: #f7f7f7;
+  cursor: zoom-in;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__zoom:focus-visible {
+  outline: 2px solid var(--color--foreground--100);
+  outline-offset: -4px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__slide figcaption {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 7px 10px;
+  color: var(--color--foreground--100);
+  background: color-mix(in srgb, var(--color--background--100) 88%, transparent);
+  font-size: 12px;
+  line-height: 1.35;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__footer {
+  justify-content: space-between;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__footer .case-study-carousel__status {
+  position: static;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__footer .case-study-carousel__actions {
+  margin-inline-start: auto;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel[data-mosaic-single-slide] .mosaic-audit-carousel__footer {
+  display: none;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-create-role-carousel {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding-block: clamp(36px, 4vw, 64px) 0;
+  border-bottom: 0;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-create-role-carousel [hidden] {
+  display: none !important;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-gallery__carousel {
+  padding-block: 0;
+  border-bottom: 0;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs {
+  margin-bottom: clamp(26px, 3vw, 42px);
+  display: flex;
+  align-items: stretch;
+  gap: clamp(22px, 3vw, 52px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid var(--color--foreground--10);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab {
+  min-height: 58px;
+  padding: 0 0 15px;
+  position: relative;
+  flex: 0 0 auto;
+  border: 0;
+  color: var(--color--foreground--50);
+  background: transparent;
+  font: inherit;
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 180ms ease-out;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  content: "";
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 220ms ease-out;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab:hover,
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab.is-active {
+  color: var(--color--foreground--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab.is-active {
+  font-weight: 650;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab.is-active::after {
+  transform: scaleX(1);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab:focus-visible {
+  outline: 2px solid var(--color--foreground--100);
+  outline-offset: -2px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-gallery-empty {
+  min-height: clamp(260px, 36vw, 520px);
+  padding: 32px;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  border: 1px solid var(--color--foreground--10);
+  color: var(--color--foreground--50);
+  background: var(--color--foreground--5);
+  text-align: center;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-gallery-empty:not([hidden]) {
+  display: grid;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-workflow-gallery-empty strong {
+  color: var(--color--foreground--100);
+  font-size: clamp(20px, 2vw, 30px);
+  line-height: 1.2;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-process-carousel .mosaic-audit-carousel__viewport {
+  aspect-ratio: 5919 / 2437;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flows-carousel .mosaic-audit-carousel__viewport {
+  aspect-ratio: 16 / 9;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-brand-figure {
+  margin-top: 34px;
+  overflow: hidden;
+  border: 1px solid var(--color--foreground--10);
+  background: #fff;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-brand-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-foundations,
+body[data-case-study-project="mosaic-erp"] .mosaic-supporting-entities {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-foundations span,
+body[data-case-study-project="mosaic-erp"] .mosaic-supporting-entities span {
+  min-height: 46px;
+  padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color--foreground--10);
+  color: var(--color--foreground--50);
+  background: var(--color--background--100);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-question-grid,
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-cards,
+body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list,
+body[data-case-study-project="mosaic-erp"] .mosaic-insight-grid {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color--foreground--10);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-question-grid article,
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-cards article,
+body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list article,
+body[data-case-study-project="mosaic-erp"] .mosaic-insight-grid article {
+  min-width: 0;
+  padding: 22px;
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-question-grid article:last-child {
+  grid-column: 1 / -1;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-question-grid h3,
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-cards h3 {
+  margin-top: 0;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-question-grid p,
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-cards p,
+body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list p {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-cards > article > span,
+body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list > article > span,
+body[data-case-study-project="mosaic-erp"] .mosaic-insight-grid > article > span,
+body[data-case-study-project="mosaic-erp"] .mosaic-context-split > article > span,
+body[data-case-study-project="mosaic-erp"] .mosaic-before-after > article > span {
+  display: block;
+  color: var(--color--foreground--50);
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-table-wrap {
+  max-width: 100%;
+  margin-top: 36px;
+  overflow-x: auto;
+  border: 1px solid var(--color--foreground--10);
+  outline: none;
+  scrollbar-width: thin;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-table-wrap:focus-visible {
+  box-shadow: 0 0 0 2px var(--color--foreground--25);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  color: var(--color--foreground--50);
+  background: var(--color--background--100);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-table th,
+body[data-case-study-project="mosaic-erp"] .mosaic-table td {
+  padding: 16px;
+  border-inline-end: 1px solid var(--color--foreground--10);
+  border-bottom: 1px solid var(--color--foreground--10);
+  text-align: start;
+  vertical-align: top;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-table thead th,
+body[data-case-study-project="mosaic-erp"] .mosaic-table tbody th {
+  color: var(--color--foreground--100);
+  font-weight: 500;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-table .is-opportunity > * {
+  color: var(--color--background--100);
+  background: var(--color--foreground--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-group {
+  margin-top: 38px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flow {
+  margin-top: 18px !important;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px !important;
+  counter-reset: mosaic-flow;
+  background: var(--color--foreground--10);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flow li {
+  min-height: 112px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--color--foreground--100);
+  background: var(--color--background--100);
+  font-size: 14px;
+  line-height: 1.35;
+  counter-increment: mosaic-flow;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flow li::before {
+  content: counter(mosaic-flow, decimal-leading-zero);
+  position: static;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  color: var(--color--foreground--50);
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-role-grid article,
+body[data-case-study-project="mosaic-erp"] .mosaic-principle-cards article {
+  min-height: 150px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-hierarchy,
+body[data-case-study-project="mosaic-erp"] .mosaic-domain-model {
+  margin-top: 28px !important;
+  padding: 0;
+  display: grid;
+  gap: 1px !important;
+  background: var(--color--foreground--10);
+  counter-reset: hierarchy;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-hierarchy li {
+  min-height: 76px;
+  padding: 16px 18px 16px 66px;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.36fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+  color: var(--color--foreground--50);
+  background: var(--color--background--100);
+  counter-increment: hierarchy;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-hierarchy li::before {
+  content: counter(hierarchy, decimal-leading-zero);
+  top: 50%;
+  inset-inline-start: 18px;
+  width: auto;
+  height: auto;
+  color: var(--color--foreground--50);
+  background: none;
+  font-size: 22px;
+  transform: translateY(-50%);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-hierarchy strong {
+  color: var(--color--foreground--100);
+  font-size: 16px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-hierarchy span {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-context-split,
+body[data-case-study-project="mosaic-erp"] .mosaic-before-after {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color--foreground--10);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-context-split article,
+body[data-case-study-project="mosaic-erp"] .mosaic-before-after article {
+  min-width: 0;
+  padding: 24px;
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-context-split h3,
+body[data-case-study-project="mosaic-erp"] .mosaic-before-after h3 {
+  margin-top: 18px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-context-split p,
+body[data-case-study-project="mosaic-erp"] .mosaic-before-after p {
+  margin-top: 18px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-domain-model {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  counter-reset: domain;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-domain-model li {
+  min-height: 110px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--color--foreground--100);
+  background: var(--color--background--100);
+  font-size: 15px;
+  counter-increment: domain;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-domain-model li::before {
+  content: counter(domain, decimal-leading-zero);
+  position: static;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  color: var(--color--foreground--50);
+  background: none;
+  font-size: 25px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap {
+  margin-top: 32px;
+  border-bottom: 1px solid var(--color--foreground--15);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details {
+  border-top: 1px solid var(--color--foreground--15);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details.is-selected {
+  border-bottom-color: var(--color--foreground--25);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap summary {
+  min-height: 0;
+  padding: 18px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 18px;
+  color: var(--color--foreground--100);
+  font-size: 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details.is-selected summary {
+  color: var(--color--accent, var(--color--foreground--100));
+  font-weight: 600;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap summary::-webkit-details-marker {
+  display: none;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap summary::marker {
+  content: "";
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color--foreground--25);
+  border-radius: 50%;
+  transition: background-color 220ms ease-out, border-color 220ms ease-out, transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon::before,
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1px;
+  background: var(--color--foreground--100);
+  transform: translate3d(-50%, -50%, 0);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon::after {
+  transform: translate3d(-50%, -50%, 0) rotate(90deg);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details[open] .mosaic-sitemap__icon {
+  transform: rotate(180deg);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details[open] .mosaic-sitemap__icon::after {
+  transform: translate3d(-50%, -50%, 0) rotate(90deg) scaleX(0);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details.is-closing .mosaic-sitemap__icon {
+  transform: rotate(0deg);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details.is-closing .mosaic-sitemap__icon::after {
+  transform: translate3d(-50%, -50%, 0) rotate(90deg) scaleX(1);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__answer {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 36px;
+  gap: 18px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translate3d(0, -8px, 0);
+  transition: max-height 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap details[open] .mosaic-sitemap__answer {
+  max-height: 260px;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__answer p {
+  grid-column: 1;
+  margin: 0;
+  max-width: 58ch;
+  padding: 0 0 30px;
+  color: var(--color--foreground--50);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-sitemap summary:focus-visible {
+  outline: 2px solid var(--color--foreground--100);
+  outline-offset: 5px;
+}
+
+@media (hover: hover) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap summary:hover .mosaic-sitemap__icon {
+    border-color: var(--color--foreground--50);
+    background: var(--color--foreground--5);
+  }
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow {
+  margin-top: 30px;
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: grid-template-rows 420ms cubic-bezier(0.22, 1, 0.36, 1), margin-top 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow.is-collapsed {
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, -8px, 0);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__inner {
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--color--foreground--15);
+  border-radius: 16px;
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__header,
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__detail {
+  padding: 18px 20px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__header {
+  border-bottom: 1px solid var(--color--foreground--10);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__header h3 {
+  margin: 0 0 4px;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.08;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__header p,
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__detail p {
+  margin: 0;
+  color: var(--color--foreground--50);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 22px 20px;
+  background: var(--color--foreground--5);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__node {
+  padding: 13px 14px;
+  border: 1px solid var(--color--foreground--15);
+  border-radius: 10px;
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__node strong {
+  display: block;
+  margin: 0;
+  color: var(--color--foreground--100);
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__node--root {
+  align-self: center;
+  min-width: 130px;
+  text-align: center;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__node--branch {
+  border-color: var(--color--foreground--100);
+  background: var(--color--foreground--100);
+  text-align: center;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__node--branch span,
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__node--branch strong {
+  color: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__connector {
+  align-self: center;
+  width: 1px;
+  height: 22px;
+  background: var(--color--foreground--25);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children {
+  position: relative;
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 12px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 1px;
+  background: var(--color--foreground--25);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 11px;
+  border: 1px solid var(--color--foreground--15);
+  border-radius: 9px;
+  color: var(--color--foreground--100);
+  background: var(--color--background--100);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -21px;
+  left: 50%;
+  width: 1px;
+  height: 20px;
+  background: var(--color--foreground--25);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button:hover,
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button:focus-visible {
+  border-color: var(--color--foreground--50);
+  color: var(--color--foreground--100);
+  transform: translateY(-1px);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button:focus-visible {
+  outline: 2px solid var(--color--foreground--100);
+  outline-offset: 2px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button.is-active {
+  border-color: var(--color--foreground--100);
+  color: var(--color--background--100);
+  background: var(--color--foreground--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__detail {
+  border-top: 1px solid var(--color--foreground--10);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__detail strong {
+  display: block;
+  margin: 5px 0;
+  color: var(--color--foreground--100);
+  font-size: 15px;
+}
+
+@media (max-width: 479px) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap summary {
+    min-height: 0;
+    padding: 18px 0;
+    grid-template-columns: minmax(0, 1fr) 32px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children::before {
+    left: 50%;
+    right: auto;
+    width: 1px;
+    height: 100%;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow__children button,
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__answer,
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon,
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon::before,
+  body[data-case-study-project="mosaic-erp"] .mosaic-sitemap__icon::after,
+  body[data-case-study-project="mosaic-erp"] .mosaic-ia-flow {
+    transition: none;
+  }
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list article {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.28fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list p {
+  margin-top: 0;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-outcomes strong {
+  font-size: clamp(24px, 2.4vw, 38px);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-evidence-chain {
+  margin-top: 34px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px 22px;
+  border: 1px solid var(--color--foreground--10);
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-evidence-chain span,
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-highlight span,
+body[data-case-study-project="mosaic-erp"] .mosaic-system-summary span {
+  color: var(--color--foreground--50);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-evidence-chain strong,
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-highlight strong,
+body[data-case-study-project="mosaic-erp"] .mosaic-system-summary strong {
+  color: var(--color--foreground--100);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-live-prototype-link,
+body[data-case-study-project="mosaic-erp"] .mosaic-live-prototype-link:visited {
+  color: var(--color--foreground--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-storybook-note {
+  margin-top: 40px;
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-flow-highlight,
+body[data-case-study-project="mosaic-erp"] .mosaic-system-summary {
+  margin-top: 30px;
+  padding: 22px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--color--foreground--10);
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-system-summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0;
+  background: var(--color--foreground--10);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-system-summary > div {
+  padding: 22px;
+  display: grid;
+  gap: 12px;
+  background: var(--color--background--100);
+}
+
+body[data-case-study-project="mosaic-erp"] .mosaic-insight-grid article:last-child {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1021px) {
+  body[data-case-study-project="mosaic-erp"] .case-study-nav .content {
+    max-height: calc(100vh - 176px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .case-study-nav .content::-webkit-scrollbar {
+    display: none;
+  }
+
+}
+
+@media (max-width: 900px) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-flow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+@media (max-width: 760px) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-question-grid,
+  body[data-case-study-project="mosaic-erp"] .mosaic-flow-cards,
+  body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list,
+  body[data-case-study-project="mosaic-erp"] .mosaic-insight-grid,
+  body[data-case-study-project="mosaic-erp"] .mosaic-context-split,
+  body[data-case-study-project="mosaic-erp"] .mosaic-before-after,
+  body[data-case-study-project="mosaic-erp"] .mosaic-system-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-question-grid article:last-child {
+    grid-column: auto;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-insight-grid article:last-child {
+    grid-column: auto;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-flow,
+  body[data-case-study-project="mosaic-erp"] .mosaic-domain-model {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-hierarchy li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-annotation-list article {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-evidence-chain {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-evidence-chain strong + span {
+    margin-top: 12px;
+  }
+
+}
+
+@media (max-width: 500px) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-flow,
+  body[data-case-study-project="mosaic-erp"] .mosaic-domain-model {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-flow li,
+  body[data-case-study-project="mosaic-erp"] .mosaic-domain-model li {
+    min-height: 96px;
+  }
+
+  body[data-case-study-project="mosaic-erp"] .mosaic-table {
+    min-width: 680px;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-case-study-project="mosaic-erp"] .mosaic-audit-carousel__track {
+    transition: none;
+  }
+}

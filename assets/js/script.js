@@ -147,7 +147,7 @@ $(document).ready(function() {
     }
   });
 
-  // The Hamdan card has two intentional destinations. A lightweight,
+  // Featured project cards can have two intentional destinations. A lightweight,
   // transform-only cursor follows the active text or image region while the
   // native links preserve keyboard access and expected browser behavior.
   document.querySelectorAll('[data-project-dual-card]').forEach(function(card) {

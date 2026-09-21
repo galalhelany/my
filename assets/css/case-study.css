@@ -1036,6 +1036,14 @@ body.case-study-lightbox-open {
   transition: opacity 200ms ease-out;
 }
 
+.case-study-lightbox--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.case-study-lightbox--single .case-study-lightbox__figure {
+  justify-self: center;
+}
+
 .case-study-lightbox::before {
   position: absolute;
   z-index: -1;
@@ -1642,7 +1650,10 @@ body.text-size--03 .app-aside .option.text-size .icon-container { transition-del
 body.text-size--04 .app-aside .option.text-size .icon-container { transition-delay: 0s; }
 
 [dir="rtl"] .case-study-page .app-aside .option.text-size .slider-container {
-  transform: rotate(-90deg);
+  right: 0;
+  left: auto;
+  transform: rotate(90deg);
+  transform-origin: top right;
 }
 
 [dir="rtl"] .case-study-language-label {

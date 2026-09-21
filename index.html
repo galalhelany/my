@@ -10,6 +10,7 @@
   <meta name="description"
     content="Senior Product Designer based in Aleppo, Syria, specializing in SaaS dashboards, ERP systems, mobile apps, design systems, and front-end-ready user interfaces." />
   <meta name="author" content="Galal Helany" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="icon" type="image/x-icon" href="assets/img/favicon-32x32.ico?v=20260826">
   <link rel="canonical" href="https://galalhelany.com/">
   <link rel="alternate" hreflang="en" href="https://galalhelany.com/">
@@ -28,8 +29,11 @@
   <meta property="og:url" content="https://galalhelany.com/" />
   <meta property="og:site_name" content="Galal Helany" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:locale:alternate" content="ar_AR" />
-  <meta property="og:image" content="https://galalhelany.com/assets/img/Galal%20Helany.png" />
+  <meta property="og:locale:alternate" content="ar_SY" />
+  <meta property="og:image" content="https://galalhelany.com/assets/img/social/galal-helany-portfolio-1200x630.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Portrait of Galal Helany" />
 
   <!-- Twitter Card -->
@@ -38,7 +42,7 @@
   <meta name="twitter:description"
     content="Senior Product Designer specializing in SaaS dashboards, ERP systems, mobile apps, design systems, and front-end-ready user interfaces." />
   <meta name="twitter:url" content="https://galalhelany.com/" />
-  <meta name="twitter:image" content="https://galalhelany.com/assets/img/Galal%20Helany.png" />
+  <meta name="twitter:image" content="https://galalhelany.com/assets/img/social/galal-helany-portfolio-1200x630.jpg" />
   <meta name="twitter:image:alt" content="Portrait of Galal Helany" />
 
   <!-- Google tag (gtag.js) -->
@@ -343,7 +347,9 @@
                   rel="noopener noreferrer" data-project-cursor-zone="live"
                   aria-label="View the live Hamdan Awards platform">
                   <img src="assets/img/projects/hamdan-awards-mockup.png" alt="Hamdan Awards platform interface mockup"
-                    width="3164" height="1802" loading="lazy" decoding="async">
+                    srcset="assets/img/optimized/hamdan-awards-mockup-768.webp 768w, assets/img/optimized/hamdan-awards-mockup-1536.webp 1536w"
+                    sizes="(max-width: 760px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                    width="3057" height="1634" loading="lazy" decoding="async">
                 </a>
                 <figcaption>
                   <a class="project-card__case-content" href="hamdan-awards-case-study.html"
@@ -396,21 +402,58 @@
           </li>
 
           <li class="project-card-item">
-            <article class="project-card">
+            <article class="project-card project-card--dual" data-project-dual-card>
               <figure>
-                <img src="assets/img/projects/mosaic-arc-erp-mockup.png" alt="Mosaic ARC ERP interface mockup"
-                  width="2796" height="2260" loading="lazy" decoding="async">
+                <a class="project-card__media-link" href="https://mosaic.arcerpsolutions.com/" target="_blank"
+                  rel="noopener noreferrer" data-project-cursor-zone="live"
+                  aria-label="View the live Mosaic ARC ERP platform">
+                  <img src="assets/img/projects/mosaic-arc-erp-mockup.png" alt="Mosaic ARC ERP interface mockup"
+                    srcset="assets/img/optimized/mosaic-arc-erp-mockup-768.webp 768w, assets/img/optimized/mosaic-arc-erp-mockup-1536.webp 1536w"
+                    sizes="(max-width: 760px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                    width="2796" height="2260" loading="lazy" decoding="async">
+                </a>
                 <figcaption>
-                  <span class="project-card__date"><span aria-hidden="true"></span>2025-2026</span>
-                  <h3 class="project-card__name">Mosaic / ARC ERP</h3>
-                  <h4 class="project-card__title">Designing a Specialized ERP for Architectural Hardware Operations</h4>
-                  <p class="project-card__description">A specialized enterprise system that brings complex architectural
-                    hardware operations, teams, and reporting into one coherent workflow.</p>
-                  <div class="project-card__tags" aria-label="Project disciplines">
-                    <span>B2B SaaS</span><span>ERP</span><span>Complex Workflows</span>
+                  <a class="project-card__case-content" href="case-study.html?project=mosaic-erp&amp;view=details"
+                    data-project-cursor-zone="case" aria-label="Open the Mosaic ARC ERP case study">
+                    <span class="project-card__date"><span aria-hidden="true"></span>2025-2026</span>
+                    <h3 class="project-card__name">Mosaic / ARC ERP</h3>
+                    <h4 class="project-card__title">Designing a Specialized ERP for Architectural Hardware Operations</h4>
+                    <p class="project-card__description">A specialized enterprise system that brings complex architectural
+                      hardware operations, teams, and reporting into one coherent workflow.</p>
+                    <div class="project-card__tags" aria-label="Project disciplines">
+                      <span>B2B SaaS</span><span>ERP</span><span>Complex Workflows</span>
+                    </div>
+                    <div class="project-card__metrics" role="list" aria-label="Selected project statistics">
+                      <div class="project-card__metric" role="listitem">
+                        <strong>Niche ERP</strong>
+                        <span>Door, Frame &amp; Hardware.</span>
+                      </div>
+                      <div class="project-card__metric" role="listitem">
+                        <strong>10+</strong>
+                        <span>Connected Modules</span>
+                      </div>
+                    </div>
+                  </a>
+                  <div class="project-card__actions">
+                    <a class="project-card__action project-card__action--case"
+                      href="case-study.html?project=mosaic-erp&amp;view=details" data-project-cursor-zone="case">
+                      <span>View full case study</span>
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+                    </a>
+                    <a class="project-card__action project-card__action--live"
+                      href="https://mosaic.arcerpsolutions.com/" target="_blank" rel="noopener noreferrer"
+                      data-project-cursor-zone="live">
+                      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" /><path d="M2.8 10h14.4M10 2.5c2.2 2.2 3.3 4.7 3.3 7.5S12.2 15.3 10 17.5C7.8 15.3 6.7 12.8 6.7 10S7.8 4.7 10 2.5Z" /></svg>
+                      <span>View live</span>
+                    </a>
                   </div>
-                  <span class="project-card__action">Full case study coming soon</span>
                 </figcaption>
+                <span class="project-card__cursor" aria-hidden="true">
+                  <svg class="project-card__cursor-icon" viewBox="0 0 24 24">
+                    <path d="M7 17 17 7M9 7h8v8" />
+                  </svg>
+                  <span data-project-cursor-label>View case</span>
+                </span>
               </figure>
             </article>
           </li>
@@ -419,6 +462,8 @@
             <article class="project-card">
               <figure>
                 <img src="assets/img/projects/laffah-mockup.png" alt="Laffah responsive web and mobile interface mockup"
+                  srcset="assets/img/optimized/laffah-mockup-768.webp 768w, assets/img/optimized/laffah-mockup-1536.webp 1536w"
+                  sizes="(max-width: 760px) 100vw, (max-width: 1200px) 90vw, 1200px"
                   width="3003" height="2042" loading="lazy" decoding="async">
                 <figcaption>
                   <span class="project-card__date"><span aria-hidden="true"></span>2024</span>
@@ -440,7 +485,10 @@
             <article class="project-card">
               <figure>
                 <img src="assets/img/projects/abh-manufacturing-mockup.png"
-                  alt="ABH Manufacturing responsive product platform mockup" width="2824" height="1176" loading="lazy"
+                  alt="ABH Manufacturing responsive product platform mockup"
+                  srcset="assets/img/optimized/abh-manufacturing-mockup-768.webp 768w, assets/img/optimized/abh-manufacturing-mockup-1536.webp 1536w"
+                  sizes="(max-width: 760px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                  width="2824" height="1176" loading="lazy"
                   decoding="async">
                 <figcaption>
                   <span class="project-card__date"><span aria-hidden="true"></span>2025</span>
@@ -462,7 +510,10 @@
             <article class="project-card">
               <figure>
                 <img src="assets/img/projects/arab-tourism-organization-mockup.png"
-                  alt="Arab Tourism Organization responsive website interface mockup" width="3057" height="2018"
+                  alt="Arab Tourism Organization responsive website interface mockup"
+                  srcset="assets/img/optimized/arab-tourism-organization-mockup-768.webp 768w, assets/img/optimized/arab-tourism-organization-mockup-1536.webp 1536w"
+                  sizes="(max-width: 760px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                  width="3057" height="2018"
                   loading="lazy" decoding="async">
                 <figcaption>
                   <span class="project-card__date"><span aria-hidden="true"></span>2025</span>
@@ -1164,6 +1215,8 @@
         <div class="image">
           <figure>
             <img src="./assets/img/Galal Helany.png" alt="Portrait of Galal Helany" width="1600" height="1600"
+              srcset="assets/img/optimized/galal-helany-640.webp 640w, assets/img/optimized/galal-helany-1200.webp 1200w"
+              sizes="(max-width: 760px) 100vw, 50vw"
               loading="lazy" decoding="async" fetchpriority="low" />
             <div class="image-overlay-01"></div>
             <div class="image-overlay-02"></div>

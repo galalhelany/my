@@ -1301,6 +1301,14 @@ body.theme--00 .client-logo-marquee__item img {
   align-items: center;
   gap: 18px;
 }
+.project-card--dual .project-card__actions {
+  display: none;
+}
+@media (max-width: 1020px) {
+  .project-card--dual .project-card__actions {
+    display: flex;
+  }
+}
 .project-card__actions .project-card__action {
   margin-top: 0;
   display: inline-flex;
@@ -1469,6 +1477,12 @@ body.theme--00 .client-logo-marquee__item img {
     aspect-ratio: 16 / 4.86;
   }
 }
+@media (min-width: 761px) and (max-width: 1020px) {
+  .project-card--dual figure {
+    aspect-ratio: auto;
+    min-height: 540px;
+  }
+}
 @media (max-width: 760px) {
   .section.work > .content {
     padding: 140px 0 72px;
@@ -1513,6 +1527,9 @@ body.theme--00 .client-logo-marquee__item img {
     min-height: 502px;
     padding: 196px 20px 26px;
     justify-content: flex-start;
+  }
+  .project-card--dual figcaption {
+    height: auto;
   }
   .project-card__title {
     max-width: 28ch;

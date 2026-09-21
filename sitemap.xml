@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://galalhelany.com/</loc>
-    <lastmod>2026-09-09</lastmod>
-    <priority>1.00</priority>
+    <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://galalhelany.com/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://galalhelany.com/index-ar.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://galalhelany.com/" />
   </url>
   <url>
     <loc>https://galalhelany.com/index-ar.html</loc>
-    <lastmod>2026-09-09</lastmod>
-    <priority>0.80</priority>
+    <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://galalhelany.com/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://galalhelany.com/index-ar.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://galalhelany.com/" />
   </url>
   <url>
     <loc>https://galalhelany.com/hamdan-awards-case-study.html</loc>
-    <lastmod>2026-09-09</lastmod>
-    <priority>0.90</priority>
+    <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://galalhelany.com/hamdan-awards-case-study.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://galalhelany.com/hamdan-awards-case-study-ar.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://galalhelany.com/hamdan-awards-case-study.html" />
   </url>
   <url>
     <loc>https://galalhelany.com/hamdan-awards-case-study-ar.html</loc>
-    <lastmod>2026-09-09</lastmod>
-    <priority>0.80</priority>
+    <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://galalhelany.com/hamdan-awards-case-study.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://galalhelany.com/hamdan-awards-case-study-ar.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://galalhelany.com/hamdan-awards-case-study.html" />
+  </url>
+  <url>
+    <loc>https://galalhelany.com/case-study.html?project=mosaic-erp</loc>
+    <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://galalhelany.com/case-study.html?project=mosaic-erp" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://galalhelany.com/case-study-ar.html?project=mosaic-erp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://galalhelany.com/case-study.html?project=mosaic-erp" />
+  </url>
+  <url>
+    <loc>https://galalhelany.com/case-study-ar.html?project=mosaic-erp</loc>
+    <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://galalhelany.com/case-study.html?project=mosaic-erp" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://galalhelany.com/case-study-ar.html?project=mosaic-erp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://galalhelany.com/case-study.html?project=mosaic-erp" />
   </url>
 </urlset>

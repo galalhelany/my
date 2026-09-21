@@ -32,31 +32,27 @@
         challenge: 'اعتمدت الفرق على أدوات منفصلة وعمليات غير متسقة، مما أبطأ المهام اليومية وقلل وضوح المعلومات أمام صناع القرار.'
       }
     },
-    'digital-banking': {
+    'mosaic-erp': {
       image: 'assets/img/projects/mosaic-arc-erp-mockup.png',
       en: {
-        title: 'Mosaic / ARC ERP',
-        category: 'B2B SaaS · ERP · Complex Workflows',
-        summary: 'Designing a specialized ERP for architectural hardware operations.',
-        role: 'Senior Product Designer',
-        timeline: '16 weeks',
-        platform: 'iOS + Android',
-        year: '2026',
-        sector: 'Architecture · Manufacturing · Enterprise Software',
-        overview: 'This placeholder narrative demonstrates how research, service design, and interface design can come together in a trusted digital banking experience. Final customer insights and business outcomes can be added later.',
-        challenge: 'Customers needed a simpler way to understand balances, complete transfers, and manage sensitive actions without losing confidence or control.'
+        title: 'Mosaic — ARC ERP',
+        category: 'Enterprise ERP · Systems Thinking · Complex Workflows',
+        summary: 'Designing a scalable ERP for architectural hardware distribution.',
+        role: 'Product Designer / UI/UX Designer',
+        platform: 'Web · Responsive',
+        sector: 'Construction · Architectural Hardware · B2B SaaS',
+        overview: 'Mosaic is a specialized ARC ERP model for door, frame, and architectural hardware distributors.',
+        challenge: 'The early design contained interface screens but lacked the architecture, workflows, design system, responsive foundations, and permission model required for a scalable enterprise product.'
       },
       ar: {
-        title: 'Mosaic / ARC ERP',
-        category: 'B2B SaaS · ERP · مسارات عمل معقدة',
-        summary: 'تصميم نظام ERP متخصص لعمليات تجهيزات المباني المعمارية.',
-        role: 'مصمم منتجات أول',
-        timeline: '16 أسبوعًا',
-        platform: 'iOS وAndroid',
-        year: '2026',
-        sector: 'عمارة · تصنيع · برمجيات مؤسسية',
-        overview: 'يوضح هذا السرد التجريبي كيف يمكن دمج البحث وتصميم الخدمات والواجهات لبناء تجربة مصرفية رقمية موثوقة. يمكن إضافة رؤى العملاء والنتائج الفعلية لاحقًا.',
-        challenge: 'احتاج العملاء إلى طريقة أبسط لفهم الأرصدة وتنفيذ التحويلات وإدارة الإجراءات الحساسة مع الحفاظ على الثقة والتحكم.'
+        title: 'Mosaic — ARC ERP',
+        category: 'نظام ERP مؤسسي · تفكير منظومي · مسارات عمل معقدة',
+        summary: 'تصميم نظام ERP قابل للتوسع لتوزيع التجهيزات المعمارية.',
+        role: 'مصمم منتجات / مصمم UI/UX',
+        platform: 'ويب متجاوب',
+        sector: 'الإنشاءات · التجهيزات المعمارية · B2B SaaS',
+        overview: 'Mosaic نموذج متخصص ضمن ARC ERP لموزعي الأبواب والإطارات والتجهيزات المعمارية.',
+        challenge: 'احتوى التصميم المبكر على شاشات واجهة، لكنه افتقر إلى البنية ومسارات العمل ونظام التصميم وأسس التجاوب ونموذج الصلاحيات اللازمة لمنتج مؤسسي قابل للتوسع.'
       }
     },
     'workforce-system': {
@@ -227,13 +223,15 @@
   var pageParameters = new URLSearchParams(window.location.search);
   var requestedSlug = pageParameters.get('project');
   var requestedView = pageParameters.get('view');
-  var slug = projects[requestedSlug] ? requestedSlug : slugs[0];
+  var isMosaicShell = /(?:^|\/)case-study(?:-ar)?\.html$/.test(window.location.pathname);
+  var defaultSlug = isMosaicShell ? 'mosaic-erp' : slugs[0];
+  var slug = projects[requestedSlug] ? requestedSlug : defaultSlug;
+  var isMosaicCaseStudy = slug === 'mosaic-erp';
   var readingView = requestedView === 'tldr' ? 'tldr' : 'details';
   var language = document.documentElement.lang === 'ar' ? 'ar' : 'en';
-  var caseStudyPaths = {
-    en: 'hamdan-awards-case-study.html',
-    ar: 'hamdan-awards-case-study-ar.html'
-  };
+  var caseStudyPaths = isMosaicCaseStudy
+    ? { en: 'case-study.html?project=mosaic-erp', ar: 'case-study-ar.html?project=mosaic-erp' }
+    : { en: 'hamdan-awards-case-study.html', ar: 'hamdan-awards-case-study-ar.html' };
   var project = projects[slug];
   var content = project[language];
   var copy = sharedCopy[language];
@@ -307,11 +305,19 @@
     }
   });
 
-  // Keep both language controls on the same case study, matching the homepage
-  // language switcher rather than sending visitors back to the landing page.
+  function buildCaseStudyPath(targetLanguage, view) {
+    var path = caseStudyPaths[targetLanguage];
+    if (!isMosaicCaseStudy && view !== 'tldr') {
+      return path;
+    }
+    var separator = path.indexOf('?') === -1 ? '?' : '&';
+    return path + separator + 'view=' + (view === 'tldr' ? 'tldr' : 'details');
+  }
+
+  // Keep language controls on the current case study and reading mode.
   document.querySelectorAll('[data-project-language]').forEach(function (languageLink) {
     var targetLanguage = languageLink.getAttribute('data-project-language');
-    languageLink.href = caseStudyPaths[targetLanguage] + (readingView === 'tldr' ? '?view=tldr' : '');
+    languageLink.href = buildCaseStudyPath(targetLanguage, readingView);
   });
 
   // Footer AI links use the current project rather than the homepage prompt.
@@ -625,6 +631,136 @@
     return slides;
   }
 
+  function buildMosaicCreateRoleSlides(galleryLanguage, arabicLabel) {
+    var assetRoot = 'assets/img/projects/';
+    var descriptions = [
+      'Create New Role screen with an assigned-user search for Vivian',
+      'Create New Role screen with the assigned-user list open',
+      'Create New Role screen with the assigned-user search field active',
+      'Create New Role screen before users are assigned',
+      'Configured System Admin role with assigned users and permission switches',
+      'Create New Role screen showing a duplicate-role error notification',
+      'Configured System Admin role with assigned users',
+      'Create New Role form with role details and assigned users',
+      'Create New Role screen with expanded permission groups and checkboxes',
+      'Create New Role screen with assigned users and collapsed permissions',
+      'Create New Role screen while editing the role description',
+      'Create New Role screen while entering a role name',
+      'Roles list with the Create New Role action',
+      'Roles list showing a successful role-creation notification'
+    ];
+
+    return descriptions.map(function (description, index) {
+      return {
+        src: assetRoot + 'mosaic-create-role-' + padGalleryNumber(index + 1) + '.png',
+        alt: galleryLanguage === 'ar'
+          ? (arabicLabel || 'مسار إنشاء دور جديد') + ' — الشاشة ' + localizeGalleryNumber(index + 1, 'ar')
+          : description,
+        width: 1440,
+        height: 1024
+      };
+    });
+  }
+
+  function buildMosaicModifyRolesSlides(galleryLanguage) {
+    var assetRoot = 'assets/img/projects/';
+    var descriptions = [
+      'Roles list with the Edit Role action open',
+      'Edit Role screen showing the unsaved changes confirmation dialog',
+      'Edit Role screen with expanded permissions and selected access rules',
+      'Edit Role screen with mixed permission selections',
+      'Roles list showing an error notification after an update attempt',
+      'Roles list showing the successful role update notification'
+    ];
+
+    return descriptions.map(function (description, index) {
+      return {
+        src: assetRoot + 'mosaic-modify-roles-' + padGalleryNumber(index + 1) + '.png',
+        alt: galleryLanguage === 'ar'
+          ? 'مسار تعديل الأدوار — الشاشة ' + localizeGalleryNumber(index + 1, 'ar')
+          : description,
+        width: 1440,
+        height: 1024
+      };
+    });
+  }
+
+  function buildMosaicCreateHardwareSetSlides(galleryLanguage) {
+    var assetRoot = 'assets/img/projects/';
+    var descriptions = [
+      'Hardware Sets empty state with Create Hardware Set action',
+      'Hardware list showing the Delete Hardware confirmation dialog',
+      'Hardware list with a selected hardware record',
+      'Hardware list showing a successful export notification',
+      'Hardware list showing an export-in-progress notification',
+      'Hardware Sets list with filters and records',
+      'Hardware Sets list with records',
+      'Hardware Sets list before creating a new hardware set',
+      'Create New Hardware Set form with completed fields',
+      'Create New Hardware Set form before data entry',
+      'Hardware Sets list showing an error notification',
+      'Hardware Sets list showing a successful creation notification'
+    ];
+
+    return descriptions.map(function (description, index) {
+      return {
+        src: assetRoot + 'mosaic-create-hardware-set-' + padGalleryNumber(index + 1) + '.png',
+        alt: galleryLanguage === 'ar'
+          ? 'مسار إنشاء مجموعة تجهيزات — الشاشة ' + localizeGalleryNumber(index + 1, 'ar')
+          : description,
+        width: 1440,
+        height: 1024
+      };
+    });
+  }
+
+  function buildMosaicSetsManagementSlides(galleryLanguage) {
+    var assetRoot = 'assets/img/projects/';
+    var descriptions = [
+      'Sets Management screen with three hardware records selected',
+      'Sets Management screen with two hardware records selected',
+      'Sets Management screen with two selected hardware records and an empty products list',
+      'Sets Management screen with one hardware record selected',
+      'Sets Management screen with no hardware records selected',
+      'Sets Management screen with an empty products list',
+      'Sets Management screen with a selected hardware set in inline edit mode',
+      'Sets Management screen before selecting a hardware set'
+    ];
+
+    return descriptions.map(function (description, index) {
+      return {
+        src: assetRoot + 'mosaic-sets-management-' + padGalleryNumber(index + 1) + '.png',
+        alt: galleryLanguage === 'ar'
+          ? 'إدارة مجموعات التجهيزات — الشاشة ' + localizeGalleryNumber(index + 1, 'ar')
+          : description,
+        width: 1920,
+        height: 1024
+      };
+    });
+  }
+
+  function buildMosaicModifyUsersSuperAdminSlides(galleryLanguage) {
+    var assetRoot = 'assets/img/projects/';
+    var descriptions = [
+      'Edit user screen showing the unsaved changes confirmation dialog',
+      'Edit user screen with profile, organization, and assigned roles',
+      'User Management list showing an error notification',
+      'User Management list showing a successful update notification',
+      'User Management list with the Edit action open'
+    ];
+
+    return descriptions.map(function (description, index) {
+      return {
+        src: assetRoot + 'mosaic-modify-users-super-admin-' + padGalleryNumber(index + 1) + '.png',
+        alt: galleryLanguage === 'ar'
+          ? 'تعديل المستخدمين بصلاحية المسؤول الأعلى — الشاشة ' + localizeGalleryNumber(index + 1, 'ar')
+          : description,
+        width: 1440,
+        height: 1024
+      };
+    });
+  }
+
   function openCaseStudyLightbox(galleryItems, startIndex, galleryLanguage, galleryLabel, syncCarousel) {
     var existingLightbox = document.querySelector('[data-case-lightbox]');
     if (existingLightbox) {
@@ -641,9 +777,13 @@
     var caption = document.createElement('figcaption');
     var previousLightboxButton = document.createElement('button');
     var nextLightboxButton = document.createElement('button');
+    var hasMultipleImages = galleryItems.length > 1;
     var closeDelay = prefersReducedMotion ? 0 : 240;
 
     lightbox.className = 'case-study-lightbox';
+    if (!hasMultipleImages) {
+      lightbox.classList.add('case-study-lightbox--single');
+    }
     lightbox.setAttribute('data-case-lightbox', '');
     lightbox.setAttribute('role', 'dialog');
     lightbox.setAttribute('aria-modal', 'true');
@@ -678,9 +818,13 @@
     mediaButton.appendChild(image);
     figure.appendChild(mediaButton);
     figure.appendChild(caption);
-    lightbox.appendChild(previousLightboxButton);
+    if (hasMultipleImages) {
+      lightbox.appendChild(previousLightboxButton);
+    }
     lightbox.appendChild(figure);
-    lightbox.appendChild(nextLightboxButton);
+    if (hasMultipleImages) {
+      lightbox.appendChild(nextLightboxButton);
+    }
 
     function updateLightbox(requestedIndex, shouldAnimate) {
       activeLightboxIndex = (requestedIndex + galleryItems.length) % galleryItems.length;
@@ -704,9 +848,9 @@
         ? 'إغلاق عارض الصورة: ' + item.alt
         : 'Close image viewer: ' + item.alt);
       caption.textContent = galleryLanguage === 'ar'
-        ? galleryLabel + ' · الصورة ' + currentNumber + ' من ' + totalNumber +
+        ? galleryLabel + (hasMultipleImages ? ' · الصورة ' + currentNumber + ' من ' + totalNumber : '') +
           ' · اضغط Esc للإغلاق'
-        : galleryLabel + ' · Photo ' + currentNumber + ' of ' + totalNumber +
+        : galleryLabel + (hasMultipleImages ? ' · Photo ' + currentNumber + ' of ' + totalNumber : '') +
           ' · Esc to close';
 
       if (typeof syncCarousel === 'function') {
@@ -753,14 +897,16 @@
       if (event.key === 'Escape') {
         event.preventDefault();
         closeLightbox();
-      } else if (event.key === 'ArrowLeft') {
+      } else if (hasMultipleImages && event.key === 'ArrowLeft') {
         event.preventDefault();
         updateLightbox(activeLightboxIndex - 1, true);
-      } else if (event.key === 'ArrowRight') {
+      } else if (hasMultipleImages && event.key === 'ArrowRight') {
         event.preventDefault();
         updateLightbox(activeLightboxIndex + 1, true);
       } else if (event.key === 'Tab') {
-        var focusableControls = [previousLightboxButton, mediaButton, nextLightboxButton];
+        var focusableControls = hasMultipleImages
+          ? [previousLightboxButton, mediaButton, nextLightboxButton]
+          : [mediaButton];
         var focusedIndex = focusableControls.indexOf(document.activeElement);
         var nextFocusIndex;
 
@@ -800,6 +946,18 @@
         galleryItems = buildApplicantPortalSlides(galleryLanguage);
       } else if (galleryType === 'website') {
         galleryItems = buildWebsiteSlides(galleryLanguage);
+      } else if (galleryType === 'mosaic-create-role') {
+        galleryItems = buildMosaicCreateRoleSlides(galleryLanguage);
+      } else if (galleryType === 'mosaic-modify-roles') {
+        galleryItems = buildMosaicModifyRolesSlides(galleryLanguage);
+      } else if (galleryType === 'mosaic-create-hardware-set') {
+        galleryItems = buildMosaicCreateHardwareSetSlides(galleryLanguage);
+      } else if (galleryType === 'mosaic-sets-management') {
+        galleryItems = buildMosaicSetsManagementSlides(galleryLanguage);
+      } else if (galleryType === 'mosaic-role-management') {
+        galleryItems = buildMosaicCreateRoleSlides(galleryLanguage, 'مسار إدارة الأدوار');
+      } else if (galleryType === 'mosaic-modify-users-super-admin') {
+        galleryItems = buildMosaicModifyUsersSuperAdminSlides(galleryLanguage);
       } else {
         galleryItems = buildAwardsManagementSlides(galleryLanguage);
       }
@@ -965,9 +1123,34 @@
         pointerStartX = null;
       }, { passive: true });
 
-      showSlide(0);
+      if ('IntersectionObserver' in window) {
+        var carouselLoadObserver = new IntersectionObserver(function (entries, observer) {
+          if (!entries.some(function (entry) { return entry.isIntersecting; })) {
+            return;
+          }
+          showSlide(0);
+          observer.disconnect();
+        }, { rootMargin: '600px 0px' });
+        carouselLoadObserver.observe(carousel);
+      } else {
+        showSlide(0);
+      }
     });
   }
+
+  document.addEventListener('case-study:open-lightbox', function (event) {
+    var detail = event.detail || {};
+    if (!Array.isArray(detail.items) || !detail.items.length) {
+      return;
+    }
+    openCaseStudyLightbox(
+      detail.items,
+      Number(detail.index) || 0,
+      detail.language === 'ar' ? 'ar' : 'en',
+      detail.label || 'Case study gallery',
+      typeof detail.onChange === 'function' ? detail.onChange : function () {}
+    );
+  });
 
   initializeCaseStudyCarousels();
 
@@ -1058,8 +1241,13 @@
 
     document.querySelectorAll('[data-reading-copy]').forEach(function (element) {
       var isSupporting = element.closest('[data-reading-mode="supporting"]');
+      var isDetailsOnly = element.closest('[data-reading-mode="details-only"]');
+      var isTldrOnly = element.closest('[data-reading-mode="tldr-only"]');
       var isInterfaceCopy = element.closest('[data-reading-mode="chrome"]');
-      if (isInterfaceCopy || (view === 'tldr' && isSupporting)) {
+      if (isInterfaceCopy ||
+          (view === 'tldr' && isSupporting) ||
+          (isMosaicCaseStudy && view === 'tldr' && isDetailsOnly) ||
+          (isMosaicCaseStudy && view === 'details' && isTldrOnly)) {
         return;
       }
 
@@ -1071,7 +1259,12 @@
 
     var visibleVisuals = 0;
     document.querySelectorAll('.case-study-media img, .case-study-gallery img').forEach(function (image) {
-      if (view !== 'tldr' || !image.closest('[data-reading-mode="supporting"]')) {
+      var isSupporting = image.closest('[data-reading-mode="supporting"]');
+      var isDetailsOnly = image.closest('[data-reading-mode="details-only"]');
+      var isTldrOnly = image.closest('[data-reading-mode="tldr-only"]');
+      if ((!isMosaicCaseStudy && (view !== 'tldr' || !isSupporting)) ||
+          (isMosaicCaseStudy && view === 'details' && !isTldrOnly) ||
+          (isMosaicCaseStudy && view === 'tldr' && !isSupporting && !isDetailsOnly)) {
         visibleVisuals += 1;
       }
     });
@@ -1093,7 +1286,7 @@
   function updateReadingLinks(view) {
     document.querySelectorAll('[data-project-language]').forEach(function (languageLink) {
       var targetLanguage = languageLink.getAttribute('data-project-language');
-      languageLink.href = caseStudyPaths[targetLanguage] + (view === 'tldr' ? '?view=tldr' : '');
+      languageLink.href = buildCaseStudyPath(targetLanguage, view);
     });
   }
 
@@ -1124,11 +1317,16 @@
 
     if (shouldUpdateUrl && window.history && window.history.replaceState) {
       var updatedUrl = new URL(window.location.href);
-      updatedUrl.searchParams.delete('project');
-      if (readingView === 'tldr') {
-        updatedUrl.searchParams.set('view', 'tldr');
+      if (isMosaicCaseStudy) {
+        updatedUrl.searchParams.set('project', 'mosaic-erp');
+        updatedUrl.searchParams.set('view', readingView);
       } else {
-        updatedUrl.searchParams.delete('view');
+        updatedUrl.searchParams.delete('project');
+        if (readingView === 'tldr') {
+          updatedUrl.searchParams.set('view', 'tldr');
+        } else {
+          updatedUrl.searchParams.delete('view');
+        }
       }
       window.history.replaceState({ readingView: readingView }, '', updatedUrl);
     }
