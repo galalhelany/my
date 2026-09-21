@@ -223,14 +223,14 @@
   var pageParameters = new URLSearchParams(window.location.search);
   var requestedSlug = pageParameters.get('project');
   var requestedView = pageParameters.get('view');
-  var isMosaicShell = /(?:^|\/)case-study(?:-ar)?\.html$/.test(window.location.pathname);
+  var isMosaicShell = /(?:^|\/)mosaic-arc-erp-case-study(?:-ar)?\.html$/.test(window.location.pathname);
   var defaultSlug = isMosaicShell ? 'mosaic-erp' : slugs[0];
   var slug = projects[requestedSlug] ? requestedSlug : defaultSlug;
   var isMosaicCaseStudy = slug === 'mosaic-erp';
   var readingView = requestedView === 'tldr' ? 'tldr' : 'details';
   var language = document.documentElement.lang === 'ar' ? 'ar' : 'en';
   var caseStudyPaths = isMosaicCaseStudy
-    ? { en: 'case-study.html?project=mosaic-erp', ar: 'case-study-ar.html?project=mosaic-erp' }
+    ? { en: 'mosaic-arc-erp-case-study.html', ar: 'mosaic-arc-erp-case-study-ar.html' }
     : { en: 'hamdan-awards-case-study.html', ar: 'hamdan-awards-case-study-ar.html' };
   var project = projects[slug];
   var content = project[language];
@@ -307,11 +307,10 @@
 
   function buildCaseStudyPath(targetLanguage, view) {
     var path = caseStudyPaths[targetLanguage];
-    if (!isMosaicCaseStudy && view !== 'tldr') {
+    if (view !== 'tldr') {
       return path;
     }
-    var separator = path.indexOf('?') === -1 ? '?' : '&';
-    return path + separator + 'view=' + (view === 'tldr' ? 'tldr' : 'details');
+    return path + '?view=tldr';
   }
 
   // Keep language controls on the current case study and reading mode.
@@ -1318,8 +1317,12 @@
     if (shouldUpdateUrl && window.history && window.history.replaceState) {
       var updatedUrl = new URL(window.location.href);
       if (isMosaicCaseStudy) {
-        updatedUrl.searchParams.set('project', 'mosaic-erp');
-        updatedUrl.searchParams.set('view', readingView);
+        updatedUrl.searchParams.delete('project');
+        if (readingView === 'tldr') {
+          updatedUrl.searchParams.set('view', 'tldr');
+        } else {
+          updatedUrl.searchParams.delete('view');
+        }
       } else {
         updatedUrl.searchParams.delete('project');
         if (readingView === 'tldr') {

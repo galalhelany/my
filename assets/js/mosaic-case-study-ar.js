@@ -6,8 +6,8 @@
     return;
   }
 
-  var canonicalUrl = 'https://galalhelany.com/case-study-ar.html?project=mosaic-erp';
-  var englishUrl = 'https://galalhelany.com/case-study.html?project=mosaic-erp';
+  var canonicalUrl = 'https://galalhelany.com/mosaic-arc-erp-case-study-ar.html';
+  var englishUrl = 'https://galalhelany.com/mosaic-arc-erp-case-study.html';
   var title = 'دراسة حالة تصميم Mosaic ERP | جلال حيلاني';
   var description = 'اكتشف كيف صُمم Mosaic، وهو نظام ERP متخصص لفرق التجهيزات المعمارية، عبر البحث ومسارات العمل والصلاحيات ونظام التصميم والنماذج الأولية والتحقق.';
 

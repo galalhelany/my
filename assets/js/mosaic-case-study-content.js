@@ -31,8 +31,8 @@
     ? 'اكتشف كيف صُمم Mosaic، وهو نظام ERP متخصص لفرق التجهيزات المعمارية، عبر البحث ومسارات العمل والصلاحيات ونظام التصميم والنماذج الأولية والتحقق.'
     : 'Explore how Mosaic, an ERP for architectural hardware teams, was shaped through research, workflows, permissions, design systems, prototypes, and validation.';
   var canonicalUrl = isArabic
-    ? 'https://galalhelany.com/case-study-ar.html?project=mosaic-erp'
-    : 'https://galalhelany.com/case-study.html?project=mosaic-erp';
+    ? 'https://galalhelany.com/mosaic-arc-erp-case-study-ar.html'
+    : 'https://galalhelany.com/mosaic-arc-erp-case-study.html';
   var socialImage = 'https://galalhelany.com/assets/img/social/mosaic-erp-case-study-1200x630.jpg';
   var schemaImage = 'https://galalhelany.com/assets/img/projects/mosaic-arc-erp-mockup.png';
 
@@ -77,9 +77,9 @@
     alternate.href = href;
   }
 
-  setAlternate('en', 'https://galalhelany.com/case-study.html?project=mosaic-erp');
-  setAlternate('ar', 'https://galalhelany.com/case-study-ar.html?project=mosaic-erp');
-  setAlternate('x-default', 'https://galalhelany.com/case-study.html?project=mosaic-erp');
+  setAlternate('en', 'https://galalhelany.com/mosaic-arc-erp-case-study.html');
+  setAlternate('ar', 'https://galalhelany.com/mosaic-arc-erp-case-study-ar.html');
+  setAlternate('x-default', 'https://galalhelany.com/mosaic-arc-erp-case-study.html');
 
   var schema = document.querySelector('#mosaic-case-study-schema');
   if (!schema) {
