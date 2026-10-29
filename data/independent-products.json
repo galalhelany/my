@@ -1,0 +1,46 @@
+{
+  "section": {
+    "en": {
+      "title": "Things I’ve Built",
+      "description": "Independent products I design, build, and launch — turning ideas into real-world experiences.",
+      "liveLabel": "View Live"
+    },
+    "ar": {
+      "title": "منتجات بنيتها",
+      "description": "منتجات مستقلة أعمل على تصميمها وتطويرها وإطلاقها، لتحويل الأفكار إلى تجارب رقمية حقيقية.",
+      "liveLabel": "زيارة المنتج"
+    }
+  },
+  "products": [
+    {
+      "id": "masaa",
+      "liveUrl": "https://masaa.app/",
+      "image": {
+        "src": "assets/img/projects/masaa-desktop-mobile.webp?v=d85fcedd42cf",
+        "width": 2136,
+        "height": 1426
+      },
+      "en": {
+        "name": "Masaa — مسعى",
+        "status": "Live Product",
+        "description": "A free focus timer that helps you stay focused without interrupting your flow. Built around a flexible Flow Pomodoro approach.",
+        "alt": "Masaa focus timer displayed on a laptop and three mobile screens",
+        "linkLabel": "View Masaa live (opens in a new tab)",
+        "logoAlt": "Official Masaa logo"
+      },
+      "ar": {
+        "name": "مسعى — Masaa",
+        "status": "منتج متاح",
+        "description": "مؤقت تركيز مجاني يساعدك على مواصلة العمل دون مقاطعة تركيزك، يعتمد على أسلوب مرن مستوحى من تقنية Flow Pomodoro.",
+        "alt": "مؤقت التركيز مسعى معروض على حاسوب محمول وثلاث شاشات للهاتف",
+        "linkLabel": "زيارة مسعى (يفتح في علامة تبويب جديدة)",
+        "logoAlt": "الشعار الرسمي لمسعى"
+      },
+      "logo": {
+        "src": "assets/img/projects/masaa-logo.svg?v=574da225d067",
+        "width": 292,
+        "height": 138
+      }
+    }
+  ]
+}

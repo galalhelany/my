@@ -1,10 +1,9 @@
 (function () {
   'use strict';
 
-  var supportsCustomCursor = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cursorMedia = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 
-  if (!supportsCustomCursor || prefersReducedMotion || !document.body) {
+  if (!document.body) {
     return;
   }
 
@@ -18,7 +17,6 @@
     '<span class="site-cursor__magnifier"><span class="site-cursor__magnifier-text"></span>' +
     '<span class="site-cursor__magnifier-logo"></span></span>';
   document.body.appendChild(cursor);
-  document.documentElement.classList.add('custom-cursor-enabled');
 
   var magnifierText = cursor.querySelector('.site-cursor__magnifier-text');
   var magnifierLogo = cursor.querySelector('.site-cursor__magnifier-logo');
@@ -32,6 +30,10 @@
   var pointerX = -80;
   var pointerY = -80;
   var cursorFrame = null;
+  var pointerTarget = null;
+  var activeParagraph = null;
+  var headingStylesDirty = true;
+  var enabled = false;
 
   // The regular experience logos inherit the active site color. These values
   // are applied only to the cloned SVG inside the lens, revealing each
@@ -49,6 +51,7 @@
   };
 
   function clearMagnifier() {
+    if (!activeHeading && !activeLogo) { return; }
     activeHeading = null;
     activeLogo = null;
     magnifierText.textContent = '';
@@ -83,13 +86,13 @@
       'direction'
     ];
 
-    magnifierText.textContent = '';
+    var fragment = document.createDocumentFragment();
     Array.from(heading.childNodes).forEach(function (node) {
-      magnifierText.appendChild(node.cloneNode(true));
+      fragment.appendChild(node.cloneNode(true));
     });
 
     var sourceElements = Array.from(heading.querySelectorAll('*'));
-    var mirroredElements = Array.from(magnifierText.querySelectorAll('*'));
+    var mirroredElements = Array.from(fragment.querySelectorAll('*'));
 
     mirroredElements.forEach(function (mirroredElement, index) {
       var sourceElement = sourceElements[index];
@@ -103,6 +106,7 @@
         mirroredElement.style.setProperty(property, sourceStyles.getPropertyValue(property));
       });
     });
+    magnifierText.replaceChildren(fragment);
   }
 
   // Recreate only the active heading inside the circular lens. Positioning the
@@ -115,36 +119,32 @@
     }
 
     var bounds = heading.getBoundingClientRect();
-    var styles = window.getComputedStyle(heading);
     var localX = pointerX - bounds.left;
     var localY = pointerY - bounds.top;
 
-    if (activeHeading !== heading) {
+    if (activeHeading !== heading || headingStylesDirty) {
+      // Snapshot computed values before changing the live lens. Typography
+      // only changes on entry, font load, resize, theme or reading-size changes.
+      var styles = window.getComputedStyle(heading);
+      var properties = ['fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'lineHeight',
+        'letterSpacing', 'textAlign', 'textTransform', 'whiteSpace', 'direction', 'color', 'padding'];
+      var values = properties.map(function (property) { return styles[property]; });
       mirrorHeadingContent(heading);
+      properties.forEach(function (property, index) { magnifierText.style[property] = values[index]; });
       activeHeading = heading;
       activeLogo = null;
       magnifierLogo.textContent = '';
+      headingStylesDirty = false;
     }
 
-    magnifierText.style.width = bounds.width + 'px';
-    magnifierText.style.fontFamily = styles.fontFamily;
-    magnifierText.style.fontSize = styles.fontSize;
-    magnifierText.style.fontStyle = styles.fontStyle;
-    magnifierText.style.fontWeight = styles.fontWeight;
-    magnifierText.style.lineHeight = styles.lineHeight;
-    magnifierText.style.letterSpacing = styles.letterSpacing;
-    magnifierText.style.textAlign = styles.textAlign;
-    magnifierText.style.textTransform = styles.textTransform;
-    magnifierText.style.whiteSpace = styles.whiteSpace;
-    magnifierText.style.direction = styles.direction;
-    magnifierText.style.color = styles.color;
-    magnifierText.style.padding = styles.padding;
+    var width = bounds.width + 'px';
+    if (magnifierText.style.width !== width) { magnifierText.style.width = width; }
     magnifierText.style.transform = 'translate3d(' +
       (magnifierSize / 2 - localX * magnifierZoom) + 'px,' +
       (magnifierSize / 2 - localY * magnifierZoom) + 'px,0) scale(' + magnifierZoom + ')';
 
-    cursor.classList.remove('is-logo-magnifier');
-    cursor.classList.add('is-magnifier');
+    toggleClass('is-logo-magnifier', false);
+    toggleClass('is-magnifier', true);
   }
 
   function renderLogoMagnifier(logo) {
@@ -196,32 +196,43 @@
       }
     }
 
-    cursor.classList.add('is-magnifier', 'is-logo-magnifier');
+    toggleClass('is-magnifier', true);
+    toggleClass('is-logo-magnifier', true);
+  }
+
+  function toggleClass(name, value) {
+    if (cursor.classList.contains(name) !== value) { cursor.classList.toggle(name, value); }
   }
 
   function renderCursor() {
-    cursor.style.setProperty('--site-cursor-x', pointerX + 'px');
-    cursor.style.setProperty('--site-cursor-y', pointerY + 'px');
+    cursorFrame = null;
+    var target = pointerTarget;
+    if (!enabled || document.hidden || !target || !target.isConnected || isNativeCursorTarget(target)) {
+      hideCursor();
+      return;
+    }
+    updateTarget(target);
     if (pendingLogo) {
       renderLogoMagnifier(pendingLogo);
     } else {
       renderMagnifier(pendingHeading);
     }
-    cursorFrame = null;
+    // A direct transform avoids cascading inherited position variables through
+    // every cloned heading/SVG descendant on every pointer frame.
+    cursor.style.transform = 'translate3d(' + pointerX + 'px,' + pointerY + 'px,0)';
+    toggleClass('is-visible', true);
   }
 
   function hideCursor() {
+    window.cancelAnimationFrame(cursorFrame);
+    cursorFrame = null;
+    pointerTarget = null;
+    activeParagraph = null;
     pendingHeading = null;
     pendingLogo = null;
     clearMagnifier();
-    cursor.classList.remove(
-      'is-visible',
-      'is-interactive',
-      'is-text',
-      'is-gallery-zoom-in',
-      'is-gallery-zoom-out',
-      'is-pressed'
-    );
+    ['is-visible', 'is-interactive', 'is-text', 'is-gallery-zoom-in',
+      'is-gallery-zoom-out', 'is-pressed'].forEach(function (name) { toggleClass(name, false); });
   }
 
   function isNativeCursorTarget(target) {
@@ -232,25 +243,28 @@
   }
 
   function isInteractiveTarget(target) {
+    // Keep the audience options' existing cursor treatment after adding keyboard semantics.
+    if (target.closest('.section.intro .option[role="button"]')) {
+      return false;
+    }
     return Boolean(target.closest(
       'a, button, label, summary, [role="button"], [data-cursor="interactive"]'
     ));
   }
 
-  document.addEventListener('pointermove', function (event) {
+  function onPointerMove(event) {
     if (event.pointerType && event.pointerType !== 'mouse') {
       hideCursor();
       return;
     }
 
-    var target = event.target instanceof Element ? event.target : null;
-    if (!target || isNativeCursorTarget(target)) {
-      hideCursor();
-      return;
-    }
-
+    pointerTarget = event.target instanceof Element ? event.target : null;
     pointerX = event.clientX;
     pointerY = event.clientY;
+    if (!cursorFrame) { cursorFrame = window.requestAnimationFrame(renderCursor); }
+  }
+
+  function updateTarget(target) {
     var galleryZoomOut = target.closest('[data-case-lightbox-media]');
     var galleryZoomIn = galleryZoomOut ? null : target.closest('[data-case-carousel-zoom], [data-mosaic-audit-zoom]');
     // Experience-logo lenses are homepage-only. Their SVG clone is recolored
@@ -263,30 +277,26 @@
     pendingHeading = pendingLogo || galleryZoomIn || galleryZoomOut ? null : target.closest('h2');
     var isInteractive = !pendingLogo && !pendingHeading && !galleryZoomIn && !galleryZoomOut &&
       isInteractiveTarget(target);
-    var paragraph = !pendingLogo && !pendingHeading && !isInteractive ? target.closest('p') : null;
+    var paragraph = !pendingLogo && !pendingHeading && !isInteractive
+      ? target.closest('p, .section.intro h1.texts > .text')
+      : null;
 
-    cursor.classList.toggle('is-interactive', isInteractive);
-    cursor.classList.toggle('is-text', Boolean(paragraph));
-    cursor.classList.toggle('is-gallery-zoom-in', Boolean(galleryZoomIn));
-    cursor.classList.toggle('is-gallery-zoom-out', Boolean(galleryZoomOut));
-
-    if (paragraph) {
+    if (paragraph && paragraph !== activeParagraph) {
       var paragraphStyles = window.getComputedStyle(paragraph);
       var paragraphLineHeight = parseFloat(paragraphStyles.lineHeight);
       var paragraphFontSize = parseFloat(paragraphStyles.fontSize) || 16;
       var caretHeight = Number.isFinite(paragraphLineHeight) ? paragraphLineHeight : paragraphFontSize * 1.25;
       cursor.style.setProperty('--site-cursor-caret-height', Math.max(16, Math.min(caretHeight, 42)) + 'px');
     }
-
-    cursor.classList.add('is-visible');
-
-    if (!cursorFrame) {
-      cursorFrame = window.requestAnimationFrame(renderCursor);
-    }
-  }, { passive: true });
+    activeParagraph = paragraph;
+    toggleClass('is-interactive', isInteractive);
+    toggleClass('is-text', Boolean(paragraph));
+    toggleClass('is-gallery-zoom-in', Boolean(galleryZoomIn));
+    toggleClass('is-gallery-zoom-out', Boolean(galleryZoomOut));
+  }
 
   document.addEventListener('pointerdown', function (event) {
-    if (!event.pointerType || event.pointerType === 'mouse') {
+    if (enabled && (!event.pointerType || event.pointerType === 'mouse')) {
       cursor.classList.add('is-pressed');
     }
   }, { passive: true });
@@ -302,4 +312,33 @@
       hideCursor();
     }
   });
+
+  function invalidateStyles() {
+    headingStylesDirty = true;
+    activeParagraph = null;
+  }
+  var styleObserver = new MutationObserver(invalidateStyles);
+  function start() {
+    if (enabled || !cursorMedia.matches) { return; }
+    enabled = true;
+    document.documentElement.classList.add('custom-cursor-enabled');
+    document.addEventListener('pointermove', onPointerMove, { passive: true });
+    // Observe only shell attributes, never the moving cursor subtree.
+    styleObserver.observe(document.body, { attributes: true });
+    styleObserver.observe(document.documentElement, { attributes: true });
+    invalidateStyles();
+  }
+  function stop() {
+    enabled = false;
+    document.removeEventListener('pointermove', onPointerMove);
+    styleObserver.disconnect();
+    hideCursor();
+    document.documentElement.classList.remove('custom-cursor-enabled');
+  }
+  window.addEventListener('resize', invalidateStyles, { passive: true });
+  if (document.fonts) { document.fonts.addEventListener('loadingdone', invalidateStyles); }
+  cursorMedia.addEventListener('change', function () { cursorMedia.matches ? start() : stop(); });
+  window.addEventListener('pagehide', stop);
+  window.addEventListener('pageshow', start);
+  start();
 }());

@@ -10,10 +10,6 @@
 /* 12 columns */
 @media all and (max-width: 1280px) {
 
-  body {
-    --font--size-huge: clamp(36px, 6.35vw, 6.35vw);
-    --font--size-large: clamp(26px, 2.24vw, 2.24vw);
-  }
   .section > .content {
     grid-column: 3 / -1;
   }
@@ -26,11 +22,7 @@
 @media all and (max-width: 1020px) {
 
   body {
-    --grid--app-margin: 20px;
     --grid--app-columns: var(--grid--app-columns-6);
-    --font--size-huge: clamp(36px, 7.77vw, 7.77vw);
-    --font--size-large: clamp(22px, 2.74vw, 2.74vw);
-    --font--size-medium: 22px;
   }
   /* Keep the compact navigation readable while inheriting the active theme. */
   .app-header {
@@ -60,7 +52,7 @@
     padding-right: 0;
   }
   .app-header .status .text {
-    color: var(--color--foreground--100);
+    color: var(--color-text-strong);
     animation: breathe-text 1.5s ease-in-out alternate infinite;
   }
   @keyframes breathe-text {
@@ -123,8 +115,8 @@
     transition-delay: 0;
   }
   .app-nav .item {
-    font-size: var(--font--size-medium);
-    line-height: 24px;
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-nav);
     margin-left: var(--font--margin-left);
     padding: 4px calc(44px + var(--grid--app-margin)) 4px var(--grid--app-margin);
     opacity: 0;
@@ -155,6 +147,7 @@
   body.mobile-nav--is--visible .app-nav .item:nth-child(6)  { transition-delay: 0.26s; }
   body.mobile-nav--is--visible .app-nav .item:nth-child(7)  { transition-delay: 0.28s; }
   body.mobile-nav--is--visible .app-nav .item:nth-child(8)  { transition-delay: 0.30s; }
+  body.mobile-nav--is--visible .app-nav .item:nth-child(9)  { transition-delay: 0.32s; }
 
   .section > .content {
     grid-column: 1 / -1;
@@ -163,12 +156,105 @@
     padding: calc(var(--grid--app-xheight) - 11px) 0 40px 0;
   }
   .look {
-    margin-top: -24px;
-    margin-left: -7px;
+    margin-inline-start: 0;
+  }
+  .section.contact .status {
+    padding-inline-start: 32px;
   }
   .app-aside {
     left: var(--grid--app-margin);
     bottom: var(--grid--app-margin);
+  }
+
+  /* Homepage shell: keep its own appearance while sharing the case-study scroll behavior. */
+  html:has(> body.homepage-page.mobile-nav--is--visible) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+  .homepage-page {
+    --home-compact-header-bottom: 4rem;
+    --home-compact-utilities-space: calc(var(--grid--app-margin) + 48px);
+  }
+  /* Mirror the existing wordmark correction and 12px close-button hit-area offset. */
+  .homepage-page .app-header .brand h3 {
+    margin-inline: var(--font--margin-left) 0;
+  }
+  .homepage-page .app-header .navigation {
+    margin-inline: 0 -12px;
+  }
+  .homepage-page .app-nav .item {
+    margin-inline: 0;
+    padding-block: var(--space-1);
+    padding-inline: var(--grid--app-margin) calc(44px + var(--grid--app-margin));
+    text-align: start;
+  }
+  .homepage-page .app-nav {
+    --home-nav-focus-space: calc(var(--focus-width) + var(--focus-offset));
+    --home-nav-fade-size: var(--space-5);
+    --home-nav-top: calc(var(--home-compact-header-bottom) + var(--space-4) - var(--home-nav-focus-space));
+    --home-nav-bottom: calc(var(--home-compact-utilities-space) + var(--space-4));
+    --home-nav-height: max(0px, calc(100dvh - var(--home-nav-top) - var(--home-nav-bottom)));
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100dvh;
+    padding-block-start: 0;
+    overflow: hidden;
+  }
+  .homepage-page .app-nav > .content {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: min(var(--home-nav-top), calc(100dvh - var(--home-nav-bottom)));
+    block-size: var(--home-nav-height);
+    min-block-size: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-block: min(var(--home-nav-focus-space), calc(var(--home-nav-height) / 2));
+    scroll-padding-block: calc(var(--home-nav-fade-size) + var(--home-nav-focus-space));
+  }
+  .homepage-page .app-nav > .content::-webkit-scrollbar,
+  .homepage-page .app-aside::-webkit-scrollbar {
+    display: none;
+  }
+  .homepage-page .app-nav::before,
+  .homepage-page .app-nav::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    block-size: min(var(--home-nav-fade-size), var(--home-nav-height));
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .homepage-page .app-nav::before {
+    inset-block-start: var(--home-nav-top);
+    background: linear-gradient(to bottom, var(--color--background--100), var(--color--background--0));
+  }
+  .homepage-page .app-nav::after {
+    inset-block-end: var(--home-nav-bottom);
+    background: linear-gradient(to top, var(--color--background--100), var(--color--background--0));
+  }
+  .homepage-page .app-nav.has-overflow-above::before,
+  .homepage-page .app-nav.has-overflow-below::after {
+    opacity: 1;
+  }
+  .homepage-page .app-aside {
+    inset-inline-start: var(--grid--app-margin);
+    inset-inline-end: auto;
+    inset-block-end: var(--grid--app-margin);
+    /* Only very short screens overflow here; the controls themselves keep their full dimensions. */
+    max-block-size: max(48px, calc(100dvh - var(--home-compact-header-bottom) - var(--grid--app-margin) - var(--space-4)));
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .homepage-page .app-aside .options {
+    flex-direction: row;
+    align-items: flex-end;
   }
 }
 
@@ -222,23 +308,10 @@
 @media all and (max-width: 500px) {
 
   body {
-    --grid--app-margin: 16px;
     --grid--app-columns: var(--grid--app-columns-2);
-    --grid--app-gutter: 16px;
-    --font--size-huge: clamp(32px, 7.5vw, 7.5vw);
-    --font--size-large: clamp(22px, 2.64vw, 2.64vw);
   }
   .app-grid-overlay .column:nth-child(n+3) {
     display: none;
-  }
-  .section h1,
-  .section.intro .text,
-  .section.values .title h2,
-  .section.background .item .role {
-    line-height: 1;
-  }
-  .section.intro .text {
-    min-height: calc(1em * 7);
   }
   .section.intro > .content {
     padding: calc(var(--grid--app-xheight) - 11px) 0 20px 0;
@@ -261,5 +334,14 @@
 
   body {
     --grid--app-xheight: 120px;
+  }
+}
+
+/* These legacy ambient effects predate the component reduced-motion rules. */
+@media (prefers-reduced-motion: reduce) {
+  .app-header .status .text,
+  .app-header .status .arrow,
+  .look .radius {
+    animation: none;
   }
 }

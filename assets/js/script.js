@@ -2,6 +2,9 @@
 
 // Script
 //------------------------------------------------------------------------------
+var homepageCompactNavigation;
+var mobileNavCloseTimer;
+
 function setLanguage(lang) {
 
 const currentPage = window.location.pathname.split("/").pop();
@@ -30,7 +33,9 @@ $(document).ready(function() {
   }
 
   // Fix touch device touch events
-  $('body *').on('touchstart', function (){});
+  // One bubbling listener retains the legacy touch-hover workaround without
+  // allocating a jQuery event record on every element (including SVG paths).
+  document.body.addEventListener('touchstart', function () {}, { passive: true });
 
   // Set the copyright to the current year in local time
   var currentYear = new Date().getFullYear();
@@ -147,6 +152,29 @@ $(document).ready(function() {
     }
   });
 
+  // Keep decorative loops at their current phase while outside the viewport.
+  // A single observer owns all targets; no polling or extra animation loop.
+  if ('IntersectionObserver' in window) {
+    var ambientTargets = Array.from(document.querySelectorAll('.client-logo-marquee, .project-card__date, .look'));
+    var ambientVisibility = new Map();
+    function updateAmbientMotion(element) {
+      element.classList.toggle('is-motion-paused', document.hidden || !ambientVisibility.get(element));
+    }
+    var ambientObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        ambientVisibility.set(entry.target, entry.isIntersecting);
+        updateAmbientMotion(entry.target);
+      });
+    });
+    function startAmbientMotion() {
+      ambientTargets.forEach(function (element) { ambientObserver.observe(element); });
+    }
+    window.addEventListener('pagehide', function () { ambientObserver.disconnect(); });
+    window.addEventListener('pageshow', startAmbientMotion);
+    document.addEventListener('visibilitychange', function () { ambientTargets.forEach(updateAmbientMotion); });
+    startAmbientMotion();
+  }
+
   // Featured project cards can have two intentional destinations. A lightweight,
   // transform-only cursor follows the active text or image region while the
   // native links preserve keyboard access and expected browser behavior.
@@ -159,23 +187,49 @@ $(document).ready(function() {
     var pendingX = -cursorSize;
     var pendingY = -cursorSize;
     var cursorFrame = null;
+    var pendingZone = null;
+    var activeMode = null;
+    var cursorMedia = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 
     if (!figure || !cursor || !cursorLabel) {
       return;
     }
 
     function renderProjectCursor() {
-      cursor.style.setProperty('--project-cursor-x', pendingX + 'px');
-      cursor.style.setProperty('--project-cursor-y', pendingY + 'px');
       cursorFrame = null;
+      if (!pendingZone || !cursorMedia.matches || document.hidden) { return; }
+      // Read geometry once per paint, before any cursor DOM writes. Keeping
+      // this read live also handles scrolling/resizing during the interaction.
+      var bounds = figure.getBoundingClientRect();
+      var x = Math.max(8, Math.min(bounds.width - cursorSize - 8, pendingX - bounds.left - cursorSize / 2));
+      var y = Math.max(8, Math.min(bounds.height - cursorSize - 8, pendingY - bounds.top - cursorSize / 2));
+      var mode = pendingZone.getAttribute('data-project-cursor-zone');
+      if (mode !== activeMode) {
+        cursorLabel.textContent = mode === 'live'
+          ? (card.getAttribute('data-project-live-label') || (isArabic ? 'عرض مباشر' : 'View live'))
+          : (isArabic ? 'عرض الحالة' : 'View case');
+        card.classList.toggle('is-project-cursor-live', mode === 'live');
+        activeMode = mode;
+      }
+      cursor.style.setProperty('--project-cursor-x', x + 'px');
+      cursor.style.setProperty('--project-cursor-y', y + 'px');
+      if (!card.classList.contains('is-project-cursor-visible')) {
+        card.classList.add('is-project-cursor-visible');
+      }
     }
 
     function hideProjectCursor() {
-      card.classList.remove('is-project-cursor-visible', 'is-project-cursor-live');
+      window.cancelAnimationFrame(cursorFrame);
+      cursorFrame = null;
+      pendingZone = null;
+      activeMode = null;
+      if (card.classList.contains('is-project-cursor-visible') || card.classList.contains('is-project-cursor-live')) {
+        card.classList.remove('is-project-cursor-visible', 'is-project-cursor-live');
+      }
     }
 
     figure.addEventListener('pointermove', function(event) {
-      if (event.pointerType && event.pointerType !== 'mouse') {
+      if (!cursorMedia.matches || (event.pointerType && event.pointerType !== 'mouse')) {
         hideProjectCursor();
         return;
       }
@@ -186,16 +240,9 @@ $(document).ready(function() {
         return;
       }
 
-      var mode = zone.getAttribute('data-project-cursor-zone');
-      var bounds = figure.getBoundingClientRect();
-      pendingX = Math.max(8, Math.min(bounds.width - cursorSize - 8, event.clientX - bounds.left - cursorSize / 2));
-      pendingY = Math.max(8, Math.min(bounds.height - cursorSize - 8, event.clientY - bounds.top - cursorSize / 2));
-
-      cursorLabel.textContent = mode === 'live'
-        ? (isArabic ? 'عرض مباشر' : 'View live')
-        : (isArabic ? 'عرض الحالة' : 'View case');
-      card.classList.toggle('is-project-cursor-live', mode === 'live');
-      card.classList.add('is-project-cursor-visible');
+      pendingZone = zone;
+      pendingX = event.clientX;
+      pendingY = event.clientY;
 
       if (!cursorFrame) {
         cursorFrame = window.requestAnimationFrame(renderProjectCursor);
@@ -203,6 +250,12 @@ $(document).ready(function() {
     }, { passive: true });
 
     figure.addEventListener('pointerleave', hideProjectCursor, { passive: true });
+    cursorMedia.addEventListener('change', hideProjectCursor);
+    window.addEventListener('blur', hideProjectCursor);
+    window.addEventListener('pagehide', hideProjectCursor);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { hideProjectCursor(); }
+    });
   });
 
   // Build the AI Summary deep links at runtime so the prompt stays readable and maintainable.
@@ -325,6 +378,7 @@ $(document).ready(function() {
   }
   function removeLoadingClass() {
     $('body').removeClass('is--loading');
+    window.dispatchEvent(new Event('homepage-ready'));
   }
   removeLoadingClassDelay();
 
@@ -411,6 +465,15 @@ $(document).ready(function() {
     }
   });
 
+  // Independent products share the existing navigation timing and easing.
+  $('.app-nav .item.independent-products').click(function() {
+    if ($('body').hasClass('mobile-nav--is--visible')) {
+      window.setTimeout(scrollToIndependentProducts, 300);
+    } else {
+      scrollToIndependentProducts();
+    }
+  });
+
   // Scroll to About from app nav
   $('.app-nav .item.about').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
@@ -444,6 +507,13 @@ $(document).ready(function() {
     }
     else {
       openMobileNav();
+    }
+  });
+
+  $('.app-header .navigation').on('keydown', function(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      $(this).trigger('click');
     }
   });
 
@@ -542,6 +612,17 @@ $(document).ready(function() {
     $('.section.intro .text.engineers').addClass('is--visible');
   });
 
+  // Audience controls in both languages reuse click behavior on the keyboard.
+  $('.section.intro .option[role="button"]').on('keydown', function(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      $(this).trigger('click');
+    }
+  }).on('click', function() {
+    $('.section.intro .option[role="button"]').attr('aria-pressed', 'false');
+    $(this).attr('aria-pressed', 'true');
+  });
+
   // Scroll to Contact from text links in sections
   $('.section a.contact').click(function() {
     scrollToContact();
@@ -589,41 +670,61 @@ $(document).keydown(function(key) {
     }
 });
 
+// Keep the existing duration/easing, but a new destination replaces old work.
+function animatePageScroll(top) {
+  var duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750;
+  $('html, body').stop(true).animate({ scrollTop: top }, duration, 'easeOutCubic');
+}
+
+// Native scrolling should also interrupt a pending programmatic journey.
+window.addEventListener('wheel', function () { $('html, body').stop(true); }, { passive: true });
+window.addEventListener('touchstart', function () { $('html, body').stop(true); }, { passive: true });
+window.addEventListener('pagehide', function () { $('html, body').stop(true); });
+document.addEventListener('keydown', function (event) {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].indexOf(event.key) !== -1) {
+    $('html, body').stop(true);
+  }
+});
+
 // Scroll to Intro
 function scrollToIntro() {
   // $('html, body').animate({ scrollTop: $('.section.intro').offset().top }, 750, 'easeOutCubic');
-  $('html, body').animate({ scrollTop: 0 }, 750, 'easeOutCubic');
+  animatePageScroll(0);
 }
 
 // Scroll to Values
 function scrollToValues() {
   // $('html, body').animate({ scrollTop: $('.section.values').offset().top - 90 }, 750, 'easeOutCubic');
-  $('html, body').animate({ scrollTop: $('.section.values').offset().top }, 750, 'easeOutCubic');
+  animatePageScroll($('.section.values').offset().top);
 }
 
 // Scroll to Background
 function scrollToBackground() {
-  $('html, body').animate({ scrollTop: $('.section.background').offset().top }, 750, 'easeOutCubic');
+  animatePageScroll($('.section.background').offset().top);
 }
 
 // Scroll to References
 function scrollToReferences() {
-  $('html, body').animate({ scrollTop: $('.section.references').offset().top }, 750, 'easeOutCubic');
+  animatePageScroll($('.section.references').offset().top);
 }
 
 // Scroll to Before We Work Together
 function scrollToFaq() {
-  $('html, body').animate({ scrollTop: $('.section.faq').offset().top }, 750, 'easeOutCubic');
+  animatePageScroll($('.section.faq').offset().top);
 }
 
 // Scroll to Work
 function scrollToWork() {
-  $('html, body').animate({ scrollTop: $('.section.work').offset().top }, 750, 'easeOutCubic');
+  animatePageScroll($('.section.work').offset().top);
+}
+
+function scrollToIndependentProducts() {
+  animatePageScroll($('#things-ive-built').offset().top);
 }
 
 // Scroll to About
 function scrollToAbout() {
-  $('html, body').animate({ scrollTop: $('.section.about').offset().top }, 750, 'easeOutCubic');
+  animatePageScroll($('.section.about').offset().top);
 }
 
 // Scroll to Contact
@@ -637,31 +738,36 @@ function scrollToContact() {
   var sectionContactTop = sectionContact.offset().top;
 
   if ( sectionContactHeight > viewportHeight ) {
-    $('html, body').animate({ scrollTop: sectionContactTop }, 750, 'easeOutCubic');
+    animatePageScroll(sectionContactTop);
   }
   else {
-    $('html, body').animate({ scrollTop: pageHeight - viewportHeight }, 750, 'easeOutCubic');
+    animatePageScroll(pageHeight - viewportHeight);
   }
 
 }
 
 // Open mobile nav
 function openMobileNav() {
+  window.clearTimeout(mobileNavCloseTimer);
+  $('.app-header .navigation').attr('aria-expanded', 'true');
   $('body').addClass('mobile-nav--is--transitioning');
   function addVisibleClassDelay() {
     window.setTimeout(addVisibleClass, 1);
   }
   function addVisibleClass() {
     $('body').addClass('mobile-nav--is--visible');
+    if (homepageCompactNavigation) { homepageCompactNavigation.refresh(); }
   }
   addVisibleClassDelay();
 }
 
 // Close mobile nav
 function closeMobileNav() {
+  window.clearTimeout(mobileNavCloseTimer);
+  $('.app-header .navigation').attr('aria-expanded', 'false');
   $('body').removeClass('mobile-nav--is--visible');
   function removeTransitioningClassDelay() {
-    window.setTimeout(removeTransitioningClass, 500);
+    mobileNavCloseTimer = window.setTimeout(removeTransitioningClass, 500);
   }
   function removeTransitioningClass() {
     $('body').removeClass('mobile-nav--is--transitioning');
@@ -784,122 +890,158 @@ function appGridOverlay() {
   $('.app-grid-overlay').toggleClass('is--visible');
 }
 
-// App main scroll
-$(window).on('load resize scroll', function() {
+// Sidebar section tracking: existing click handlers still own smooth scrolling.
+$(function () {
+  // Select by document order at one reading line, never observer callback order.
+  // Keep the preceding destination active through unlinked editorial interludes.
+  function trackSidebarNavigation(items, options) {
+    items = items.filter(function (item) { return item.section; }).sort(function (a, b) {
+      if (a.section === b.section) { return 0; }
+      return a.section.compareDocumentPosition(b.section) & 2 ? 1 : -1;
+    });
+    var observer;
+    var frame;
+    var readingLine;
+    var pendingLink;
+    var pendingTimer;
 
-  var viewportHeight = $(window).height();
-  var viewportHeightHalf = viewportHeight / 2;
-  var viewportHeightThird = viewportHeight / 3;
-  var viewportHeightQuarter = viewportHeight / 4;
+    function select(link) {
+      var changed = link && link.getAttribute('aria-current') !== 'location';
+      items.forEach(function (item) {
+        var active = item.link === link && !item.link.hidden;
+        item.link.classList.toggle('is--active', active);
+        if (active) {
+          item.link.setAttribute('aria-current', 'location');
+        } else {
+          item.link.removeAttribute('aria-current');
+        }
+      });
+      if (changed && options.onActiveChange) { options.onActiveChange(link); }
+    }
 
-  var appNavItem = $('.app-nav .item');
-  var appNavItemIntro = $('.app-nav .item.intro');
-  var appNavItemWork = $('.app-nav .item.work');
-  var appNavItemValues = $('.app-nav .item.values');
-  var appNavItemBackground = $('.app-nav .item.background');
-  var appNavItemReferences = $('.app-nav .item.references');
-  var appNavItemFaq = $('.app-nav .item.faq');
-  var appNavItemAbout = $('.app-nav .item.about');
-  var appNavItemContact = $('.app-nav .item.contact');
+    function clearPending() {
+      window.clearTimeout(pendingTimer);
+      pendingLink = null;
+    }
 
-  var appMain = $('.app-main');
-  var appMainHeight = appMain.height();
-  var appMainScrollTop = $(window).scrollTop();
-  var appMainScrollMiddle = appMainScrollTop + viewportHeightHalf;
-  var appMainScrollBottom = appMainScrollTop + viewportHeight;
-  var appMainScrollDownRemaining = appMainHeight - appMainScrollBottom;
+    function update() {
+      frame = null;
+      var visible = items.filter(function (item) {
+        return !item.link.hidden && !item.section.hidden && item.section.getClientRects().length;
+      });
+      if (!visible.length) { return; }
+      var current = visible[0];
+      visible.forEach(function (item) {
+        if (item.section.getBoundingClientRect().top <= readingLine + 2) { current = item; }
+      });
+      if (window.scrollY > 2 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+        current = visible[visible.length - 1];
+      }
+      if (pendingLink && visible.some(function (item) { return item.link === pendingLink; })) {
+        if (current.link !== pendingLink) { return; }
+      }
+      clearPending();
+      select(current.link);
+    }
 
-  var section = $('.app-main .section');
+    function schedule() {
+      if (!frame) { frame = window.requestAnimationFrame(update); }
+    }
 
-  var sectionIntro = $('.app-main .section.intro');
-  var sectionIntroHeight = sectionIntro.height();
-  var sectionIntroHeightHalf = sectionIntroHeight / 2;
-  var sectionIntroTop = sectionIntro.offset().top;
-  var sectionIntroMiddle = sectionIntroTop + sectionIntroHeightHalf;
-  var sectionIntroBottom = sectionIntroTop + sectionIntroHeight;
+    function rebuild() {
+      var height = Math.max(4, window.innerHeight);
+      var clearance = 0;
+      if (options.anchorClearance && items.length) {
+        clearance = (parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0) +
+          (parseFloat(window.getComputedStyle(items[0].section).scrollMarginTop) || 0);
+      }
+      readingLine = Math.floor(Math.min(height - 2, Math.max(height * 0.3, clearance + 2)));
+      if ('IntersectionObserver' in window) {
+        if (observer) { observer.disconnect(); }
+        observer = new IntersectionObserver(schedule, {
+          rootMargin: '-' + readingLine + 'px 0px -' + (height - readingLine - 2) + 'px 0px',
+          threshold: 0
+        });
+        items.forEach(function (item) { observer.observe(item.section); });
+      }
+      schedule();
+    }
 
-  var sectionWork = $('.app-main .section.work')
-  var sectionWorkHeight = sectionWork.height();
-  var sectionWorkTop = sectionWork.offset().top;
-  var sectionWorkBottom = sectionWorkTop + sectionWorkHeight;
+    function activate(link) {
+      clearPending();
+      pendingLink = link;
+      select(link);
+      // Hold the clicked destination during smooth travel, including the mobile delay.
+      pendingTimer = window.setTimeout(function () { clearPending(); schedule(); }, 1500);
+    }
 
-  var sectionValues = $('.app-main .section.values')
-  var sectionValuesHeight = sectionValues.height();
-  var sectionValuesTop = sectionValues.offset().top;
-  var sectionValuesBottom = sectionValuesTop + sectionValuesHeight;
-
-  var sectionBackground = $('.app-main .section.background')
-  var sectionBackgroundHeight = sectionBackground.height();
-  var sectionBackgroundTop = sectionBackground.offset().top;
-  var sectionBackgroundBottom = sectionBackgroundTop + sectionBackgroundHeight;
-
-  var sectionReferences = $('.app-main .section.references')
-  var sectionReferencesHeight = sectionReferences.height();
-  var sectionReferencesTop = sectionReferences.offset().top;
-  var sectionReferencesBottom = sectionReferencesTop + sectionReferencesHeight;
-
-  var sectionFaq = $('.app-main .section.faq')
-  var sectionFaqHeight = sectionFaq.height();
-  var sectionFaqTop = sectionFaq.offset().top;
-  var sectionFaqBottom = sectionFaqTop + sectionFaqHeight;
-
-  var sectionAbout = $('.app-main .section.about')
-  var sectionAboutHeight = sectionAbout.height();
-  var sectionAboutTop = sectionAbout.offset().top;
-  var sectionAboutBottom = sectionAboutTop + sectionAboutHeight;
-
-  var sectionContact = $('.app-main .section.contact')
-  var sectionContactHeight = sectionContact.height();
-  var sectionContactHeightHalf = sectionContactHeight / 2;
-  var sectionContactTop = sectionContact.offset().top;
-  var sectionContactMiddle = sectionContactTop + sectionContactHeightHalf;
-  var sectionContactBottom = sectionContactTop + sectionContactHeight;
-
-  // console.log('————————');
-  // console.log('viewport height = ' + viewportHeight);
-  // console.log('viewport height half = ' + viewportHeightHalf);
-  // console.log('viewport height third = ' + viewportHeightThird);
-  // console.log('viewport height quarter = ' + viewportHeightQuarter);
-  // console.log('—');
-  // console.log('.app-main height = ' + appMainHeight);
-  // console.log('.app-main scroll top = ' + appMainScrollTop);
-  // console.log('.app-main scroll middle = ' + appMainScrollMiddle);
-  // console.log('.app-main scroll bottom = ' + appMainScrollBottom);
-  // console.log('.app-main scroll down remaining = ' + appMainScrollDownRemaining);
-
-  appNavItem.removeClass('is--active');
-  // section.removeClass('is--in-view');
-
-  if ( sectionIntroMiddle > appMainScrollTop ){
-    appNavItemIntro.addClass('is--active');
-    // sectionIntro.addClass('is--in-view');
+    function cancelPending() {
+      if (pendingLink) { clearPending(); schedule(); }
+    }
+    window.addEventListener('wheel', cancelPending, { passive: true });
+    window.addEventListener('touchstart', cancelPending, { passive: true });
+    document.addEventListener('keydown', function (event) {
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].indexOf(event.key) !== -1) {
+        cancelPending();
+      }
+    });
+    window.addEventListener('resize', rebuild, { passive: true });
+    window.addEventListener('load', schedule, { once: true });
+    if ('IntersectionObserver' in window && items.length) {
+      // A short final section may never reach the reading line before page end.
+      var endObserver = new IntersectionObserver(schedule, { threshold: [0, 1] });
+      endObserver.observe(options.footer || items[items.length - 1].section);
+    } else {
+      // Only browsers without IntersectionObserver need a scroll listener.
+      window.addEventListener('scroll', schedule, { passive: true });
+    }
+    rebuild();
+    return { activate: activate, refresh: schedule };
   }
-  else if ( sectionWorkTop <= appMainScrollBottom && sectionWorkBottom >= appMainScrollMiddle ){
-    appNavItemWork.addClass('is--active');
-    // sectionWork.addClass('is--in-view');
-  }
-  if ( sectionValuesTop <= appMainScrollMiddle && sectionValuesBottom >= appMainScrollMiddle ){
-    appNavItemValues.addClass('is--active');
-    // sectionValues.addClass('is--in-view');
-  }
-  if ( sectionBackgroundTop <= appMainScrollMiddle && sectionBackgroundBottom >= appMainScrollMiddle ){
-    appNavItemBackground.addClass('is--active');
-    // sectionBackground.addClass('is--in-view');
-  }
-  if ( sectionReferencesTop <= appMainScrollMiddle && sectionReferencesBottom >= appMainScrollMiddle ){
-    appNavItemReferences.addClass('is--active');
-    // sectionReferences.addClass('is--in-view');
-  }
-  if ( sectionFaqTop <= appMainScrollMiddle && sectionFaqBottom >= appMainScrollMiddle ){
-    appNavItemFaq.addClass('is--active');
-  }
-  if ( sectionAboutTop <= appMainScrollMiddle && sectionContactMiddle >= appMainScrollBottom ){
-    appNavItemAbout.addClass('is--active');
-    // sectionAbout.addClass('is--in-view');
-  }
-  if ( sectionContactMiddle < appMainScrollBottom ){
-    appNavItemContact.addClass('is--active');
-    // sectionContact.addClass('is--in-view');
-  }
+  var items = Array.from(document.querySelectorAll('.app-nav .item[href^="#"]')).map(function (link) {
+    return {
+      link: link,
+      // #hello belongs to the transient cover; track the persistent intro instead.
+      section: link.classList.contains('intro') ? document.querySelector('.section.intro') :
+        document.getElementById(link.getAttribute('href').slice(1))
+    };
+  });
+  homepageCompactNavigation = window.createCompactNavigationViewport({
+    nav: document.querySelector('.app-nav'),
+    propertyTarget: document.body,
+    propertyPrefix: '--home-compact',
+    prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  });
+  var tracking = trackSidebarNavigation(items, {
+    onActiveChange: function(link) { homepageCompactNavigation.reveal(link, false); }
+  });
+  items.forEach(function (item) {
+    item.link.addEventListener('click', function (event) {
+      if (!item.section) { return; }
+      // Avoid a native hash jump competing with the existing jQuery smooth scroll.
+      event.preventDefault();
+      var destination = item.link.getAttribute('href');
+      if (window.history.pushState && window.location.hash !== destination) {
+        window.history.pushState(null, '', destination);
+      }
+      tracking.activate(item.link);
+    });
+  });
 
-}); // End app main scroll
+  // Restore this new destination on deep links and Back/Forward navigation.
+  // Existing destinations keep their current page-load and scrolling behavior.
+  function restoreIndependentProducts() {
+    if (window.location.hash === '#things-ive-built' && !document.body.classList.contains('is--loading')) {
+      var section = document.getElementById('things-ive-built');
+      if (section) {
+        window.scrollTo(0, section.offsetTop);
+        tracking.refresh();
+      }
+    }
+  }
+  window.addEventListener('pageshow', restoreIndependentProducts);
+  window.addEventListener('homepage-ready', restoreIndependentProducts);
+  window.addEventListener('popstate', restoreIndependentProducts);
+  window.addEventListener('hashchange', restoreIndependentProducts);
+  if (document.fonts) { document.fonts.ready.then(restoreIndependentProducts); }
+});

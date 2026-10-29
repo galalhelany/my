@@ -10,6 +10,24 @@
   font-weight: 500;
 }
 
+@font-face {
+  font-family: "DIN Next LT Arabic";
+  src: url("../fonts/DINNextLTArabic-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  /* Keep Latin text and Western numerals in the existing typeface. */
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF,
+    U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* The supplied Arabic face is Regular only; do not manufacture other styles. */
+:lang(ar) {
+  --font--family: var(--font-arabic);
+  --font--weight: 400;
+  font-synthesis: none;
+}
+
 * {
   font-family: var(--font--family);
   font-style: var(--font--style);
@@ -22,6 +40,13 @@
 html {
   font-size: var(--font--size-regular);
   line-height: var(--font--size-regular-line-height);
+}
+
+/* Text roles are independent of the fixed document root and editorial headings. */
+body {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
 }
 
 .numeral-8 {

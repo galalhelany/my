@@ -176,23 +176,25 @@
 
   <link href="assets/css/normalize-8.0.1.css" rel="stylesheet">
   <link href="assets/css/reset.css" rel="stylesheet">
-  <link href="assets/css/font.css" rel="stylesheet">
-  <link href="assets/css/variables.css" rel="stylesheet">
-  <link href="assets/css/color.css" rel="stylesheet">
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/font.css?v=20261029-products-2" rel="stylesheet">
+  <link href="assets/css/variables.css?v=20261029-products-2" rel="stylesheet">
+  <link href="assets/css/color.css?v=20261029-products-2" rel="stylesheet">
+  <link href="assets/css/style.css?v=20261029-masaa-reference-3" rel="stylesheet">
   <link href="assets/css/grid.css" rel="stylesheet">
-  <link href="assets/css/media-queries.css" rel="stylesheet">
+  <link href="assets/css/media-queries.css?v=20261029-products-2" rel="stylesheet">
 
   <script src="assets/js/modernizr.js"></script>
   <script src="assets/js/jquery-3.7.1.min.js"></script>
   <script src="assets/js/jquery-easing-1.4.1.js"></script>
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/cursor.js" defer></script>
+  <script src="assets/js/compact-navigation.js?v=20261029-products-2"></script>
+  <script src="assets/js/script.js?v=20261029-products-2"></script>
+  <script src="assets/js/gradual-blur.js?v=20261029-1" defer></script>
+  <script src="assets/js/cursor.js?v=20261029-products-2" defer></script>
 
 
 </head>
 
-<body class="cover--is--visible is--loading theme--16">
+<body class="homepage-page cover--is--visible is--loading theme--16">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTLZB942" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
@@ -207,7 +209,7 @@
       </div>
 
       <div class="actions">
-        <div class="option navigation">
+        <div class="option navigation" role="button" tabindex="0" aria-label="Open navigation" aria-expanded="false">
           <div class="content">
             <div class="icon">
               <div class="line">
@@ -228,6 +230,7 @@
     <div class="content">
       <a class="item intro is--active" href="#hello">Hello</a>
       <a class="item work" href="#projects">Projects</a>
+      <a class="item independent-products" href="#things-ive-built">Things I’ve Built</a>
       <a class="item values" href="#principles">Principles</a>
       <a class="item background" href="#experience">Experience</a>
       <a class="item references" href="#what-i-bring">What I bring</a>
@@ -241,8 +244,8 @@
 
     <section class="section cover" id="hello">
       <div class="content">
-        <h1>
-          Designing Complex <br> Digital Products <br> That Scale</h1>
+        <p class="homepage-cover-title">
+          Designing Complex <br> Digital Products <br> That Scale</p>
       </div>
     </section>
 
@@ -252,31 +255,31 @@
         <div class="gradient-mask left"></div>
         <div class="gradient-mask right is--visible"></div>
         <div class="options">
-          <div class="option anyone is--active">For anyone</div>
-          <div class="option recruiters">Recruiters</div>
-          <div class="option product-designers">Product Designers</div>
-          <div class="option product-managers">Product Managers</div>
-          <div class="option engineers">Engineers</div>
+          <div class="option anyone is--active" role="button" tabindex="0" aria-pressed="true"><span class="audience-option__label">For anyone</span><span class="audience-option__size" aria-hidden="true">For anyone</span></div>
+          <div class="option recruiters" role="button" tabindex="0" aria-pressed="false"><span class="audience-option__label">Recruiters</span><span class="audience-option__size" aria-hidden="true">Recruiters</span></div>
+          <div class="option product-designers" role="button" tabindex="0" aria-pressed="false"><span class="audience-option__label">Product Designers</span><span class="audience-option__size" aria-hidden="true">Product Designers</span></div>
+          <div class="option product-managers" role="button" tabindex="0" aria-pressed="false"><span class="audience-option__label">Product Managers</span><span class="audience-option__size" aria-hidden="true">Product Managers</span></div>
+          <div class="option engineers" role="button" tabindex="0" aria-pressed="false"><span class="audience-option__label">Engineers</span><span class="audience-option__size" aria-hidden="true">Engineers</span></div>
         </div>
 
-        <div class="texts">
-          <p class="text anyone is--visible">Hello there <br>I’m a designer creating beautiful, <br> user-friendly
+        <h1 class="texts">
+          <span class="text anyone is--visible">Hello there <br>I’m a designer creating beautiful, <br> user-friendly
             digital
-            experiences that truly help people every day </p>
-          <p class="text recruiters">I’m a product designer with 6 years of experience delivering impactful designs
+            experiences that truly help people every day </span>
+          <span class="text recruiters">I’m a product designer with 6 years of experience delivering impactful designs
             for
-            brands, products, and teams of all sizes</p>
-          <p class="text product-designers">I turn strategy into <br>pixels, creating high-quality, user-focused
-            experiences through careful, systems-driven design</p>
-          <p class="text product-managers">I bring end-to-end product expertise, partnering from vision and strategy
+            brands, products, and teams of all sizes</span>
+          <span class="text product-designers">I turn strategy into <br>pixels, creating high-quality, user-focused
+            experiences through careful, systems-driven design</span>
+          <span class="text product-managers">I bring end-to-end product expertise, partnering from vision and strategy
             to
-            discovery and delivery to create meaningful impact</p>
-          <p class="text engineers">tech-savvy designer with coding skills
+            discovery and delivery to create meaningful impact</span>
+          <span class="text engineers">tech-savvy designer with coding skills
             Understands full development workflow
             Communicates seamlessly with you
             Builds functional, scalable solutions
-          </p>
-        </div>
+          </span>
+        </h1>
 
         <!-- Client logo marquee: JavaScript duplicates this group once for a seamless loop. -->
         <div class="client-logo-marquee" id="clients" aria-label="Selected clients and organizations">
@@ -357,21 +360,25 @@
                 <figcaption>
                   <a class="project-card__case-content" href="hamdan-awards-case-study.html"
                     data-project-cursor-zone="case" aria-label="Open the Hamdan Awards case study">
-                    <span class="project-card__date"><span aria-hidden="true"></span>2024</span>
-                    <h3 class="project-card__name">Hamdan Awards</h3>
-                    <h4 class="project-card__title">Simplifying a Complex Multi-Role Awards Management Platform</h4>
-                    <p class="project-card__description">An end-to-end awards platform that unifies applications,
-                      evaluation, administration, and multi-role workflows in one scalable experience.</p>
+                    <div class="project-card__identity">
+                      <div class="project-card__header">
+                        <h3 class="project-card__name">Hamdan Awards</h3>
+                        <span class="project-card__date"><bdi dir="ltr">2024</bdi></span>
+                      </div>
+                      <h4 class="project-card__title">Simplifying a Complex Multi-Role Awards Management Platform</h4>
+                      <p class="project-card__description">An end-to-end awards platform that unifies applications,
+                        evaluation, administration, and multi-role workflows in one scalable experience.</p>
+                    </div>
                     <div class="project-card__tags" aria-label="Project disciplines">
                       <span>Enterprise Product</span><span>Multi-Role Workflows</span><span>Design System</span>
                     </div>
                     <div class="project-card__metrics" role="list" aria-label="Selected project outcomes">
                       <div class="project-card__metric" role="listitem">
-                        <strong aria-label="+&nbsp;1,352&nbsp;%" class="">+&nbsp;1,352&nbsp;%</strong>
+                        <strong dir="ltr" aria-label="+&nbsp;1,352&nbsp;%" class="">+&nbsp;1,352&nbsp;%</strong>
                         <span>submission performance in the applicant portal</span>
                       </div>
                       <div class="project-card__metric" role="listitem">
-                        <strong aria-label="80&nbsp;%&nbsp;+" class="">80&nbsp;%&nbsp;+</strong>
+                        <strong dir="ltr" aria-label="80&nbsp;%&nbsp;+" class="">80&nbsp;%&nbsp;+</strong>
                         <span>CSAT (Customer Satisfaction Score) from 257 survey responses</span>
                       </div>
                     </div>
@@ -418,11 +425,15 @@
                 <figcaption>
                   <a class="project-card__case-content" href="mosaic-arc-erp-case-study.html"
                     data-project-cursor-zone="case" aria-label="Open the Mosaic ARC ERP case study">
-                    <span class="project-card__date"><span aria-hidden="true"></span>2025-2026</span>
-                    <h3 class="project-card__name">Mosaic / ARC ERP</h3>
-                    <h4 class="project-card__title">Designing a Specialized ERP for Architectural Hardware Operations</h4>
-                    <p class="project-card__description">A specialized enterprise system that brings complex architectural
-                      hardware operations, teams, and reporting into one coherent workflow.</p>
+                    <div class="project-card__identity">
+                      <div class="project-card__header">
+                        <h3 class="project-card__name">Mosaic / ARC ERP</h3>
+                        <span class="project-card__date"><bdi dir="ltr">2025-2026</bdi></span>
+                      </div>
+                      <h4 class="project-card__title">Designing a Specialized ERP for Architectural Hardware Operations</h4>
+                      <p class="project-card__description">A specialized enterprise system that brings complex architectural
+                        hardware operations, teams, and reporting into one coherent workflow.</p>
+                    </div>
                     <div class="project-card__tags" aria-label="Project disciplines">
                       <span>B2B SaaS</span><span>ERP</span><span>Complex Workflows</span>
                     </div>
@@ -432,7 +443,7 @@
                         <span>Door, Frame &amp; Hardware.</span>
                       </div>
                       <div class="project-card__metric" role="listitem">
-                        <strong>10+</strong>
+                        <strong dir="ltr">10+</strong>
                         <span>Connected Modules</span>
                       </div>
                     </div>
@@ -469,12 +480,16 @@
                   sizes="(max-width: 760px) 100vw, (max-width: 1200px) 90vw, 1200px"
                   width="3003" height="2042" loading="lazy" decoding="async">
                 <figcaption>
-                  <span class="project-card__date"><span aria-hidden="true"></span>2024</span>
-                  <h3 class="project-card__name">Laffah</h3>
-                  <h4 class="project-card__title">Reimagining the Digital Ordering Experience for a Growing Restaurant
-                    Brand</h4>
-                  <p class="project-card__description">A responsive ordering experience designed to make menu discovery,
-                    customization, and checkout faster across mobile and desktop.</p>
+                  <div class="project-card__identity">
+                    <div class="project-card__header">
+                      <h3 class="project-card__name">Laffah</h3>
+                      <span class="project-card__date"><bdi dir="ltr">2024</bdi></span>
+                    </div>
+                    <h4 class="project-card__title">Reimagining the Digital Ordering Experience for a Growing Restaurant
+                      Brand</h4>
+                    <p class="project-card__description">A responsive ordering experience designed to make menu discovery,
+                      customization, and checkout faster across mobile and desktop.</p>
+                  </div>
                   <div class="project-card__tags" aria-label="Project disciplines">
                     <span>Consumer Product</span><span>E-commerce</span><span>Responsive Web</span>
                   </div>
@@ -494,12 +509,16 @@
                   width="2824" height="1176" loading="lazy"
                   decoding="async">
                 <figcaption>
-                  <span class="project-card__date"><span aria-hidden="true"></span>2025</span>
-                  <h3 class="project-card__name">ABH Manufacturing</h3>
-                  <h4 class="project-card__title">Transforming a Complex Product Ecosystem into a Scalable Digital
-                    Experience</h4>
-                  <p class="project-card__description">A scalable B2B platform that simplifies product discovery,
-                    technical information, and operational management across devices.</p>
+                  <div class="project-card__identity">
+                    <div class="project-card__header">
+                      <h3 class="project-card__name">ABH Manufacturing</h3>
+                      <span class="project-card__date"><bdi dir="ltr">2025</bdi></span>
+                    </div>
+                    <h4 class="project-card__title">Transforming a Complex Product Ecosystem into a Scalable Digital
+                      Experience</h4>
+                    <p class="project-card__description">A scalable B2B platform that simplifies product discovery,
+                      technical information, and operational management across devices.</p>
+                  </div>
                   <div class="project-card__tags" aria-label="Project disciplines">
                     <span>B2B Product</span><span>Product Discovery</span><span>Responsive Web</span>
                   </div>
@@ -519,12 +538,16 @@
                   width="3057" height="2018"
                   loading="lazy" decoding="async">
                 <figcaption>
-                  <span class="project-card__date"><span aria-hidden="true"></span>2025</span>
-                  <h3 class="project-card__name">Arab Tourism Organization</h3>
-                  <h4 class="project-card__title">Restructuring a Content-Rich Digital Experience for Easier Discovery
-                  </h4>
-                  <p class="project-card__description">A clearer content architecture that helps visitors discover
-                    destinations, reports, member information, and organizational resources.</p>
+                  <div class="project-card__identity">
+                    <div class="project-card__header">
+                      <h3 class="project-card__name">Arab Tourism Organization</h3>
+                      <span class="project-card__date"><bdi dir="ltr">2025</bdi></span>
+                    </div>
+                    <h4 class="project-card__title">Restructuring a Content-Rich Digital Experience for Easier Discovery
+                    </h4>
+                    <p class="project-card__description">A clearer content architecture that helps visitors discover
+                      destinations, reports, member information, and organizational resources.</p>
+                  </div>
                   <div class="project-card__tags" aria-label="Project disciplines">
                     <span>Information Architecture</span><span>UX/UI</span><span>Responsive Web</span>
                   </div>
@@ -537,6 +560,47 @@
 
       </div>
     </section>
+
+    <!-- independent-products:start -->
+    <section class="section independent-products" id="things-ive-built" aria-labelledby="independent-products-title">
+      <div class="content">
+        <header class="project-showcase__intro">
+          <h2 id="independent-products-title">Things I’ve Built</h2>
+          <p>Independent products I design, build, and launch — turning ideas into real-world experiences.</p>
+        </header>
+        <ul class="project-grid">
+          <li class="project-card-item">
+            <article class="project-card project-card--dual project-card--product" data-project-dual-card
+              data-product-id="masaa" data-project-live-label="View Live">
+              <figure>
+                <figcaption>
+                  <a class="project-card__case-content" href="https://masaa.app/" target="_blank" rel="noopener noreferrer" data-project-cursor-zone="live"
+                    aria-label="View Masaa live (opens in a new tab)">
+                    <span class="project-card__date"><span aria-hidden="true"></span>Live Product</span>
+                    <img class="project-card__logo" src="assets/img/projects/masaa-logo.svg?v=574da225d067" alt="Official Masaa logo"
+                      width="292" height="138" loading="lazy" decoding="async">
+                    <h3 class="project-card__name"><bdi>Masaa — مسعى</bdi></h3>
+                    <p class="project-card__description">A free focus timer that helps you stay focused without interrupting your flow. Built around a flexible <bdi dir="ltr">Flow&nbsp;Pomodoro</bdi> approach.</p>
+                  </a>
+                </figcaption>
+                <a class="project-card__media-link" href="https://masaa.app/" target="_blank"
+                  rel="noopener noreferrer" data-project-cursor-zone="live" aria-label="View Masaa live (opens in a new tab)">
+                  <img src="assets/img/projects/masaa-desktop-mobile.webp?v=d85fcedd42cf" alt="Masaa focus timer displayed on a laptop and three mobile screens"
+                    width="2136" height="1426" loading="lazy" decoding="async">
+                </a>
+                <span class="project-card__cursor" aria-hidden="true">
+                  <svg class="project-card__cursor-icon" viewBox="0 0 24 24">
+                    <path d="M7 17 17 7M9 7h8v8" />
+                  </svg>
+                  <span data-project-cursor-label>View Live</span>
+                </span>
+              </figure>
+            </article>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <!-- independent-products:end -->
 
     <section class="section values" id="principles">
       <div class="content">
@@ -1208,7 +1272,7 @@
                 <span class="description">Made by <a href="https://galalhelany.com/">Galal
                     Helany</a></span>
 
-                <span class="copyright">© <span class="year">2025</span> v 4.3</span>
+                <span class="copyright">© <span class="year">2025</span> v 4.4</span>
               </p>
             </div>
           </div>

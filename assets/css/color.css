@@ -4,10 +4,23 @@
 ----------------------------------------------------------------------------- */
 
 body {
-  color: var(--color--foreground--100);
+  /* Opaque text roles target normal text on the solid theme background.
+   * Image/tinted component surfaces and legacy opacity consumers need Stage B.
+   * Resolve focus on body so it follows the selected theme's text primary. */
+  color: var(--color-text-primary);
   background-color: var(--color--background--100);
+  --focus-color: var(--color-text-primary);
+  --color-graphic-primary: var(--color-text-primary);
+  --color-text-strong: var(--color--foreground--100);
 }
 body.theme--16 {
+  --color-text-primary: #1c1c1e;
+  --color-text-strong: #1c1c1e;
+  /* Keep graphics and focus rings at their existing black. */
+  --color-graphic-primary: #000000;
+  --focus-color: #000000;
+  --color-text-secondary: #505050;
+  --color-text-muted: #666666;
   --color--foreground--100: rgb(0 0 0 / 1);
   --color--foreground--50:  rgb(0 0 0 / 0.5);
   --color--foreground--33:  rgb(0 0 0 / 0.333);
@@ -21,6 +34,9 @@ body.theme--16 {
   --color--background--0:   rgb(255 255 255 / 0);
 }
 body.theme--15 {
+  --color-text-primary: #12191a;
+  --color-text-secondary: #465152;
+  --color-text-muted: #596465;
   --color--foreground--100: rgb(18 25 26 / 1);
   --color--foreground--50:  rgb(18 25 26 / 0.5);
   --color--foreground--33:  rgb(18 25 26 / 0.333);
@@ -34,6 +50,9 @@ body.theme--15 {
   --color--background--0:   rgb(242 251 253 / 0);
 }
 body.theme--14 {
+  --color-text-primary: #1e282a;
+  --color-text-secondary: #414e51;
+  --color-text-muted: #515e61;
   --color--foreground--100: rgb(30 40 42 / 1);
   --color--foreground--50:  rgb(30 40 42 / 0.5);
   --color--foreground--33:  rgb(30 40 42 / 0.333);
@@ -47,6 +66,9 @@ body.theme--14 {
   --color--background--0:   rgb(222 235 238 / 0);
 }
 body.theme--13 {
+  --color-text-primary: #263631;
+  --color-text-secondary: #3d5049;
+  --color-text-muted: #4b5c55;
   --color--foreground--100: rgb(38 54 49 / 1);
   --color--foreground--50:  rgb(38 54 49 / 0.5);
   --color--foreground--33:  rgb(38 54 49 / 0.333);
@@ -60,6 +82,9 @@ body.theme--13 {
   --color--background--0:   rgb(213 227 222 / 0);
 }
 body.theme--12 {
+  --color-text-primary: #3b4236;
+  --color-text-secondary: #454e3f;
+  --color-text-muted: #4d5546;
   --color--foreground--100: rgb(59 66 54 / 1);
   --color--foreground--50:  rgb(59 66 54 / 0.5);
   --color--foreground--33:  rgb(59 66 54 / 0.333);
@@ -73,6 +98,9 @@ body.theme--12 {
   --color--background--0:   rgb(209 218 203 / 0);
 }
 body.theme--11 {
+  --color-text-primary: #514e38;
+  --color-text-secondary: #54513a;
+  --color-text-muted: #57543c;
   --color--foreground--100: rgb(81 78 56 / 1);
   --color--foreground--50:  rgb(81 78 56 / 0.5);
   --color--foreground--33:  rgb(81 78 56 / 0.333);
@@ -86,6 +114,9 @@ body.theme--11 {
   --color--background--0:   rgb(213 209 183 / 0);
 }
 body.theme--10 {
+  --color-text-primary: #774e34;
+  --color-text-secondary: #7c5035;
+  --color-text-muted: #815338;
   --color--foreground--100: rgb(119 78 52 / 1);
   --color--foreground--50:  rgb(119 78 52 / 0.5);
   --color--foreground--33:  rgb(119 78 52 / 0.333);
@@ -99,6 +130,10 @@ body.theme--10 {
   --color--background--0:   rgb(243 230 207 / 0);
 }
 body.theme--09 {
+  /* Keep the orange foreground for artwork; readable text uses burnt orange. */
+  --color-text-primary: #7f2c09;
+  --color-text-secondary: #8a320d;
+  --color-text-muted: #95370f;
   --color--foreground--100: rgb(233 79 14 / 1);
   --color--foreground--50:  rgb(233 79 14 / 0.5);
   --color--foreground--33:  rgb(233 79 14 / 0.333);
@@ -113,6 +148,10 @@ body.theme--09 {
 }
 /* Mid point is theme--08 */
 body.theme--08 {
+  /* Cream cannot meet normal-text contrast on this saturated orange surface. */
+  --color-text-primary: #140900;
+  --color-text-secondary: #1c0c02;
+  --color-text-muted: #241006;
   --color--foreground--100: rgb(243 230 207 / 1);
   --color--foreground--50:  rgb(243 230 207 / 0.6);
   --color--foreground--33:  rgb(243 230 207 / 0.45);
@@ -126,6 +165,10 @@ body.theme--08 {
   --color--background--0:   rgb(233 79 14 / 0);
 }
 body.theme--07 {
+  /* The original cream is close to the contrast floor: do not dim text roles. */
+  --color-text-primary: #f3d8b8;
+  --color-text-secondary: #f3d8b8;
+  --color-text-muted: #f3d8b8;
   --color--foreground--100: rgb(243 216 184 / 1);
   --color--foreground--50:  rgb(243 216 184 / 0.6);
   --color--foreground--33:  rgb(243 216 184 / 0.45);
@@ -139,6 +182,9 @@ body.theme--07 {
   --color--background--0:   rgb(157 68 51 / 0);
 }
 body.theme--06 {
+  --color-text-primary: #f2c3a4;
+  --color-text-secondary: #efc0a1;
+  --color-text-muted: #ecbd9e;
   --color--foreground--100: rgb(242 195 164 / 1);
   --color--foreground--50:  rgb(242 195 164 / 0.6);
   --color--foreground--33:  rgb(242 195 164 / 0.45);
@@ -152,6 +198,9 @@ body.theme--06 {
   --color--background--0:   rgb(119 58 53 / 0);
 }
 body.theme--05 {
+  --color-text-primary: #ffb1b1;
+  --color-text-secondary: #fcaeae;
+  --color-text-muted: #f9abab;
   --color--foreground--100: rgb(255 177 177 / 1);
   --color--foreground--50:  rgb(255 177 177 / 0.6);
   --color--foreground--33:  rgb(255 177 177 / 0.45);
@@ -165,6 +214,9 @@ body.theme--05 {
   --color--background--0:   rgb(84 60 89 / 0);
 }
 body.theme--04 {
+  --color-text-primary: #f8a6d3;
+  --color-text-secondary: #f0a2cc;
+  --color-text-muted: #e99ec6;
   --color--foreground--100: rgb(248 166 211 / 1);
   --color--foreground--50:  rgb(248 166 211 / 0.6);
   --color--foreground--33:  rgb(248 166 211 / 0.45);
@@ -178,6 +230,9 @@ body.theme--04 {
   --color--background--0:   rgb(64 54 79 / 0);
 }
 body.theme--03 {
+  --color-text-primary: #cfbcec;
+  --color-text-secondary: #c2b0dd;
+  --color-text-muted: #b7a5d2;
   --color--foreground--100: rgb(207 188 236 / 1);
   --color--foreground--50:  rgb(207 188 236 / 0.6);
   --color--foreground--33:  rgb(207 188 236 / 0.45);
@@ -191,6 +246,9 @@ body.theme--03 {
   --color--background--0:   rgb(46 50 72 / 0);
 }
 body.theme--02 {
+  --color-text-primary: #b7d4f5;
+  --color-text-secondary: #a4bedc;
+  --color-text-muted: #96afcb;
   --color--foreground--100: rgb(183 212 245 / 1);
   --color--foreground--50:  rgb(183 212 245 / 0.6);
   --color--foreground--33:  rgb(183 212 245 / 0.45);
@@ -204,6 +262,9 @@ body.theme--02 {
   --color--background--0:   rgb(24 41 56 / 0);
 }
 body.theme--01 {
+  --color-text-primary: #c3ebf1;
+  --color-text-secondary: #abcfd4;
+  --color-text-muted: #97b8bd;
   --color--foreground--100: rgb(195 235 241 / 1);
   --color--foreground--50:  rgb(195 235 241 / 0.6);
   --color--foreground--33:  rgb(195 235 241 / 0.45);
@@ -217,6 +278,9 @@ body.theme--01 {
   --color--background--0:   rgb(5 26 28 / 0);
 }
 body.theme--00 {
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #c2c2c2;
+  --color-text-muted: #a3a3a3;
   --color--foreground--100: rgb(255 255 255 / 1);
   --color--foreground--50:  rgb(255 255 255 / 0.6);
   --color--foreground--33:  rgb(255 255 255 / 0.45);
@@ -281,4 +345,31 @@ body.theme--02 .image-overlay-02,
 body.theme--01 .image-overlay-02 {
   background-color: var(--color--background--100);
   mix-blend-mode: lighten;
+}
+
+/* These graphics inherit currentColor from text; preserve their light-theme ink. */
+body.theme--16 .project-card__action svg,
+body.theme--16 .case-image-gallery__button svg {
+  color: var(--color-graphic-primary);
+}
+body.theme--16 .pre-contact-cta__link svg {
+  stroke: var(--color--foreground--100);
+}
+@media (hover: hover) {
+  body.theme--16 .pre-contact-cta__link:hover svg {
+    stroke: var(--color--background--100);
+  }
+}
+body.theme--16 .case-image-gallery__item {
+  border-color: color-mix(in srgb, var(--color-graphic-primary) 14%, transparent);
+}
+body.theme--16 .case-image-gallery__button {
+  border-color: color-mix(in srgb, var(--color-graphic-primary) 18%, transparent);
+}
+body.theme--16 .case-image-gallery__button:focus-visible {
+  outline-color: var(--color-graphic-primary);
+}
+body.theme--16[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab:hover::after,
+body.theme--16[data-case-study-project="mosaic-erp"] .mosaic-workflow-tabs__tab.is-active::after {
+  background: var(--color-graphic-primary);
 }

@@ -1,25 +1,115 @@
 
 
-/* Variables
+/* Foundations
+ * Values live here; components select roles; pages own editorial composition.
+ * Typography consumers use semantic roles; section and shell migration remains opt-in.
+ * Keep root sizing and page-owned editorial composition intact.
 ----------------------------------------------------------------------------- */
 
 :root {
-  --font--family: "Montserrat-Arabic", system-ui, sans-serif;
+  /* The existing Montserrat face is registered as "Montserrat-Arabic". */
+  --font-latin: "Montserrat-Arabic", system-ui, sans-serif;
+  --font-arabic: "DIN Next LT Arabic", "Montserrat-Arabic", Tahoma, Arial, sans-serif;
+  --font-body: var(--font-latin);
+  --weight-text: 500;
+
+  /* Semantic roles: H1 page, H2 section, H3 component, H4 subheading.
+   * HTML heading levels do not automatically consume these visual roles. */
+  --text-display: clamp(2rem, 1.25rem + 3.5vw, 5.5rem);
+  --text-h1: clamp(2.75rem, 1.75rem + 4vw, 6rem);
+  --text-h2: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+  --text-h3: clamp(1.375rem, 1.125rem + 0.75vw, 1.875rem);
+  --text-h4: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-body-lg: clamp(1.25rem, 1.125rem + 0.5vw, 1.5rem);
+  --text-body: 1rem;
+  --text-reading: 1.125rem;
+  --text-body-sm: 0.875rem;
+  --text-label: 0.8125rem;
+  --text-caption: 0.75rem;
+  --text-nav: 1rem;
+  --text-stat: clamp(1.75rem, 1.25rem + 1.5vw, 3rem);
+
+  --leading-display: 1.02;
+  --leading-h1: 1.02;
+  --leading-h2: 1.08;
+  --leading-h3: 1.15;
+  --leading-h4: 1.25;
+  --leading-body-lg: 1.5;
+  --leading-body: 1.6;
+  --leading-body-relaxed: 1.7;
+  --leading-body-sm: 1.55;
+  --leading-label: 1.4;
+  --leading-caption: 1.5;
+  --leading-nav: 1.5;
+  --leading-stat: 1;
+
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.025em;
+  --tracking-h1: -0.03em;
+  --tracking-h3: -0.015em;
+  --tracking-body: normal;
+  --tracking-label: 0.04em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Section boundaries are opt-in: a section owns its opening space.
+   * Preserve existing 220px pauses and full-screen features until Stage C. */
+  --section-space-standard: clamp(6rem, 4rem + 6vw, 10rem);
+  --section-space-compact: clamp(3rem, 2rem + 3vw, 5rem);
+  --section-space-feature: clamp(8rem, 12vw, 13.75rem);
+  --section-heading-gap: var(--space-16);
+  --content-group-gap: var(--space-6);
+  --paragraph-gap: var(--space-4);
+
+  /* Width/rail tokens describe future migration, not a centered container.
+   * Grid gap also owns the existing gutter between the twelve columns. */
+  --layout-max-width: 90rem;
+  --layout-rail-width: 11rem;
+  --layout-rail-gap: var(--space-8);
+  --layout-main-width: calc(var(--layout-max-width) - var(--layout-rail-width) - var(--layout-rail-gap));
+  --layout-reading-width: min(65ch, 36rem);
+  --layout-reading-width-ar: min(60ch, 34rem);
+  --layout-gutter: 2.5rem;
+  --layout-grid-gap: var(--space-5);
+
+  /* Default light surface; theme text roles belong to color.css.
+   * Decorative opacity tokens below remain independent of readable text. */
+  --color-text-primary: #000000;
+  --color-text-secondary: #505050;
+  --color-text-muted: #666666;
+  --focus-width: 2px;
+  --focus-offset: 4px;
+  --focus-color: var(--color-text-primary);
+  --focus-radius: 2px;
+
+  /* Compatibility aliases for remaining consumers; keep the fixed document root.
+   * Do not alias the Arabic body role to the fixed 16px document root. */
+  --font--family: var(--font-latin);
   --font--style: normal;
   --font--weight: 500;
   --font--margin-left: -0.07em;
   --font--margin-left-opening-quote-mark: -0.406em;
   --font--feature-settings: "liga", "ss02", "ss03", "ss04", "ss06";
   --font--feature-settings-no-stylized-numeral-8: "ss06" 0;
-  --font--size-huge: clamp(36px, 5.14vw, 5.14vw);
-  --font--size-large: clamp(26px, 1.81vw, 1.81vw);
-  --font--size-medium: 26px;
+  --font--size-huge: var(--text-display);
+  --font--size-large: var(--text-body-lg);
+  /* Compact wordmark/control exception, continuous across the header breakpoint. */
+  --font--size-medium: clamp(1.375rem, 1.125rem + 0.5vw, 1.625rem);
   --font--size-regular: 16px;
   --font--size-regular-line-height: 1.25;
 }
 
 :root {
-  --grid--app-margin: 40px;
+  --grid--app-margin: var(--layout-gutter);
   --grid--app-columns: var(--grid--app-columns-12);
   --grid--app-columns-12: repeat(12, [col-start] 1fr);
   --grid--app-columns-6: repeat(6, [col-start] 1fr);
@@ -27,7 +117,7 @@
   --grid--app-columns-3: repeat(3, [col-start] 1fr);
   --grid--app-columns-2: repeat(2, [col-start] 1fr);
   --grid--app-columns-1: repeat(1, [col-start] 1fr);
-  --grid--app-gutter: 20px;
+  --grid--app-gutter: var(--layout-grid-gap);
   --grid--app-xheight: 220px;
 }
 
@@ -43,4 +133,59 @@
   --color--foreground--0:   rgb(0 0 0 / 0);
   --color--background--100: rgb(255 255 255 / 1);
   --color--background--0:   rgb(255 255 255 / 0);
+}
+
+/* Match the existing locale architecture, including mixed-language fragments.
+ * Font faces, loading and Arabic synthesis remain owned by font.css. */
+:lang(ar) {
+  --font-body: var(--font-arabic);
+  --weight-text: 400;
+  --text-display: clamp(2.125rem, 1.375rem + 3.25vw, 5rem);
+  --text-h1: clamp(2.625rem, 1.75rem + 3.75vw, 5.5rem);
+  --text-h2: clamp(2rem, 1.5rem + 2.25vw, 3.75rem);
+  --text-h3: clamp(1.5rem, 1.25rem + 0.75vw, 2rem);
+  --text-h4: clamp(1.25rem, 1.125rem + 0.5vw, 1.5rem);
+  --text-body-lg: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem);
+  --text-body: 1.125rem;
+  --text-reading: 1.1875rem;
+  --text-body-sm: 1rem;
+  --text-label: 0.875rem;
+  --text-caption: 0.875rem;
+  --text-nav: 1.0625rem;
+  --leading-display: 1.2;
+  --leading-h1: 1.25;
+  --leading-h2: 1.3;
+  --leading-h3: 1.35;
+  --leading-h4: 1.4;
+  --leading-body-lg: 1.6;
+  --leading-body: 1.75;
+  --leading-body-relaxed: 1.8;
+  --leading-body-sm: 1.65;
+  --leading-label: 1.5;
+  --leading-caption: 1.6;
+  --leading-nav: 1.6;
+  --tracking-display: normal;
+  --tracking-heading: normal;
+  --tracking-h1: normal;
+  --tracking-h3: normal;
+  --tracking-body: normal;
+  --tracking-label: normal;
+  --layout-reading-width: var(--layout-reading-width-ar);
+}
+
+/* Preserve the current layout thresholds and 40 / 20 / 16px page gutters.
+ * Legacy grid aliases resolve here, avoiding competing body-level values. */
+@media (max-width: 1020px) {
+  :root { --layout-gutter: var(--space-5); }
+}
+
+@media (max-width: 760px) {
+  :root { --section-heading-gap: var(--space-8); }
+}
+
+@media (max-width: 500px) {
+  :root {
+    --layout-gutter: var(--space-4);
+    --layout-grid-gap: var(--space-4);
+  }
 }
