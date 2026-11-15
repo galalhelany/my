@@ -37,12 +37,6 @@ $(document).ready(function() {
   // allocating a jQuery event record on every element (including SVG paths).
   document.body.addEventListener('touchstart', function () {}, { passive: true });
 
-  // Set the copyright to the current year in local time
-  var currentYear = new Date().getFullYear();
-  $('.copyright .year').html(currentYear);
-  // console.log('Current year is ' + currentYear);
-  // console.log('Setting copyright accordingly');
-
   // Keep the native details semantics while allowing the FAQ answers to finish
   // their closing motion before the browser removes them from the layout.
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
