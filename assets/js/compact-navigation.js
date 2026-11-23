@@ -8,7 +8,8 @@
     var propertyTarget = options.propertyTarget || nav;
     var viewport = nav ? nav.querySelector('.content') : null;
     var utilities = document.querySelector('.app-aside');
-    var header = document.querySelector('.app-header');
+    var header = document.querySelector('.mp-header');
+    var headerTools = document.querySelector('.mp-header-region > .mp-tools');
     if (!nav || !viewport || !utilities || !header) {
       return { refresh: function () {}, reveal: function () {} };
     }
@@ -51,8 +52,10 @@
       frame = null;
       if (!isOpen()) { return; }
       var bounds = nav.getBoundingClientRect();
-      var top = Math.max(0, header.getBoundingClientRect().bottom - bounds.top);
-      var bottom = Math.max(0, bounds.bottom - utilities.getBoundingClientRect().top);
+      var headerBottom = header.getBoundingClientRect().bottom;
+      var toolsBottom = headerTools ? headerTools.getBoundingClientRect().bottom : 0;
+      var top = Math.max(0, Math.max(headerBottom, toolsBottom) - bounds.top);
+      var bottom = utilities.getClientRects().length ? Math.max(0, bounds.bottom - utilities.getBoundingClientRect().top) : 0;
       [[propertyPrefix + '-header-bottom', top], [propertyPrefix + '-utilities-space', bottom]].forEach(function (entry) {
         var value = entry[1].toFixed(2) + 'px';
         if (propertyTarget.style.getPropertyValue(entry[0]) !== value) { propertyTarget.style.setProperty(entry[0], value); }
