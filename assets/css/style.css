@@ -239,7 +239,8 @@ body {
   .custom-cursor-enabled button,
   .custom-cursor-enabled label,
   .custom-cursor-enabled summary,
-  .custom-cursor-enabled [role="button"] {
+  .custom-cursor-enabled [role="button"],
+  .custom-cursor-enabled .section.intro [role="tab"] {
     cursor: none !important;
   }
   .custom-cursor-enabled input:not([type="range"]),
@@ -981,9 +982,6 @@ body.theme-slider--is--visible .app-aside .option.theme .dot:nth-child(1)  { tra
 .section.intro .gradient-mask.right.is--visible {
   opacity: 1;
 }
-.section.intro .texts {
-
-}
 /* The H1 names the active audience variant; its children own display typography. */
 .section.intro h1.texts {
   margin: 0;
@@ -1012,6 +1010,76 @@ html[lang="ar"] .section .homepage-section-label {
 }
 .section.intro .text span {
   white-space: nowrap;
+}
+.section.intro .text .audience-reading-word {
+  white-space: inherit;
+}
+
+@property --audience-reading-position {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@media (width > 1020px) {
+  /* All variants size the same grid row, including while web fonts load. */
+  .section.intro #audience-panel .texts {
+    display: grid;
+    align-items: start;
+  }
+  .section.intro #audience-panel .text {
+    display: block;
+    grid-area: 1 / 1;
+    min-height: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .section.intro #audience-panel .text.is--visible {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .section.intro .option[role="tab"]:is(:focus-visible, :active) {
+    color: var(--color-text-primary);
+  }
+  .section.intro .option[role="tab"]:focus-visible,
+  .section.intro #audience-panel:focus-visible {
+    outline: var(--focus-width) solid var(--focus-color);
+    outline-offset: calc(-1 * var(--focus-width));
+    border-radius: var(--focus-radius);
+  }
+  .section.intro .options[data-audience-label] .option::before,
+  .section.intro .options[data-audience-label] .option::after {
+    content: none;
+  }
+  .section.intro .audience-option__progress {
+    position: absolute;
+    left: 0;
+    inset-block-end: var(--space-2);
+    inline-size: 1px;
+    block-size: 2px;
+    background: var(--color-text-primary);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+  body.theme--16 .section.intro .text.is-reading {
+    --audience-reading-muted: #B1B1B1;
+  }
+  body.theme--00 .section.intro .text.is-reading {
+    --audience-reading-muted: #5C5C5C;
+  }
+  .section.intro .text.is-reading .audience-reading-word {
+    /* Adjacent words start one unit apart and crossfade over 1.5 units. */
+    color: color-mix(in srgb, var(--audience-reading-muted, var(--color-text-muted)), var(--color-text-primary)
+      clamp(0%, calc((var(--audience-reading-position) - var(--audience-word-index)) * 200% / 3), 100%));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .section.intro .options .option[role="tab"] {
+      transition: color 180ms ease-out;
+    }
+    .section.intro .audience-option__progress.is-moving {
+      transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
 }
 
 /* Client logos: a seamless GPU-accelerated marquee with a monochrome treatment. */
@@ -2757,6 +2825,12 @@ body.theme--00 .client-logo-marquee__item img {
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
   letter-spacing: var(--tracking-body);
+}
+.copyright .year {
+  white-space: nowrap;
+}
+#mobile-portfolio [data-mobile-content="portfolio-colophon"] {
+  margin-block-start: var(--space-4);
 }
 
 

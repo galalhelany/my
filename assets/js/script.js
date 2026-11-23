@@ -570,45 +570,7 @@ $(document).ready(function() {
       $('.section.intro .gradient-mask.left').removeClass('is--visible');
     }
   });
-  $('.section.intro .option').click(function() {
-    $('.section.intro .option').removeClass('is--active');
-    $('.section.intro .text').removeClass('is--visible');
-  });
-  $('.section.intro .option.anyone').click(function() {
-    $('.section.intro .option.anyone').addClass('is--active');
-    $('.section.intro .text.anyone').addClass('is--visible');
-  });
-  $('.section.intro .option.recruiters').click(function() {
-    $('.section.intro .option.recruiters').addClass('is--active');
-    $('.section.intro .text.recruiters').addClass('is--visible');
-  });
-  $('.section.intro .option.design-directors').click(function() {
-    $('.section.intro .option.design-directors').addClass('is--active');
-    $('.section.intro .text.design-directors').addClass('is--visible');
-  });
-  $('.section.intro .option.product-designers').click(function() {
-    $('.section.intro .option.product-designers').addClass('is--active');
-    $('.section.intro .text.product-designers').addClass('is--visible');
-  });
-  $('.section.intro .option.product-managers').click(function() {
-    $('.section.intro .option.product-managers').addClass('is--active');
-    $('.section.intro .text.product-managers').addClass('is--visible');
-  });
-  $('.section.intro .option.engineers').click(function() {
-    $('.section.intro .option.engineers').addClass('is--active');
-    $('.section.intro .text.engineers').addClass('is--visible');
-  });
-
-  // Audience controls in both languages reuse click behavior on the keyboard.
-  $('.section.intro .option[role="button"]').on('keydown', function(event) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      $(this).trigger('click');
-    }
-  }).on('click', function() {
-    $('.section.intro .option[role="button"]').attr('aria-pressed', 'false');
-    $(this).attr('aria-pressed', 'true');
-  });
+  initAudienceTabs();
 
   // Scroll to Contact from text links in sections
   $('.section a.contact').click(function() {
@@ -616,6 +578,325 @@ $(document).ready(function() {
   });
 
 }); // End document ready
+
+function initAudienceTabs() {
+  const hero = document.querySelector('.section.intro');
+  const list = hero?.querySelector('.options[data-audience-label]');
+  const panel = hero?.querySelector('#audience-panel');
+  if (!list || !panel) return;
+
+  const tabs = Array.from(list.querySelectorAll('.option'));
+  const labels = tabs.map(tab => tab.querySelector('.audience-option__label'));
+  const headlines = Array.from(panel.querySelectorAll('.texts > .text'));
+  const defaultIndex = tabs.findIndex(tab => tab.classList.contains('is--active'));
+  const desktop = window.matchMedia('(width > 1020px)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cycleDuration = 8900;
+  const transitionDuration = 300;
+  const easing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+  const canRevealWords = typeof CSS.registerProperty === 'function' &&
+    CSS.supports('color', 'color-mix(in srgb, black, white)');
+  const wordCounts = new WeakMap();
+  let activeIndex = defaultIndex;
+  let desktopIndex = defaultIndex;
+  let manualIndex = null;
+  let reading;
+  let headlineMotion = [];
+  let observer;
+  let inView = false;
+  let hasFocus = false;
+  const underline = document.createElement('span');
+  const underlineResize = new ResizeObserver(() => positionUnderline());
+
+  underline.className = 'audience-option__progress';
+  underline.setAttribute('aria-hidden', 'true');
+  tabs.forEach((tab, index) => { tab.id = 'audience-tab-' + (index + 1); });
+
+  function positionUnderline(animate = false) {
+    if (!desktop.matches) {
+      underlineResize.disconnect();
+      underline.remove();
+      return;
+    }
+
+    const label = labels[activeIndex].getBoundingClientRect();
+    const left = label.left - list.getBoundingClientRect().left + list.scrollLeft;
+    const transform = `translateX(${left}px) scaleX(${label.width})`;
+    if (underline.isConnected && underline.style.transform === transform) return;
+
+    underline.classList.toggle('is-moving', animate && underline.isConnected);
+    underline.style.transform = transform;
+    if (!underline.isConnected) {
+      list.append(underline);
+      underlineResize.observe(list);
+      labels.forEach(label => underlineResize.observe(label));
+    }
+  }
+
+  function prepareWords(headline) {
+    if (wordCounts.has(headline)) return wordCounts.get(headline);
+
+    const walker = document.createTreeWalker(headline, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    let count = 0;
+    // Keep source whitespace, punctuation, line breaks, and inline markup.
+    // Each Arabic word stays intact so the browser can shape its letters.
+    for (const node of textNodes) {
+      if (!node.data.trim()) continue;
+      const fragment = document.createDocumentFragment();
+      for (const part of node.data.split(/(\s+)/u)) {
+        if (!part) continue;
+        if (!part.trim()) {
+          fragment.append(part);
+          continue;
+        }
+        const word = document.createElement('span');
+        word.className = 'audience-reading-word';
+        word.style.setProperty('--audience-word-index', count++);
+        word.textContent = part;
+        fragment.append(word);
+      }
+      node.replaceWith(fragment);
+    }
+    wordCounts.set(headline, count);
+    return count;
+  }
+
+  function cancelHeadlineMotion() {
+    const interrupted = headlineMotion.some(animation =>
+      animation.playState === 'running' || animation.playState === 'paused');
+    headlineMotion.forEach(animation => animation.cancel());
+    headlineMotion = [];
+    return interrupted;
+  }
+
+  function renderSelection(index, animate = false) {
+    const outgoing = headlines[activeIndex];
+    const incoming = headlines[index];
+    const interrupted = cancelHeadlineMotion();
+    activeIndex = index;
+
+    tabs.forEach((tab, position) => {
+      const selected = index === position;
+      tab.classList.toggle('is--active', selected);
+      tab.tabIndex = !desktop.matches || selected ? 0 : -1;
+      tab.setAttribute(desktop.matches ? 'aria-selected' : 'aria-pressed', String(selected));
+      headlines[position].classList.toggle('is--visible', selected);
+      headlines[position].setAttribute('aria-hidden', String(!selected));
+    });
+    if (desktop.matches) panel.setAttribute('aria-labelledby', tabs[index].id);
+    positionUnderline(animate);
+
+    if (!animate || outgoing === incoming || reducedMotion.matches || !incoming.animate) return;
+
+    // Start the new selection immediately in the DOM, and stagger the visuals
+    // so the two headlines never share the same lines while fading.
+    const delay = interrupted ? 0 : 100;
+    if (delay) {
+      headlineMotion.push(outgoing.animate([
+        { visibility: 'visible', opacity: 1, transform: 'translateY(0)' },
+        { visibility: 'visible', opacity: 0, transform: 'translateY(-6px)' }
+      ], { duration: delay, easing }));
+    }
+    headlineMotion.push(incoming.animate([
+      { opacity: 0 },
+      { opacity: 1 }
+    ], { delay, duration: transitionDuration - delay, easing, fill: 'backwards' }));
+  }
+
+  function startReading(transitionTime = 0) {
+    const headline = headlines[desktopIndex];
+    const keyframes = [];
+    if (canRevealWords) {
+      const count = wordCounts.get(headline);
+      headline.classList.add('is-reading');
+      keyframes.push(
+        { '--audience-reading-position': '0', offset: 0 },
+        { '--audience-reading-position': '0', offset: transitionTime / cycleDuration },
+        { '--audience-reading-position': String(count + 0.5), offset: 1 }
+      );
+    }
+    // A single native animation owns the color reveal and the rotation deadline.
+    reading = headline.animate(keyframes, { duration: cycleDuration, fill: 'both' });
+    reading.onfinish = syncRotation;
+  }
+
+  function clearReading() {
+    if (!reading) return;
+    reading.onfinish = null;
+    reading.effect.target.classList.remove('is-reading');
+    reading.cancel();
+    reading = undefined;
+  }
+
+  function syncRotation() {
+    if (!reading) return;
+
+    if (!inView || document.hidden || hasFocus) {
+      [reading, ...headlineMotion].forEach(animation => {
+        if (animation.playState === 'running') animation.pause();
+      });
+      return;
+    }
+
+    if (reading.playState === 'finished') {
+      clearReading();
+      desktopIndex = (desktopIndex + 1) % tabs.length;
+      renderSelection(desktopIndex, true);
+      startReading(transitionDuration);
+    } else if (reading.playState === 'paused') {
+      [reading, ...headlineMotion].forEach(animation => {
+        if (animation.playState === 'paused') animation.play();
+      });
+    }
+  }
+
+  function stopObserving() {
+    observer?.disconnect();
+    observer = undefined;
+    inView = false;
+    syncRotation();
+  }
+
+  function syncObserver() {
+    if (!desktop.matches || reducedMotion.matches || manualIndex !== null ||
+        !window.IntersectionObserver || !headlines[desktopIndex].animate) {
+      stopObserving();
+    } else if (!observer) {
+      if (!reading) {
+        // Give every variant its final wrapping before any timed switches.
+        if (canRevealWords) headlines.forEach(prepareWords);
+        startReading();
+        reading.pause();
+        reading.currentTime = 0;
+      }
+      observer = new IntersectionObserver((entries, source) => {
+        if (source !== observer) return;
+        const entry = entries[entries.length - 1];
+        inView = entry.intersectionRatio >= 0.2;
+        syncRotation();
+      }, { threshold: 0.2 });
+      observer.observe(panel);
+    }
+  }
+
+  function syncMode() {
+    const isDesktop = desktop.matches;
+    if (isDesktop) {
+      list.setAttribute('role', 'tablist');
+      list.setAttribute('aria-label', list.dataset.audienceLabel);
+      panel.setAttribute('role', 'tabpanel');
+      panel.tabIndex = 0;
+    } else {
+      list.removeAttribute('role');
+      list.removeAttribute('aria-label');
+      panel.removeAttribute('role');
+      panel.removeAttribute('tabindex');
+      panel.removeAttribute('aria-labelledby');
+    }
+    tabs.forEach(tab => {
+      tab.setAttribute('role', isDesktop ? 'tab' : 'button');
+      tab.removeAttribute(isDesktop ? 'aria-pressed' : 'aria-selected');
+      if (isDesktop) {
+        tab.setAttribute('aria-controls', panel.id);
+        tab.dataset.cursor = 'interactive';
+      } else {
+        tab.removeAttribute('aria-controls');
+        delete tab.dataset.cursor;
+      }
+    });
+    hasFocus = isAudienceControl(document.activeElement);
+    renderSelection(manualIndex ?? (isDesktop ? desktopIndex : defaultIndex));
+    syncObserver();
+  }
+
+  function selectTab(index) {
+    manualIndex = index;
+    stopObserving();
+    clearReading();
+    renderSelection(index, desktop.matches);
+  }
+
+  function onTabKey(event) {
+    const index = tabs.indexOf(event.target);
+    if (index === -1) return;
+    let next = index;
+
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        break;
+      case 'ArrowRight':
+      case 'ArrowLeft': {
+        if (!desktop.matches) return;
+        const rtl = document.documentElement.dir === 'rtl';
+        const step = (event.key === 'ArrowRight') !== rtl ? 1 : -1;
+        next = (index + step + tabs.length) % tabs.length;
+        break;
+      }
+      case 'Home':
+      case 'End':
+        if (!desktop.matches) return;
+        next = event.key === 'Home' ? 0 : tabs.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    selectTab(next);
+    if (next !== index) tabs[next].focus();
+  }
+
+  function isAudienceControl(element) {
+    return list.contains(element) || panel.contains(element);
+  }
+
+  function connect() {
+    const listeners = new AbortController();
+    const { signal } = listeners;
+
+    list.addEventListener('click', event => {
+      const index = tabs.indexOf(event.target.closest('.option'));
+      if (index !== -1) selectTab(index);
+    }, { signal });
+    list.addEventListener('keydown', onTabKey, { signal });
+    hero.addEventListener('focusin', event => {
+      hasFocus = isAudienceControl(event.target);
+      syncRotation();
+    }, { signal });
+    hero.addEventListener('focusout', event => {
+      hasFocus = isAudienceControl(event.relatedTarget);
+      syncRotation();
+    }, { signal });
+    desktop.addEventListener('change', syncMode, { signal });
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) {
+        cancelHeadlineMotion();
+        clearReading();
+      }
+      syncObserver();
+    }, { signal });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && !reading) cancelHeadlineMotion();
+      syncRotation();
+    }, { signal });
+    window.addEventListener('pagehide', event => {
+      stopObserving();
+      cancelHeadlineMotion();
+      underlineResize.disconnect();
+      underline.remove();
+      listeners.abort();
+      if (event.persisted) window.addEventListener('pageshow', connect, { once: true });
+      else clearReading();
+    }, { signal });
+    syncMode();
+  }
+
+  connect();
+}
 
 
 

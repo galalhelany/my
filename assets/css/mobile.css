@@ -342,6 +342,10 @@
     border-radius: 0;
   }
 
+  #mobile-portfolio .mp-work-card a.mp-work-image-pair:focus-visible { outline-offset: -4px; }
+
+  .mp-work-card a.mp-work-image-pair:active img { filter: brightness(0.92); }
+
   .mp-work-image-pair [data-work-image='dark'] { visibility: var(--mp-work-dark-image, hidden); }
   .mp-work-image-pair [data-work-image='light'] { visibility: var(--mp-work-light-image, visible); }
 
