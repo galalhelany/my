@@ -736,7 +736,7 @@ body:not([data-reading-view='tldr']) .mp-case-toc [data-mobile-reading='tldr'] {
 }
 
 @media (max-width: 1020px) and (prefers-reduced-motion: no-preference) {
-  html[data-mobile-palette-motion] :is(body, .mp-header, .mp-hero, .mp-tools, .mp-card, .mp-nav, .case-study-nav__link) {
+  html[data-mobile-palette-motion] :is(body, .mp-header, .mp-hero, .mp-tools, .mp-card, .mp-metrics > div, .mp-nav, .case-study-nav__link) {
     transition: background-color 360ms cubic-bezier(0.22, 1, 0.36, 1), color 360ms cubic-bezier(0.22, 1, 0.36, 1),
       border-color 360ms cubic-bezier(0.22, 1, 0.36, 1);
   }

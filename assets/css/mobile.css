@@ -263,6 +263,34 @@
     line-height: var(--mp-body-leading);
   }
 
+  .mp-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 2px 0 0;
+  }
+
+  .mp-metrics > div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 9px;
+    background: var(--mp-soft);
+    border-radius: 8px;
+  }
+
+  .mp-metrics dt { color: var(--mp-secondary); font-size: 0.75rem; line-height: 1.4; }
+
+  .mp-metrics dd {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.022em;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
   .mp-work-project {
     display: grid;
     min-block-size: var(--mp-work-stage, 0px);
@@ -315,6 +343,8 @@
     gap: clamp(10px, calc(var(--mp-work-stage) * 0.016), 14px);
     padding-block-end: var(--mp-work-action-inset);
   }
+
+  .mp-work-card .mp-metrics dd { font-size: clamp(1.06rem, 4vw, 1.25rem); }
 
   .mp-work-card-footer {
     display: grid;
@@ -1001,7 +1031,7 @@
   }
 
   :dir(rtl) .mp-directional { transform: scaleX(-1); }
-  [lang='ar'] #mobile-portfolio :is(.mp-title, h2, h3) { letter-spacing: normal; }
+  [lang='ar'] #mobile-portfolio :is(.mp-title, h2, h3, .mp-metrics dd) { letter-spacing: normal; }
   [lang='ar'] #mobile-portfolio .mp-title { line-height: 1.13; }
   [lang='ar'] #mobile-portfolio :is(.mp-tab, .mp-button, .mp-role) { font-size: 0.91rem; }
 
