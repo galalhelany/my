@@ -194,9 +194,9 @@
 
 
 <style>#mobile-portfolio { display: none; }</style>
-<link rel="stylesheet" href="assets/css/mobile.css?v=20261123-work-images" media="(max-width: 1020px)">
+<link rel="stylesheet" href="assets/css/mobile.css?v=20261123-built-images" media="(max-width: 1020px)">
   <link rel="stylesheet" href="assets/css/portfolio-header.css?v=20261123-mobile-consistency">
-  <script src="assets/js/mobile-boot.js?v=20261123-work-cards" data-kind="home"></script>
+  <script src="assets/js/mobile-boot.js?v=20261123-work-reveal" data-kind="home"></script>
   <script src="assets/js/portfolio-header.js?v=20261123-mobile-consistency" defer></script>
   <script src="assets/js/portfolio-chat.js?v=20261121-mobile-chat" defer></script>
 <noscript><style>
@@ -361,7 +361,10 @@
       </div>
       <div class="mp-cards"><article class="mp-card">
           <div class="mp-card-meta"><span>Live Product</span></div>
-          <img class="mp-project-image" src="assets/img/projects/masaa-desktop-mobile.webp?v=d85fcedd42cf" alt="Masaa focus timer displayed on a laptop and three mobile screens" width="2136" height="1426" loading="lazy" decoding="async">
+          <div class="mp-project-image mp-work-image-pair">
+            <img data-work-image="light" src="assets/img/projects/masaa-mobile-light.webp" alt="Masaa focus timer displayed on a laptop and three mobile screens" width="1735" height="1158" loading="lazy">
+            <img data-work-image="dark" src="assets/img/projects/masaa-mobile.webp" alt="Masaa focus timer displayed on a laptop and three mobile screens" width="1735" height="1158" loading="lazy">
+          </div>
           <div class="mp-card-copy">
             <h2><a class="mp-stretched-link" href="https://masaa.app/" target="_blank" rel="noopener noreferrer"><bdi>Masaa — مسعى</bdi><span class="mp-visually-hidden"> (opens in a new tab)</span></a></h2>
             <p>A free focus timer that helps you stay focused without interrupting your flow. Built around a flexible Flow Pomodoro approach.</p>

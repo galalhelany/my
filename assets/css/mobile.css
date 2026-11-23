@@ -298,8 +298,9 @@
     max-block-size: min(var(--mp-work-art-limit, 480px), clamp(140px, calc(var(--mp-work-stage, 100dvh) * 0.64), 480px));
   }
 
+  .mp-work-image-pair { position: relative; }
+
   .mp-work-card .mp-work-image-pair {
-    position: relative;
     inline-size: min(100%, 427px);
     aspect-ratio: 427 / 400;
   }
@@ -444,42 +445,43 @@
       50% { opacity: 1; transform: translateY(2.5px); }
     }
 
-    .mp-work-card {
-      opacity: var(--mp-work-opacity, 1);
-      transform: var(--mp-work-transform, none);
+    /* The wrapper keeps its snap position and masks the incoming layer behind
+       the preceding card. Clipping also keeps covered links out of hit testing. */
+    :is([data-work-snap='mandatory'], [data-work-snap='proximity']) .mp-work-project + .mp-work-project {
+      overflow: clip;
     }
 
-    @supports (view-timeline-name: --mp-project) and (animation-range: entry 0% entry 34%) {
-      .mp-work-project {
-        /* Measure the unchanged wrapper so the animated card cannot shift its own timeline. */
-        view-timeline: --mp-project block;
+    @supports not (overflow: clip) {
+      :is([data-work-snap='mandatory'], [data-work-snap='proximity']) .mp-work-project + .mp-work-project {
+        clip-path: inset(0);
+      }
+    }
+
+    :is([data-work-snap='mandatory'], [data-work-snap='proximity']) .mp-work-project + .mp-work-project > .mp-work-card {
+      --mp-work-reveal-travel: min(200px, calc(var(--mp-work-stage) * 0.4));
+      transform: translateY(calc(var(--mp-work-reveal-travel) * var(--mp-work-reveal-offset, 0)));
+    }
+
+    @supports (view-timeline-name: --mp-work-entry) and (view-timeline-inset: 1px 1px) and (animation-timeline: --mp-work-entry) and (animation-range: entry 0% entry 100%) {
+      :is([data-work-snap='mandatory'], [data-work-snap='proximity']) .mp-work-project + .mp-work-project {
+        view-timeline: --mp-work-entry block;
         view-timeline-inset: var(--mp-top) var(--mp-bottom);
       }
 
-      .mp-work-project > .mp-work-card {
-        animation: auto cubic-bezier(0.22, 1, 0.36, 1) backwards mp-project-enter,
-          auto cubic-bezier(0.22, 1, 0.36, 1) forwards mp-project-exit;
-        animation-timeline: --mp-project, --mp-project;
-        animation-range: entry 0% entry 34%, exit 70% exit 100%;
+      :is([data-work-snap='mandatory'], [data-work-snap='proximity']) .mp-work-project + .mp-work-project > .mp-work-card {
+        animation: mp-work-uncover auto linear both;
+        animation-timeline: --mp-work-entry;
+        animation-range: entry 0% entry 100%;
       }
 
-      .mp-work-project:first-child > .mp-work-card { animation-name: none, mp-project-exit; }
-      .mp-work-project:last-child > .mp-work-card { animation-name: mp-project-enter, none; }
-
-      @keyframes mp-project-enter {
-        from { opacity: 0.7; transform: translateY(24px) scale(0.97); }
-        to { opacity: 1; transform: none; }
-      }
-
-      @keyframes mp-project-exit {
-        from { opacity: 1; transform: none; }
-        to { opacity: 0.96; transform: scale(0.98); }
+      @keyframes mp-work-uncover {
+        from { transform: translateY(calc(-1 * var(--mp-work-reveal-travel))); }
+        to { transform: translateY(0); }
       }
     }
 
-    .mp-work-project > .mp-work-card:has(:focus-visible) {
-      animation-name: none;
-      opacity: 1;
+    :is([data-work-snap='mandatory'], [data-work-snap='proximity']) .mp-work-project + .mp-work-project > .mp-work-card:has(:focus-visible) {
+      animation: none;
       transform: none;
     }
   }

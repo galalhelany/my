@@ -14,8 +14,9 @@
   const entryOffsets = new Map();
   const entryPrefix = Date.now();
   const scrollStorageKey = 'portfolio-mobile-scroll';
-  const hasProjectTimelines = CSS.supports('view-timeline-name', '--mp-project') &&
-    CSS.supports('animation-range', 'entry 0% entry 34%');
+  const hasProjectTimelines = CSS.supports('view-timeline-name', '--mp-work-entry') &&
+    CSS.supports('view-timeline-inset', '1px 1px') && CSS.supports('animation-timeline', '--mp-work-entry') &&
+    CSS.supports('animation-range', 'entry 0% entry 100%');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const principles = document.querySelectorAll('#principles .title h2');
   const sharedSections = [...app.querySelectorAll('[data-mobile-content]')].map(slot => {
@@ -84,10 +85,9 @@
     const artwork = cards.map(card => card.querySelector('.mp-project-image'));
     const statuses = home.querySelectorAll('.mp-work-status-type');
     const pendingReveals = new Set(statuses);
-    const clamp = value => Math.min(1, Math.max(0, value));
-    const ease = value => 1 - (1 - value) ** 4;
     const options = { passive: true, signal: (workSession = new AbortController()).signal };
     let frame = 0;
+    let revealRanges = [];
     let revealObserver;
     let revealMargin;
     let stageObserver;
@@ -174,32 +174,32 @@
       if (page.dataset.workSnap !== mode) page.dataset.workSnap = mode;
       observeStatuses(headerHeight, bottom);
       observeStages(headerHeight, bottom);
+
+      if (!hasProjectTimelines) {
+        // Match the entry timeline's edges. Refresh geometry only when stages resize.
+        const scroll = window.scrollY;
+        const stageEnd = headerHeight + stageHeight;
+        revealRanges = free ? [] : workProjects.slice(1).map(project => {
+          const { top, height } = project.getBoundingClientRect();
+          return { card: project.firstElementChild, start: top + scroll - stageEnd, distance: Math.min(height, stageHeight) };
+        });
+      }
       schedule();
     }
 
     function paint() {
       frame = 0;
-      const top = Math.max(0, headerRegion.getBoundingClientRect().bottom);
-      const bottom = (page.hasAttribute('data-work-hint-docked') ? dockHint : nav).getBoundingClientRect().top;
-      const available = bottom - top;
-      if (available <= 0) return;
-      const bounds = workProjects.map(project => project.getBoundingClientRect());
-
-      bounds.forEach((rect, index) => {
-        if (rect.bottom <= top || rect.top > bottom + 24) return;
-        const overlap = Math.min(rect.height, available);
-        const incoming = index === 0 ? 1 : ease(clamp((bottom - rect.top) / (overlap * 0.34)));
-        const outgoing = index === cards.length - 1 ? 0 : ease(clamp(1 - (rect.bottom - top) / (overlap * 0.3)));
-        const opacity = 0.7 + 0.3 * incoming - 0.04 * outgoing;
-        const scale = 0.97 + 0.03 * incoming - 0.02 * outgoing;
-        const shift = 24 * (1 - incoming);
-        cards[index].style.setProperty('--mp-work-opacity', opacity.toFixed(3));
-        cards[index].style.setProperty('--mp-work-transform', `translateY(${shift.toFixed(2)}px) scale(${scale.toFixed(4)})`);
-      });
+      const scroll = window.scrollY;
+      for (const { card, start, distance } of revealRanges) {
+        const offset = Math.max(-1, Math.min(0, (scroll - start) / distance - 1)).toFixed(5);
+        if (card.style.getPropertyValue('--mp-work-reveal-offset') !== offset) {
+          card.style.setProperty('--mp-work-reveal-offset', offset);
+        }
+      }
     }
 
     function schedule() {
-      if (!hasProjectTimelines && !frame && !reducedMotion.matches) frame = requestAnimationFrame(paint);
+      if (revealRanges.length && !frame && !reducedMotion.matches) frame = requestAnimationFrame(paint);
     }
 
     const geometry = new ResizeObserver(sizeStages);
@@ -209,12 +209,13 @@
     window.addEventListener('resize', sizeStages, options);
     window.visualViewport?.addEventListener('resize', sizeStages, options);
     reducedMotion.addEventListener('change', () => {
-      if (reducedMotion.matches) hintFade?.cancel();
+      if (reducedMotion.matches) {
+        hintFade?.cancel();
+        cancelAnimationFrame(frame);
+        frame = 0;
+      } else schedule();
     }, options);
-    if (!hasProjectTimelines) {
-      window.addEventListener('scroll', schedule, options);
-      reducedMotion.addEventListener('change', schedule, options);
-    }
+    if (!hasProjectTimelines) window.addEventListener('scroll', schedule, options);
     options.signal.addEventListener('abort', () => {
       geometry.disconnect();
       revealObserver?.disconnect();
@@ -229,10 +230,7 @@
       page.style.removeProperty('--mp-work-nav-base');
       for (const image of artwork) image.style.removeProperty('--mp-work-art-limit');
       for (const status of statuses) status.removeAttribute('data-work-status-reveal');
-      for (const card of cards) {
-        card.style.removeProperty('--mp-work-opacity');
-        card.style.removeProperty('--mp-work-transform');
-      }
+      if (!hasProjectTimelines) for (const card of cards) card.style.removeProperty('--mp-work-reveal-offset');
     }, { once: true });
     sizeStages();
   }
