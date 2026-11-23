@@ -298,6 +298,29 @@
     max-block-size: min(var(--mp-work-art-limit, 480px), clamp(140px, calc(var(--mp-work-stage, 100dvh) * 0.64), 480px));
   }
 
+  .mp-work-card .mp-work-image-pair {
+    position: relative;
+    inline-size: min(100%, 427px);
+    aspect-ratio: 427 / 400;
+  }
+
+  .mp-work-image-pair img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+
+  .mp-work-image-pair [data-work-image='dark'] { visibility: var(--mp-work-dark-image, hidden); }
+  .mp-work-image-pair [data-work-image='light'] { visibility: var(--mp-work-light-image, visible); }
+
+  /* Match the dark half of the existing image palette in color.css. */
+  body:is(.theme--00, .theme--01, .theme--02, .theme--03, .theme--04, .theme--05, .theme--06, .theme--07, .theme--08) .mp-work-image-pair {
+    --mp-work-dark-image: visible;
+    --mp-work-light-image: hidden;
+  }
+
   .mp-work-card .mp-card-copy {
     flex: none;
     gap: clamp(10px, calc(var(--mp-work-stage) * 0.02), 14px);
