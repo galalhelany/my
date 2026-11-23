@@ -263,34 +263,6 @@
     line-height: var(--mp-body-leading);
   }
 
-  .mp-metrics {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin: 2px 0 0;
-  }
-
-  .mp-metrics > div {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 5px;
-    padding: 9px;
-    background: var(--mp-soft);
-    border-radius: 8px;
-  }
-
-  .mp-metrics dt { color: var(--mp-secondary); font-size: 0.75rem; line-height: 1.4; }
-
-  .mp-metrics dd {
-    margin: 0;
-    font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: -0.022em;
-    line-height: 1.2;
-    overflow-wrap: anywhere;
-  }
-
   .mp-work-project {
     display: grid;
     min-block-size: var(--mp-work-stage, 0px);
@@ -310,11 +282,12 @@
 
   .mp-work-card .mp-card-meta > bdi { white-space: nowrap; }
 
+  /* The artwork and copy share the space between the title and the scroll hint. */
   .mp-work-artwork {
-    flex: 1 0 auto;
     display: grid;
     place-items: center;
-    padding: clamp(14px, 4vw, 26px) clamp(10px, 3vw, 20px);
+    margin-block-start: auto;
+    padding: clamp(10px, calc(var(--mp-work-stage) * 0.03), 20px) clamp(10px, 3vw, 20px);
   }
 
   .mp-work-card .mp-project-image {
@@ -327,8 +300,9 @@
 
   .mp-work-card .mp-card-copy {
     flex: none;
-    gap: 14px;
-    padding-block-start: 0;
+    gap: clamp(10px, calc(var(--mp-work-stage) * 0.02), 14px);
+    margin-block-end: auto;
+    padding-block: 0 12px;
   }
 
   .mp-work-card .mp-project-summary {
@@ -336,29 +310,6 @@
     font-weight: 600;
     line-height: 1.5;
     overflow-wrap: anywhere;
-  }
-
-  .mp-work-card .mp-card-copy:has(.mp-work-card-actions) {
-    --mp-work-action-inset: clamp(16px, calc(var(--mp-work-stage) * 0.025), 20px);
-    gap: clamp(10px, calc(var(--mp-work-stage) * 0.016), 14px);
-    padding-block-end: var(--mp-work-action-inset);
-  }
-
-  .mp-work-card .mp-metrics dd { font-size: clamp(1.06rem, 4vw, 1.25rem); }
-
-  .mp-work-card-footer {
-    display: grid;
-    gap: 4px;
-    margin-block-start: auto;
-  }
-
-  .mp-work-card-footer:has(.mp-work-card-actions) {
-    gap: clamp(6px, calc(var(--mp-work-stage) * 0.012), 10px);
-    margin-block-start: 0;
-  }
-
-  :root:not([data-work-hint-docked]) .mp-work-card .mp-card-copy:has(.mp-work-scroll-hint) {
-    padding-block-end: var(--mp-work-action-inset, 12px);
   }
 
   .mp-card-copy .mp-work-status {
@@ -392,8 +343,9 @@
 
   .mp-work-scroll-hint.mp-work-scroll-dock { display: none; }
 
-  [data-work-hint-docked] .mp-work-card-footer .mp-work-scroll-hint,
-  [data-work-hint-docked] .mp-work-card-footer:not(:has(.mp-work-card-actions)) { display: none; }
+  .mp-work-card > .mp-work-scroll-hint { margin-block-end: 12px; }
+
+  [data-work-hint-docked] .mp-work-card > .mp-work-scroll-hint { display: none; }
 
   [data-work-hint-docked] .mp-work-scroll-hint.mp-work-scroll-dock {
     position: fixed;
@@ -414,7 +366,6 @@
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
     gap: 12px;
-    margin-block-start: auto;
   }
 
   body.theme--00 .mp-work-card-actions {
@@ -1031,7 +982,7 @@
   }
 
   :dir(rtl) .mp-directional { transform: scaleX(-1); }
-  [lang='ar'] #mobile-portfolio :is(.mp-title, h2, h3, .mp-metrics dd) { letter-spacing: normal; }
+  [lang='ar'] #mobile-portfolio :is(.mp-title, h2, h3) { letter-spacing: normal; }
   [lang='ar'] #mobile-portfolio .mp-title { line-height: 1.13; }
   [lang='ar'] #mobile-portfolio :is(.mp-tab, .mp-button, .mp-role) { font-size: 0.91rem; }
 

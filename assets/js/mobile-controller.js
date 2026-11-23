@@ -9,7 +9,7 @@
   const navTrack = app.querySelector('.mp-nav-inner');
   const bottomNav = navTrack.parentElement;
   const workProjects = [...(home?.querySelectorAll('.mp-work-project') ?? [])];
-  const { hints: workHints, dock: dockHint } = prepareWorkFooters();
+  const { hints: workHints, dock: dockHint } = prepareWorkCards();
   const tabOffsets = new Map();
   const entryOffsets = new Map();
   const entryPrefix = Date.now();
@@ -34,7 +34,7 @@
   let nextEntry = 0;
   let lastVibration = -Infinity;
 
-  function prepareWorkFooters() {
+  function prepareWorkCards() {
     const hintTemplate = home?.querySelector('[data-work-scroll-hint]');
     const hints = new Map();
     if (!hintTemplate) return { hints };
@@ -48,9 +48,6 @@
 
     workProjects.forEach((project, index) => {
       const status = statuses.get(project.querySelector('h3').textContent.trim());
-      const copy = project.querySelector('.mp-card-copy');
-      const actions = copy.querySelector('.mp-work-card-actions');
-      const hint = index < workProjects.length - 1 ? hintTemplate.content.firstElementChild.cloneNode(true) : null;
 
       if (status) {
         const text = document.createElement('p');
@@ -66,18 +63,13 @@
           type.append(soft);
         }
         text.append(type);
-        copy.append(text);
+        project.querySelector('.mp-card-copy').append(text);
       }
-      if (!actions && !hint) return;
 
-      const footer = document.createElement('div');
-      footer.className = 'mp-work-card-footer';
-      if (actions) footer.append(actions);
-      if (hint) {
-        footer.append(hint);
-        hints.set(project, hint);
-      }
-      copy.append(footer);
+      if (index === workProjects.length - 1) return;
+      const hint = hintTemplate.content.firstElementChild.cloneNode(true);
+      project.firstElementChild.append(hint);
+      hints.set(project, hint);
     });
     if (!hints.size) return { hints };
     const dock = hintTemplate.content.firstElementChild.cloneNode(true);
