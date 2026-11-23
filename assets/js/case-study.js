@@ -412,8 +412,27 @@
   // Shared portfolio shell ---------------------------------------------------
   var body = document.body;
   var article = document.querySelector('.case-study-article');
-  var navigationButton = document.querySelector('.app-header .navigation');
+  var navigationButton = document.querySelector('[data-portfolio-menu]');
   var navigationLinks = document.querySelectorAll('.case-study-nav .item');
+  var mobileToc = document.querySelector('.mp-case-toc');
+  if (mobileToc && article) {
+    // Mosaic's localization scripts populate the article and sidebar before this script runs.
+    var chevron = mobileToc.querySelector('svg');
+    var rows = Array.from(navigationLinks).flatMap(function (link) {
+      var target = document.getElementById(link.hash.slice(1));
+      if (!target || !article.contains(target)) return [];
+      var row = document.createElement('li');
+      var mode = link.getAttribute('data-reading-nav');
+      if (mode) row.setAttribute('data-mobile-reading', mode);
+      var anchor = document.createElement('a');
+      anchor.href = link.hash;
+      anchor.textContent = link.textContent;
+      if (chevron) anchor.append(chevron.cloneNode(true));
+      row.append(anchor);
+      return [row];
+    });
+    mobileToc.replaceChildren(...rows);
+  }
   var themeControl = document.querySelector('.app-aside .option.theme');
   var themeSlider = document.querySelector('.app-aside .option.theme .slider');
   var readingButtons = document.querySelectorAll('[data-reading-view]');
@@ -433,8 +452,9 @@
 
     function update() {
       frame = null;
+      if (reading.hasAttribute('data-mobile-reading-bar')) { return; }
       var bottom = '';
-      if (compact.matches) {
+      if (compact.matches && utilities.getClientRects().length) {
         var bounds = utilities.getBoundingClientRect();
         // Layout coordinates exclude the switch's existing footer/reading-mode transforms.
         var left = reading.offsetLeft;
@@ -474,6 +494,65 @@
   }
 
   keepFloatingControlsClear();
+
+  function setupMobileReadingBar() {
+    const bar = document.querySelector('.case-study-reading-bar');
+    const navigation = document.querySelector('#mobile-portfolio .mp-nav');
+    if (!bar || !navigation) return;
+
+    const root = document.documentElement;
+    const mobile = window.matchMedia('(max-width: 1020px)');
+    const originalPosition = document.createComment('Reading bar desktop position');
+    bar.before(originalPosition);
+    let previousY = 0;
+
+    function measure() {
+      root.style.setProperty('--mp-case-nav-height', navigation.getBoundingClientRect().height + 'px');
+      root.style.setProperty('--mp-case-mode-height', bar.getBoundingClientRect().height + 'px');
+    }
+
+    function updateDirection() {
+      const y = Math.max(0, window.scrollY);
+      const delta = y - previousY;
+      if (y > 8 && Math.abs(delta) < 12) return;
+      bar.toggleAttribute('data-reading-bar-hidden', y > 8 && delta > 0);
+      previousY = y;
+    }
+
+    function resetDirection() {
+      if (!mobile.matches) return;
+      previousY = Math.max(0, window.scrollY);
+      bar.removeAttribute('data-reading-bar-hidden');
+    }
+
+    const observer = new ResizeObserver(measure);
+    function syncViewport() {
+      if (mobile.matches) {
+        navigation.closest('#mobile-portfolio').before(bar);
+        bar.setAttribute('data-mobile-reading-bar', '');
+        root.setAttribute('data-mobile-reading-bar', '');
+        resetDirection();
+        measure();
+        observer.observe(navigation);
+        observer.observe(bar);
+        window.addEventListener('scroll', updateDirection, { passive: true });
+      } else {
+        window.removeEventListener('scroll', updateDirection);
+        observer.disconnect();
+        root.removeAttribute('data-mobile-reading-bar');
+        root.style.removeProperty('--mp-case-nav-height');
+        root.style.removeProperty('--mp-case-mode-height');
+        originalPosition.after(bar);
+        bar.removeAttribute('data-mobile-reading-bar');
+        bar.removeAttribute('data-reading-bar-hidden');
+      }
+    }
+    mobile.addEventListener('change', syncViewport);
+    window.addEventListener('pageshow', () => window.requestAnimationFrame(resetDirection));
+    syncViewport();
+  }
+
+  setupMobileReadingBar();
 
   function initializeMetricCounters() {
     var counterElements = Array.from(document.querySelectorAll('.case-study-metrics strong'));
@@ -1525,7 +1604,32 @@
   }
 
   applyTextSize(readSavedTextSize(), false);
+  setupReadingLineHeight();
   commitReadingView(readingView, true);
+
+  function setupReadingLineHeight() {
+    const key = 'caseStudyLineHeight';
+    const levels = ['1.4', '1.55', '', '1.85', '1.9'];
+    const labels = language === 'ar'
+      ? ['ضيق جدًا', 'ضيق', 'افتراضي', 'واسع', 'واسع جدًا']
+      : ['Very tight', 'Tight', 'Default', 'Loose', 'Very loose'];
+
+    function apply(value, persist) {
+      const index = Number(value ?? 2);
+      const selected = Number.isInteger(index) && index >= 0 && index < levels.length ? index : 2;
+      article.dataset.caseLineHeight = String(selected);
+      article.dataset.caseLineHeightLabel = labels[selected];
+      article.style.setProperty('--case-reading-leading', levels[selected]);
+      if (persist) {
+        try { window.localStorage.setItem(key, String(selected)); } catch { /* Storage is optional. */ }
+      }
+    }
+
+    let saved;
+    try { saved = window.localStorage.getItem(key); } catch { /* Use the default spacing. */ }
+    apply(saved, false);
+    window.addEventListener('mobile-reading-line-height', event => apply(event.detail, true));
+  }
 
   function removeThemeClasses() {
     Array.from(body.classList).forEach(function (className) {
@@ -1545,10 +1649,8 @@
   }
 
   // Match the homepage's automatic dark-mode choice on first load.
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    applyTheme(0);
-  } else {
-    applyTheme(16);
+  if (!body.hasAttribute('data-mobile-theme-ready')) {
+    applyTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 0 : 16);
   }
 
   if (themeSlider) {
@@ -1604,6 +1706,7 @@
     if (isOpen) {
       body.classList.add('mobile-nav--is--transitioning');
       window.requestAnimationFrame(function () {
+        if (navigationButton.getAttribute('aria-expanded') !== 'true') { return; }
         body.classList.add('mobile-nav--is--visible');
         compactCaseNavigation.refresh();
       });
@@ -1617,7 +1720,12 @@
 
   if (navigationButton) {
     navigationButton.addEventListener('click', function () {
-      setMobileNavigation(!body.classList.contains('mobile-nav--is--visible'));
+      setMobileNavigation(navigationButton.getAttribute('aria-expanded') !== 'true');
+    });
+    window.matchMedia('(max-width: 1020px)').addEventListener('change', function (event) {
+      if (!event.matches && body.classList.contains('mobile-nav--is--transitioning')) {
+        setMobileNavigation(false);
+      }
     });
   }
 
@@ -1630,6 +1738,10 @@
       }
 
       event.preventDefault();
+      if (body.classList.contains('mobile-nav--is--visible')) {
+        target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
       setMobileNavigation(false);
       sidebarTracking.activate(link);
       target.scrollIntoView({
@@ -1872,9 +1984,20 @@
     anchorClearance: true,
     footer: caseStudyFooter,
     onActiveChange: function (link) {
+      mobileToc?.querySelectorAll('a').forEach(function (item) {
+        if (item.hash === link.hash) item.setAttribute('aria-current', 'location');
+        else item.removeAttribute('aria-current');
+      });
       desktopCaseNavigation.reveal(link, false);
       compactCaseNavigation.reveal(link, false);
     }
+  });
+
+  mobileToc?.addEventListener('click', function (event) {
+    var link = event.target.closest('a');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    var sidebarLink = Array.from(navigationLinks).find(function (item) { return item.hash === link.hash && !item.hidden; });
+    if (sidebarLink) sidebarTracking.activate(sidebarLink);
   });
 
   if ('IntersectionObserver' in window) {

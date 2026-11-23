@@ -3,6 +3,16 @@
 /* Color
 ----------------------------------------------------------------------------- */
 
+:root {
+  --mono-light-paper: #fff;
+  --mono-dark-paper: #000;
+  --mono-light-ink: #1c1c1e;
+  --mono-light-secondary: #505050;
+  --mono-dark-secondary: #c2c2c2;
+  --mono-light-muted: #666666;
+  --mono-dark-muted: #a3a3a3;
+}
+
 body {
   /* Opaque text roles target normal text on the solid theme background.
    * Image/tinted component surfaces and legacy opacity consumers need Stage B.
@@ -14,13 +24,13 @@ body {
   --color-text-strong: var(--color--foreground--100);
 }
 body.theme--16 {
-  --color-text-primary: #1c1c1e;
-  --color-text-strong: #1c1c1e;
+  --color-text-primary: var(--mono-light-ink);
+  --color-text-strong: var(--mono-light-ink);
   /* Keep graphics and focus rings at their existing black. */
   --color-graphic-primary: #000000;
   --focus-color: #000000;
-  --color-text-secondary: #505050;
-  --color-text-muted: #666666;
+  --color-text-secondary: var(--mono-light-secondary);
+  --color-text-muted: var(--mono-light-muted);
   --color--foreground--100: rgb(0 0 0 / 1);
   --color--foreground--50:  rgb(0 0 0 / 0.5);
   --color--foreground--33:  rgb(0 0 0 / 0.333);
@@ -30,7 +40,7 @@ body.theme--16 {
   --color--foreground--10:  rgb(0 0 0 / 0.1);
   --color--foreground--5:   rgb(0 0 0 / 0.05);
   --color--foreground--0:   rgb(0 0 0 / 0);
-  --color--background--100: rgb(255 255 255 / 1);
+  --color--background--100: var(--mono-light-paper);
   --color--background--0:   rgb(255 255 255 / 0);
 }
 body.theme--15 {
@@ -278,9 +288,9 @@ body.theme--01 {
   --color--background--0:   rgb(5 26 28 / 0);
 }
 body.theme--00 {
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #c2c2c2;
-  --color-text-muted: #a3a3a3;
+  --color-text-primary: var(--mono-light-paper);
+  --color-text-secondary: var(--mono-dark-secondary);
+  --color-text-muted: var(--mono-dark-muted);
   --color--foreground--100: rgb(255 255 255 / 1);
   --color--foreground--50:  rgb(255 255 255 / 0.6);
   --color--foreground--33:  rgb(255 255 255 / 0.45);
@@ -290,7 +300,7 @@ body.theme--00 {
   --color--foreground--10:  rgb(255 255 255 / 0.17);
   --color--foreground--5:   rgb(255 255 255 / 0.12);
   --color--foreground--0:   rgb(255 255 255 / 0);
-  --color--background--100: rgb(0 0 0 / 1);
+  --color--background--100: var(--mono-dark-paper);
   --color--background--0:   rgb(0 0 0 / 0);
 }
 

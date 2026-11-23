@@ -318,8 +318,11 @@
     activeParagraph = null;
   }
   var styleObserver = new MutationObserver(invalidateStyles);
+  function mobileAppIsVisible() {
+    return document.documentElement.hasAttribute('data-mobile-active');
+  }
   function start() {
-    if (enabled || !cursorMedia.matches) { return; }
+    if (enabled || !cursorMedia.matches || mobileAppIsVisible()) { return; }
     enabled = true;
     document.documentElement.classList.add('custom-cursor-enabled');
     document.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -337,7 +340,12 @@
   }
   window.addEventListener('resize', invalidateStyles, { passive: true });
   if (document.fonts) { document.fonts.addEventListener('loadingdone', invalidateStyles); }
-  cursorMedia.addEventListener('change', function () { cursorMedia.matches ? start() : stop(); });
+  function syncCursor() {
+    if (cursorMedia.matches && !mobileAppIsVisible()) start();
+    else if (enabled) stop();
+  }
+  cursorMedia.addEventListener('change', syncCursor);
+  window.addEventListener('mobile-portfolio-routechange', syncCursor);
   window.addEventListener('pagehide', stop);
   window.addEventListener('pageshow', start);
   start();

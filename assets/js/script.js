@@ -349,7 +349,7 @@ $(document).ready(function() {
 
   // Detect if user prefers dark mode and make it dark
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    if ( $('body').hasClass('theme--16') ){
+    if ( !$('body').is('[data-mobile-theme-ready]') && $('body').hasClass('theme--16') ){
          appThemeRemoveAll();
          $('body').addClass('theme--00');
          $('.app-aside .slider').val(0);
@@ -495,19 +495,12 @@ $(document).ready(function() {
   });
 
   // Mobile nav trigger
-  $('.app-header .navigation').click(function() {
+  $('[data-portfolio-menu]').click(function() {
     if ( $('body').hasClass('mobile-nav--is--visible') ){
       closeMobileNav();
     }
     else {
       openMobileNav();
-    }
-  });
-
-  $('.app-header .navigation').on('keydown', function(event) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      $(this).trigger('click');
     }
   });
 
@@ -743,7 +736,7 @@ function scrollToContact() {
 // Open mobile nav
 function openMobileNav() {
   window.clearTimeout(mobileNavCloseTimer);
-  $('.app-header .navigation').attr('aria-expanded', 'true');
+  $('[data-portfolio-menu]').attr('aria-expanded', 'true');
   $('body').addClass('mobile-nav--is--transitioning');
   function addVisibleClassDelay() {
     window.setTimeout(addVisibleClass, 1);
@@ -758,7 +751,7 @@ function openMobileNav() {
 // Close mobile nav
 function closeMobileNav() {
   window.clearTimeout(mobileNavCloseTimer);
-  $('.app-header .navigation').attr('aria-expanded', 'false');
+  $('[data-portfolio-menu]').attr('aria-expanded', 'false');
   $('body').removeClass('mobile-nav--is--visible');
   function removeTransitioningClassDelay() {
     mobileNavCloseTimer = window.setTimeout(removeTransitioningClass, 500);
@@ -1027,7 +1020,7 @@ $(function () {
   function restoreIndependentProducts() {
     if (window.location.hash === '#things-ive-built' && !document.body.classList.contains('is--loading')) {
       var section = document.getElementById('things-ive-built');
-      if (section) {
+      if (section && section.getClientRects().length) {
         window.scrollTo(0, section.offsetTop);
         tracking.refresh();
       }

@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <title>جلال حيلاني | Senior Product Designer — UX/UI &amp; Product Design</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description"
     content="جلال حيلاني، Senior Product Designer متخصص في تصميم المنتجات الرقمية وتجربة المستخدم، مع خبرة في الأنظمة المؤسسية المعقدة ومنتجات SaaS وERP وتصميم أنظمة الواجهات." />
   <meta name="author" content="جلال حيلاني" />
@@ -160,7 +160,7 @@
   <link href="assets/css/reset.css" rel="stylesheet">
   <link href="assets/css/font.css?v=20261029-products-2" rel="stylesheet">
   <link href="assets/css/variables.css?v=20261029-products-2" rel="stylesheet">
-  <link href="assets/css/color.css?v=20261029-products-2" rel="stylesheet">
+  <link href="assets/css/color.css?v=20261120-mobile-theme-motion" rel="stylesheet">
   <link href="assets/css/style.css?v=20261029-masaa-reference-3" rel="stylesheet">
   <link href="assets/css/grid.css" rel="stylesheet">
   <link href="assets/css/media-queries.css?v=20261029-products-2" rel="stylesheet">
@@ -169,18 +169,242 @@
   <script src="assets/js/jquery-3.7.1.min.js"></script>
   <script src="assets/js/jquery-easing-1.4.1.js"></script>
   <script src="assets/js/copyright.js" defer></script>
-  <script src="assets/js/compact-navigation.js?v=20261029-products-2"></script>
-  <script src="assets/js/script.js?v=20261029-products-2"></script>
-  <script src="assets/js/gradual-blur.js?v=20261029-1" defer></script>
-  <script src="assets/js/cursor.js?v=20261029-products-2" defer></script>
+  <script src="assets/js/compact-navigation.js?v=20261120-work-scroll"></script>
+  <script src="assets/js/script.js?v=20261120-header"></script>
+  <script src="assets/js/cursor.js?v=216a5750a7" defer></script>
 
 
+
+<style>#mobile-portfolio { display: none; }</style>
+<link rel="stylesheet" href="assets/css/mobile.css?v=20261123-work-no-metrics" media="(max-width: 1020px)">
+  <link rel="stylesheet" href="assets/css/portfolio-header.css?v=20261123-mobile-consistency">
+  <script src="assets/js/mobile-boot.js?v=20261123-tab-indicator" data-kind="home"></script>
+  <script src="assets/js/portfolio-header.js?v=20261123-mobile-consistency" defer></script>
+  <script src="assets/js/portfolio-chat.js?v=20261121-mobile-chat" defer></script>
+<noscript><style>
+  body.homepage-page.is--loading { overflow-y: visible; pointer-events: auto; }
+  body.homepage-page.cover--is--visible .app-main { transform: none; }
+  body.homepage-page.is--loading .section.cover { display: none; }
+  body.homepage-page.cover--is--visible :is(.app-header, .mp-header-region) { opacity: 1; pointer-events: auto; }
+  body.homepage-page.cover--is--visible .app-nav { opacity: 1; }
+  @media (max-width: 1020px) {
+    .homepage-page .mp-header-region { position: static; }
+    .homepage-page .mp-tools { display: none; }
+    .homepage-page .app-nav {
+      position: static; display: block; height: auto; padding: 8px 0;
+      pointer-events: auto; overflow: visible;
+    }
+    .homepage-page .app-nav .item { opacity: 1; transform: none; }
+  }
+</style></noscript>
 </head>
 
 <body class="homepage-page cover--is--visible is--loading theme--16">
+<script>window.dispatchEvent(new Event('mobile-portfolio-body'));</script>
+<span class="mp-header-boundary" aria-hidden="true"></span>
+  <div class="mp-header-region">
+    <header class="mp-header">
+      <a class="mp-skip" href="#portfolio-content">انتقل إلى المحتوى</a>
+      <div class="mp-wrap mp-header-inner">
+        <a class="mp-brand" href="#hello" data-mobile-route=""><img src="assets/img/optimized/galal-helany-640.webp" width="36" height="36" alt="" loading="lazy" decoding="async"><strong>جلال حيلاني</strong></a>
+        <div class="mp-header-switch">
+          <div class="mp-header-actions mp-header-layer" data-header-expanded><button class="mp-control mp-theme-toggle" type="button" id="mp-theme" aria-label="تغيير الألوان" aria-haspopup="dialog" aria-expanded="false" data-desktop-label="تغيير الألوان" disabled><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button><a class="mp-control mp-language" href="index.html" hreflang="en" lang="en">English</a></div>
+          <div class="mp-header-actions mp-header-layer mp-header-contact" data-header-compact inert>
+            <a href="https://cal.com/galalhelany" target="_blank" rel="noopener noreferrer" aria-label="احجز مكالمة"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg><span class="mp-contact-full">احجز مكالمة</span><span class="mp-contact-short" aria-hidden="true">مكالمة</span></a><a href="mailto:hello@galalhelany.com?subject=Enquiry%20from%20website" data-mobile-chat-open aria-label="أرسل رسالة"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg><span class="mp-contact-full">أرسل رسالة</span><span class="mp-contact-short" aria-hidden="true">رسالة</span></a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="mp-hero">
+        <div class="mp-wrap mp-hero-inner">
+          <p class="mp-intro"><strong>أصمّم منتجات رقمية معقّدة قابلة للتوسّع.</strong> أحوّل مسارات العمل المعقّدة إلى تجارب واضحة وقابلة للتوسّع للبرمجيات السحابية والمنتجات المؤسسية.</p>
+          <div class="mp-hero-links">
+            <div class="mp-hero-actions"><a href="https://cal.com/galalhelany" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>احجز مكالمة</a><a href="mailto:hello@galalhelany.com?subject=Enquiry%20from%20website" data-mobile-chat-open><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>أرسل رسالة</a></div>
+            <div class="mp-hero-socials"><a href="https://www.linkedin.com/in/galalhelany" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (يفتح في علامة تبويب جديدة)"><span class="mp-social-icon mp-social-icon--linkedin" aria-hidden="true"></span></a><a href="https://www.behance.net/galalhelany" target="_blank" rel="noopener noreferrer" aria-label="Behance (يفتح في علامة تبويب جديدة)"><span class="mp-social-icon mp-social-icon--behance" aria-hidden="true"></span></a></div>
+          </div>
+        </div>
+      </div>
+    <div class="mp-tools" role="group" aria-label="التنقل في الموقع">
+      <div class="mp-wrap mp-tools-inner"><button class="mp-control" type="button" data-portfolio-menu aria-expanded="false" aria-controls="portfolio-sections" aria-label="التنقل في الموقع"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list" aria-hidden="true"><path d="M3 5h.01"></path><path d="M3 12h.01"></path><path d="M3 19h.01"></path><path d="M8 5h13"></path><path d="M8 12h13"></path><path d="M8 19h13"></path></svg></button></div>
+    </div>
+  </div>
+<div id="mobile-portfolio"><main class="mp-wrap mp-main" id="mobile-main">
+      <div class="mp-panel" data-mobile-panel="work">
+        <template data-work-scroll-hint>
+          <div class="mp-work-scroll-hint">
+            <span>مرّر لاستكشاف المزيد</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-down" aria-hidden="true"><path d="m7 6 5 5 5-5"></path><path d="m7 13 5 5 5-5"></path></svg>
+          </div>
+        </template>
+        <p class="mp-title mp-visually-hidden" role="heading" aria-level="1" tabindex="-1">الأعمال</p>
+        <section class="mp-section mp-work-selected" aria-labelledby="mp-selected-title">
+          <h2 id="mp-selected-title" class="mp-visually-hidden">أعمال مختارة</h2>
+          <div class="mp-cards">
+            <div class="mp-work-project">
+              <article class="mp-card mp-work-card">
+                <div class="mp-card-meta">
+                  <h3><bdi>جوائز حمدان</bdi></h3>
+                  <bdi>2024</bdi>
+                </div>
+                <div class="mp-work-artwork">
+                  <img class="mp-project-image" src="assets/img/optimized/hamdan-awards-mockup-768.webp" srcset="assets/img/optimized/hamdan-awards-mockup-768.webp 768w, assets/img/optimized/hamdan-awards-mockup-1536.webp 1536w" sizes="(min-width: 928px) 804px, (min-width: 650px) 86vw, 94vw" alt="نموذج واجهات منصة جوائز حمدان" width="3057" height="1634" loading="lazy" decoding="async">
+                </div>
+                <div class="mp-card-copy">
+                  <p class="mp-project-summary">تبسيط تجربة منصة مؤسسية متعددة الأدوار لإدارة الجوائز</p>
+                  <div class="mp-work-card-actions">
+                    <a class="mp-button mp-work-primary" href="hamdan-awards-case-study-ar.html">عرض دراسة الحالة<span class="mp-visually-hidden"> · <bdi>جوائز حمدان</bdi></span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right mp-directional" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
+                    <a class="mp-button" href="https://www.ha.ae/ar" target="_blank" rel="noopener noreferrer">زيارة الموقع<span class="mp-visually-hidden"> · <bdi>جوائز حمدان</bdi> (يفتح في علامة تبويب جديدة)</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right mp-directional" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="mp-work-project">
+              <article class="mp-card mp-work-card">
+                <div class="mp-card-meta">
+                  <h3><bdi>Mosaic / ARC ERP</bdi></h3>
+                  <bdi>2025–2026</bdi>
+                </div>
+                <div class="mp-work-artwork">
+                  <img class="mp-project-image" src="assets/img/optimized/mosaic-arc-erp-mockup-768.webp" srcset="assets/img/optimized/mosaic-arc-erp-mockup-768.webp 768w, assets/img/optimized/mosaic-arc-erp-mockup-1536.webp 1536w" sizes="(min-width: 928px) 804px, (min-width: 650px) 86vw, 94vw" alt="نموذج واجهات نظام Mosaic ARC ERP" width="2796" height="2260" loading="lazy" decoding="async">
+                </div>
+                <div class="mp-card-copy">
+                  <p class="mp-project-summary">تبسيط العمليات المعقدة في نظام ERP متخصص</p>
+                  <div class="mp-work-card-actions">
+                    <a class="mp-button mp-work-primary" href="mosaic-arc-erp-case-study-ar.html">عرض دراسة الحالة<span class="mp-visually-hidden"> · <bdi>Mosaic / ARC ERP</bdi></span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right mp-directional" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
+                    <a class="mp-button" href="https://mosaic.arcerpsolutions.com/" target="_blank" rel="noopener noreferrer">زيارة الموقع<span class="mp-visually-hidden"> · <bdi>Mosaic / ARC ERP</bdi> (يفتح في علامة تبويب جديدة)</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right mp-directional" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="mp-work-project" id="mp-previews-title">
+              <article class="mp-card mp-work-card">
+                <div class="mp-card-meta">
+                  <h3><bdi>لفاح</bdi></h3>
+                  <bdi>2024</bdi>
+                </div>
+                <div class="mp-work-artwork">
+                  <img class="mp-project-image" src="assets/img/optimized/laffah-mockup-768.webp" srcset="assets/img/optimized/laffah-mockup-768.webp 768w, assets/img/optimized/laffah-mockup-1536.webp 1536w" sizes="(min-width: 928px) 804px, (min-width: 650px) 86vw, 94vw" alt="نموذج واجهات لفاح للويب والجوال" width="3003" height="2042" loading="lazy" decoding="async">
+                </div>
+                <div class="mp-card-copy">
+                  <p class="mp-project-summary">إعادة تصميم تجربة الطلب الرقمي عبر مختلف الأجهزة</p>
+                </div>
+              </article>
+            </div>
+            <div class="mp-work-project">
+              <article class="mp-card mp-work-card">
+                <div class="mp-card-meta">
+                  <h3><bdi>ABH Manufacturing</bdi></h3>
+                  <bdi>2025</bdi>
+                </div>
+                <div class="mp-work-artwork">
+                  <img class="mp-project-image" src="assets/img/optimized/abh-manufacturing-mockup-768.webp" srcset="assets/img/optimized/abh-manufacturing-mockup-768.webp 768w, assets/img/optimized/abh-manufacturing-mockup-1536.webp 1536w" sizes="(min-width: 928px) 804px, (min-width: 650px) 86vw, 94vw" alt="نموذج منصة منتجات ABH Manufacturing للويب والجوال" width="2824" height="1176" loading="lazy" decoding="async">
+                </div>
+                <div class="mp-card-copy">
+                  <p class="mp-project-summary">تبسيط اكتشاف المنتجات والمعلومات التقنية في منصة B2B</p>
+                </div>
+              </article>
+            </div>
+            <div class="mp-work-project">
+              <article class="mp-card mp-work-card">
+                <div class="mp-card-meta">
+                  <h3><bdi>المنظمة العربية للسياحة</bdi></h3>
+                  <bdi>2025</bdi>
+                </div>
+                <div class="mp-work-artwork">
+                  <img class="mp-project-image" src="assets/img/optimized/arab-tourism-organization-mockup-768.webp" srcset="assets/img/optimized/arab-tourism-organization-mockup-768.webp 768w, assets/img/optimized/arab-tourism-organization-mockup-1536.webp 1536w" sizes="(min-width: 928px) 804px, (min-width: 650px) 86vw, 94vw" alt="نموذج واجهات موقع المنظمة العربية للسياحة" width="3057" height="2018" loading="lazy" decoding="async">
+                </div>
+                <div class="mp-card-copy">
+                  <p class="mp-project-summary">إعادة تنظيم المحتوى لتحسين الوصول إلى المعلومات</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section id="mobile-products" class="mp-panel" data-mobile-panel="built" aria-labelledby="mp-products-title">
+      <div class="mp-page-heading">
+        <p class="mp-title" role="heading" aria-level="1" tabindex="-1" id="mp-products-title">منتجات بنيتها</p>
+        <p class="mp-lead">منتجات مستقلة أعمل على تصميمها وتطويرها وإطلاقها، لتحويل الأفكار إلى تجارب رقمية حقيقية.</p>
+      </div>
+      <div class="mp-cards"><article class="mp-card">
+          <div class="mp-card-meta"><span>منتج متاح</span></div>
+          <img class="mp-project-image" src="assets/img/projects/masaa-desktop-mobile.webp?v=d85fcedd42cf" alt="مؤقت التركيز مسعى معروض على حاسوب محمول وثلاث شاشات للهاتف" width="2136" height="1426" loading="lazy" decoding="async">
+          <div class="mp-card-copy">
+            <h2><a class="mp-stretched-link" href="https://masaa.app/" target="_blank" rel="noopener noreferrer"><bdi>مسعى — Masaa</bdi><span class="mp-visually-hidden"> (يفتح في علامة تبويب جديدة)</span></a></h2>
+            <p>مؤقت تركيز مجاني يساعدك على مواصلة العمل دون مقاطعة تركيزك، يعتمد على أسلوب مرن مستوحى من تقنية Flow Pomodoro.</p>
+          </div>
+        </article></div>
+    </section>
+      <div class="mp-panel" data-mobile-panel="experience">
+        <div class="mp-page-heading"><p class="mp-title" role="heading" aria-level="1" tabindex="-1">الخبرة</p></div>
+        <div class="mp-content-slot" data-mobile-content="experience"></div>
+        <div class="mp-section mp-content-slot" data-mobile-content="what-i-bring"></div>
+        <div class="mp-section mp-content-slot" data-mobile-content="markets"></div>
+      </div>
+      <div class="mp-panel" data-mobile-panel="about">
+        <div class="mp-page-heading mp-wrap"><p class="mp-title" role="heading" aria-level="1" tabindex="-1">نبذة عني</p></div>
+        <div class="mp-about">
+          <img class="mp-portrait" src="assets/img/optimized/galal-helany-640.webp" srcset="assets/img/optimized/galal-helany-640.webp 640w, assets/img/optimized/galal-helany-1200.webp 1200w" sizes="100vw" alt="صورة شخصية لجلال حيلاني" width="1200" height="1200" loading="lazy" decoding="async">
+          <div class="mp-prose mp-wrap">
+            <h2>جلال حيلاني</h2>
+            <p class="mp-role">مصمم منتجات أول</p>
+            <p>بدأ اهتمامي بالحواسيب في سن التاسعة، حين دفعني الفضول إلى اكتشاف كيفية تصميم الواجهات وبناء التجارب الرقمية. ومع مرور السنوات، تطور هذا الاهتمام إلى مسار مهني يجمع بين التصميم البصري وتجربة المستخدم وتصميم المنتجات الرقمية.</p><p>اليوم، أعمل بصفتي Senior Product Designer، بخبرة تتجاوز 6 سنوات في UX/UI وأكثر من 10 سنوات في التصميم البصري. أركز على تصميم منتجات رقمية واضحة وسهلة الاستخدام، مع خبرة متخصصة في الأنظمة المؤسسية المعقدة، حيث يتطلب التصميم فهمًا عميقًا للعمليات واحتياجات المستخدمين والمتطلبات التقنية.</p><p>تساعدني خلفيتي في تطوير الواجهات الأمامية على الربط بين التصميم والتنفيذ، واتخاذ قرارات تراعي قابلية الاستخدام والجدوى التقنية وقابلية التوسع. كما تمنحني خبرتي في الهوية البصرية والعلامات التجارية والتسويق الرقمي منظورًا أشمل عند تصميم تجارب متكاملة تجمع بين الوظيفة والاتساق البصري.</p><p>مقيم في سوريا · متاح للعمل عن بُعد</p>
+          </div>
+        </div>
+        <div class="mp-section mp-content-slot mp-wrap" data-mobile-content="principles"></div>
+      </div>
+      <div class="mp-panel" data-mobile-panel="contact">
+        <div class="mp-page-heading">
+          <p class="mp-title" role="heading" aria-level="1" tabindex="-1">تواصل</p>
+          <p class="mp-lead">أخبرني عمّا تبنيه.</p>
+          <div class="mp-availability"><span aria-hidden="true"></span>أعمل حاليًا وأرحّب بفرص جديدة</div>
+          <p class="mp-small">تعاقد · عمل حر</p>
+        </div>
+        <ul class="mp-contact">
+      <li>
+          <a href="https://cal.com/galalhelany" target="_blank" rel="noopener noreferrer">
+            <span class="mp-contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days" aria-hidden="true"><path d="M8 2v3"></path><path d="M16 2v3"></path><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M8 13h.01"></path><path d="M12 13h.01"></path><path d="M16 13h.01"></path><path d="M8 17h.01"></path><path d="M12 17h.01"></path><path d="M16 17h.01"></path></svg></span>
+            <span class="mp-contact-copy"><strong>احجز مكالمة</strong><small><bdi>اختر وقتًا مناسبًا للحديث</bdi></small><span class="mp-visually-hidden"> (يفتح في علامة تبويب جديدة)</span></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </a>
+        </li><li>
+          <a href="mailto:hello@galalhelany.com?subject=Enquiry%20from%20website">
+            <span class="mp-contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg></span>
+            <span class="mp-contact-copy"><strong>البريد الإلكتروني</strong><small><bdi>hello@galalhelany.com</bdi></small></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </a>
+        </li><li>
+          <a href="https://www.linkedin.com/in/galalhelany" target="_blank" rel="noopener noreferrer">
+            <span class="mp-contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span>
+            <span class="mp-contact-copy"><strong>LinkedIn</strong><small><bdi>linkedin.com</bdi></small><span class="mp-visually-hidden"> (يفتح في علامة تبويب جديدة)</span></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </a>
+        </li><li>
+          <a href="https://www.behance.net/galalhelany" target="_blank" rel="noopener noreferrer">
+            <span class="mp-contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span>
+            <span class="mp-contact-copy"><strong>Behance</strong><small><bdi>behance.net</bdi></small><span class="mp-visually-hidden"> (يفتح في علامة تبويب جديدة)</span></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </a>
+        </li>
+      <li>
+        <a href="mailto:hello@galalhelany.com?subject=Enquiry%20from%20website" data-mobile-chat-open>
+          <span class="mp-contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg></span>
+          <span class="mp-contact-copy"><strong>محادثة مباشرة</strong><small>أرسل رسالة</small></span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right mp-directional" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+        </a>
+      </li>
+    </ul>
+      </div>
+    </main><nav class="mp-nav" aria-label="التنقل في معرض الأعمال"><span class="mp-nav-spotlight" aria-hidden="true"></span><span class="mp-nav-indicator" aria-hidden="true"></span><div class="mp-nav-inner">
+      <a class="mp-tab" data-mobile-tab="work" data-mobile-route="" href="#projects" aria-current="page"><span class="mp-tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase-business" aria-hidden="true"><g class="mp-tab-outline"><path d="M12 12h.01"></path><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path d="M22 13a18.15 18.15 0 0 1-20 0"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></g><g class="mp-tab-solid" fill="currentColor" stroke="none"><path d="M7 6V4a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2h-2V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v2Z"></path><path fill-rule="evenodd" d="M4 5h16a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3Zm-1 7.3v1.8q9 5.1 18 0v-1.8q-9 5.1-18 0ZM12 10a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Z"></path></g></svg></span><span>الأعمال</span></a>
+      <a class="mp-tab" data-mobile-tab="built" data-mobile-route="" href="#things-ive-built"><span class="mp-tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><g class="mp-tab-outline"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></g><g class="mp-tab-solid" fill="currentColor" stroke="none"><rect x="1" y="5" width="9" height="8" rx="1.5"></rect><rect x="1" y="14.5" width="9" height="8.5" rx="1.5"></rect><rect x="11.5" y="14.5" width="7.5" height="8.5" rx="1.5"></rect><rect x="13" y="1" width="10" height="10" rx="1.5"></rect></g></svg></span><span>منتجات</span></a>
+      <a class="mp-tab" data-mobile-tab="experience" data-mobile-route="" href="#experience"><span class="mp-tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-milestone" aria-hidden="true"><g class="mp-tab-outline"><path d="M12 13v8"></path><path d="M12 3v3"></path><path d="M4 6h12l4 4-4 4H4V6Z"></path></g><g class="mp-tab-solid" fill="currentColor" stroke="none"><path d="M11 3a1 1 0 0 1 2 0v2h3a1 1 0 0 1 .7.3l4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-.7.3h-3v6a1 1 0 0 1-2 0v-6H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h7Z"></path></g></svg></span><span>الخبرة</span></a>
+      <a class="mp-tab" data-mobile-tab="about" data-mobile-route="" href="#about"><span class="mp-tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round lucide-user-2" aria-hidden="true"><g class="mp-tab-outline"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></g><g class="mp-tab-solid" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="6"></circle><path d="M12 14a9 9 0 0 1 9 8H3a9 9 0 0 1 9-8Z"></path></g></svg></span><span>عني</span></a>
+      <a class="mp-tab" data-mobile-tab="contact" data-mobile-route="" href="#contact"><span class="mp-tab-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail" aria-hidden="true"><g class="mp-tab-outline"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></g><g class="mp-tab-solid" fill="currentColor" stroke="none"><path fill-rule="evenodd" d="M4 3h16a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3ZM3 6.5v2l7.4 4.7a3 3 0 0 0 3.2 0L21 8.5v-2l-8.4 5.35a1.1 1.1 0 0 1-1.2 0Z"></path></g></svg></span><span>تواصل</span></a>
+    </div></nav></div>
 
   <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNK5TXWX" height="0" width="0"
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNK5TXWX" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
@@ -210,7 +434,7 @@
     </div>
   </header>
 
-  <nav class="app-nav" aria-label="التنقل الرئيسي">
+  <nav class="app-nav" id="portfolio-sections" aria-label="التنقل الرئيسي">
     <div class="content">
       <a class="item intro is--active" href="#hello">مرحبًا</a>
       <a class="item work" href="#projects">المشاريع</a>
@@ -224,7 +448,7 @@
     </div>
   </nav>
 
-  <main class="app-main">
+  <main class="app-main" id="portfolio-content" tabindex="-1">
 
     <section class="section cover" id="hello">
       <div class="content">
@@ -582,10 +806,10 @@
       </div>
     </section>
 
-    <section class="section markets" aria-labelledby="markets-title">
+    <section class="section markets" id="markets" aria-labelledby="markets-title">
       <div class="content">
         <header class="markets__header">
-          <h2 id="markets-title">أسواق مختلفة.<br><span>تحديات مشتركة.</span></h2>
+          <h2 id="markets-title">أسواق مختلفة.<br> <span>تحديات مشتركة.</span></h2>
         </header>
 
         <!-- ينسخ سكربت الشريط الحالي هذه المجموعة مرة واحدة لإنشاء حركة متصلة. -->
@@ -1229,40 +1453,7 @@
       </div>
   </aside>
 
-  <script>
-    // Keep the original Chatwoot launcher visible and position it for RTL content.
-    window.chatwootSettings = {
-      hideMessageBubble: false,
-      showUnreadMessagesDialog: false,
-      position: "left",
-      locale: "ar",
-      useBrowserLanguage: false,
-      type: "standard",
-      darkMode: "auto"
-    };
 
-    window.addEventListener("chatwoot:ready", function () {
-      if (window.$chatwoot) {
-        window.$chatwoot.toggleBubbleVisibility("show");
-      }
-    });
-
-    (function (d, t) {
-      var BASE_URL = "https://app.chatwoot.com";
-      var g = d.createElement(t),
-        s = d.getElementsByTagName(t)[0];
-      g.src = BASE_URL + "/packs/js/sdk.js";
-      g.defer = true;
-      g.async = true;
-      s.parentNode.insertBefore(g, s);
-      g.onload = function () {
-        window.chatwootSDK.run({
-          websiteToken: "swzo4hhjh2fjAiAVYvyiYSEo",
-          baseUrl: BASE_URL,
-        });
-      };
-    })(document, "script");
-  </script>
 
 
 </body>
