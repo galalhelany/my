@@ -82,7 +82,6 @@
   function activateWorkStages() {
     const nav = navTrack.parentElement;
     const cards = workProjects.map(project => project.firstElementChild);
-    const artwork = cards.map(card => card.querySelector('.mp-project-image'));
     const statuses = home.querySelectorAll('.mp-work-status-type');
     const pendingReveals = new Set(statuses);
     const options = { passive: true, signal: (workSession = new AbortController()).signal };
@@ -152,7 +151,6 @@
       const available = page.clientHeight - headerHeight - navHeight;
       // Leave room to read and focus links in exceptionally short or zoomed viewports.
       const free = available < 96 || (window.visualViewport?.scale ?? 1) > 1.05;
-      for (const image of artwork) image.style.removeProperty('--mp-work-art-limit');
       page.removeAttribute('data-work-hint-docked');
       const docked = Boolean(dockHint && (free || [...workHints.keys()].some(project => project.offsetHeight > available + 1)));
       page.toggleAttribute('data-work-hint-docked', docked);
@@ -160,15 +158,6 @@
       const bottom = navHeight + dockHeight;
       page.style.setProperty('--mp-work-nav', `${bottom}px`);
       const stageHeight = available - dockHeight;
-      if (docked && !free) {
-        // Fit the artwork to the stage only when every panel can still show a usable preview.
-        const sizes = workProjects.map((project, index) => [project.offsetHeight - stageHeight, artwork[index].offsetHeight]);
-        if (sizes.every(([overflow, imageHeight]) => overflow <= 1 || imageHeight - Math.ceil(overflow) >= 140)) {
-          sizes.forEach(([overflow, imageHeight], index) => {
-            if (overflow > 1) artwork[index].style.setProperty('--mp-work-art-limit', `${imageHeight - Math.ceil(overflow)}px`);
-          });
-        }
-      }
       const allFit = !free && workProjects.every(project => project.offsetHeight <= stageHeight + 1);
       const mode = free ? 'free' : allFit ? 'mandatory' : 'proximity';
       if (page.dataset.workSnap !== mode) page.dataset.workSnap = mode;
@@ -228,7 +217,6 @@
       page.style.removeProperty('--mp-work-header');
       page.style.removeProperty('--mp-work-nav');
       page.style.removeProperty('--mp-work-nav-base');
-      for (const image of artwork) image.style.removeProperty('--mp-work-art-limit');
       for (const status of statuses) status.removeAttribute('data-work-status-reveal');
       if (!hasProjectTimelines) for (const card of cards) card.style.removeProperty('--mp-work-reveal-offset');
     }, { once: true });
