@@ -62,7 +62,48 @@
     }
   }
 
-  function createPickerSlider(dialog, { source, label, read, apply, describe, lineHeight }, activeDrags) {
+  function createReadingLabels(dialog) {
+    let active;
+    let hideTimer;
+
+    function clear() {
+      clearTimeout(hideTimer);
+      active?.removeAttribute('data-label-state');
+      active = undefined;
+    }
+
+    return {
+      clear,
+      show(caption) {
+        if (!dialog.hasAttribute('data-visible')) return;
+        if (active !== caption) clear();
+        clearTimeout(hideTimer);
+        active = caption;
+        caption.dataset.labelState = 'visible';
+      },
+      release(caption) {
+        if (active !== caption) return;
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => { caption.dataset.labelState = 'fading'; }, 800);
+      }
+    };
+  }
+
+  let lastSliderTick = -Infinity;
+
+  function tickSlider(event, dialog) {
+    if (!event.isTrusted || !mobile.matches || !dialog.hasAttribute('data-visible') || typeof navigator.vibrate !== 'function') return;
+    const now = performance.now();
+    if (now - lastSliderTick < 60) return;
+    lastSliderTick = now;
+    try {
+      navigator.vibrate(10);
+    } catch {
+      // Vibration may be blocked by the browser or device settings.
+    }
+  }
+
+  function createPickerSlider(dialog, { source, label, read, apply, describe, lineHeight }, activeDrags, labels) {
     // Both reading controls reuse the original five-stop text-size rail.
     const rail = document.createElement('div');
     rail.className = 'app-aside';
@@ -94,6 +135,25 @@
     rail.append(option);
     dialog.append(rail);
 
+    let caption;
+    if (labels) {
+      caption = document.createElement('span');
+      caption.className = 'mp-reading-slider-label';
+      caption.textContent = label;
+      caption.setAttribute('aria-hidden', 'true');
+      rail.append(caption);
+      const rangeKeys = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End']);
+      slider.addEventListener('keydown', event => {
+        if (rangeKeys.has(event.key)) labels.show(caption);
+      });
+      slider.addEventListener('keyup', event => {
+        if (rangeKeys.has(event.key) && dragging === undefined) labels.release(caption);
+      });
+      slider.addEventListener('blur', () => {
+        if (dragging === undefined) labels.release(caption);
+      });
+    }
+
     const dots = option.querySelectorAll('.dot');
     const min = Number(slider.min);
     const max = Number(slider.max);
@@ -105,21 +165,23 @@
       option.style.setProperty('--mp-theme-position', (slider.valueAsNumber - min) / (max - min));
     }
 
-    function preview() {
-      if (slider.value === read()) return;
+    function preview(event) {
+      const previous = read();
+      if (slider.value === previous) return;
       apply(slider.value);
       sync();
+      if (slider.value !== previous) tickSlider(event, dialog);
     }
 
-    function previewAt(y) {
+    function previewAt(event) {
       const center = dot => {
         const { top, height } = dot.getBoundingClientRect();
         return top + height / 2;
       };
       const bottom = center(dots[0]);
       const top = center(dots[dots.length - 1]);
-      slider.valueAsNumber = Math.round(min + (max - min) * (bottom - y) / (bottom - top));
-      preview();
+      slider.valueAsNumber = Math.round(min + (max - min) * (bottom - event.clientY) / (bottom - top));
+      preview(event);
     }
 
     slider.addEventListener('input', preview);
@@ -128,19 +190,23 @@
       event.preventDefault();
       dragging = event.pointerId;
       activeDrags.add(dragging);
+      labels?.show(caption);
       slider.setPointerCapture(dragging);
       slider.focus({ preventScroll: true });
-      previewAt(event.clientY);
+      previewAt(event);
     });
     slider.addEventListener('pointermove', event => {
-      if (event.pointerId === dragging) previewAt(event.clientY);
+      if (event.pointerId === dragging) previewAt(event);
     });
     slider.addEventListener('pointerup', event => {
-      if (event.pointerId === dragging) previewAt(event.clientY);
+      if (event.pointerId === dragging) previewAt(event);
     });
     slider.addEventListener('lostpointercapture', event => {
       activeDrags.delete(event.pointerId);
-      if (event.pointerId === dragging) dragging = undefined;
+      if (event.pointerId === dragging) {
+        dragging = undefined;
+        labels?.release(caption);
+      }
     });
     return { slider, sync };
   }
@@ -152,7 +218,8 @@
     dialog.setAttribute('aria-label', trigger.getAttribute('aria-label'));
 
     const activeDrags = new Set();
-    const sliders = controls.map(control => createPickerSlider(dialog, control, activeDrags));
+    const labels = reading ? createReadingLabels(dialog) : null;
+    const sliders = controls.map(control => createPickerSlider(dialog, control, activeDrags, labels));
     document.body.append(dialog);
     trigger.setAttribute('aria-controls', dialog.id);
     let backdropPress;
@@ -167,6 +234,7 @@
       if (!dialog.open) return;
       clearTimeout(closeTimer);
       dialog.removeAttribute('data-visible');
+      labels?.clear();
       const finish = () => {
         dialog.close();
         trigger.setAttribute('aria-expanded', 'false');
@@ -258,7 +326,7 @@
         },
         {
           source: legacyTextSize,
-          label: root.lang === 'ar' ? 'تباعد الأسطر' : 'Line height',
+          label: root.lang === 'ar' ? 'تباعد الأسطر' : 'Line Height',
           lineHeight: true,
           read: () => article.dataset.caseLineHeight,
           describe: () => article.dataset.caseLineHeightLabel,

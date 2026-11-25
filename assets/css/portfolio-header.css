@@ -328,9 +328,11 @@ html[data-mobile-theme='0'] .mp-theme-toggle .lucide-sun { opacity: 1; transform
   html:has(#mp-reading-settings[open]) { overflow-anchor: none; }
 
   #mp-reading-settings[open] {
+    --mp-picker-rail: min(368px, calc(var(--mp-picker-room) - 98px));
     display: flex;
     direction: ltr;
     gap: 14px;
+    padding-block: 32px;
     max-inline-size: calc(100% - 32px);
     overflow: visible;
   }
@@ -341,6 +343,37 @@ html[data-mobile-theme='0'] .mp-theme-toggle .lucide-sun { opacity: 1; transform
     position: static;
     max-block-size: none;
     overflow: visible;
+  }
+
+  #mp-reading-settings .app-aside {
+    position: relative;
+    inset: auto;
+  }
+
+  .mp-reading-slider-label {
+    position: absolute;
+    inset-block-end: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--mp-ink);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .mp-reading-slider-label[data-label-state='visible'] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mp-reading-slider-label[data-label-state='visible'] { transition: opacity 180ms ease; }
+    .mp-reading-slider-label[data-label-state='fading'] { transition: opacity 280ms ease, visibility 0s 280ms; }
   }
 
   .mp-theme-picker .app-aside .option:is(.theme, .text-size) {
